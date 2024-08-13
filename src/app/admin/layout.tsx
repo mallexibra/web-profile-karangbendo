@@ -1,8 +1,9 @@
+import './globals.css';
 import { Metadata } from 'next';
 import { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Admin',
+  title: 'Admin Keren',
   description: 'Admin description',
 };
 
