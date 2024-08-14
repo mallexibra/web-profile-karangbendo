@@ -7,10 +7,13 @@ export default function TableSection() {
     <Card>
       <div className="flex justify-between items-center mb-3">
         <p className="font-bold">Daftar Akun Admin</p>
-        <div className="w-max px-3 py-2 bg-primary rounded-md text-white text-sm font-medium gap-2 flex justify-center items-center">
+        <button
+          type="button"
+          className="w-max px-3 py-2 bg-primary rounded-md text-white text-sm font-medium gap-2 flex justify-center items-center"
+        >
           <IconPlus color="#fff" size={18} />
           <p>Tambah Data</p>
-        </div>
+        </button>
       </div>
       <div className="overflow-x-auto rounded-md">
         <table className="table-auto w-full text-left">
