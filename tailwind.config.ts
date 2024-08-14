@@ -10,7 +10,10 @@ const config: Config = {
     extend: {
       colors: {
         primary: "#449E85",
-        gray: "#F6F6F6"
+        second: "#faf7f7",
+        gray: "#F6F6F6",
+        warning: "#FBB42C",
+        danger: "#CA3737"
       }
     },
   },
