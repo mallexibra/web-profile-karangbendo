@@ -18,12 +18,12 @@ export default function SidebarAdmin() {
           DESA <br /> KARANGBENDO
         </p>
       </div>
-      <div className="py-5 pl-5 space-y-5">
+      <div className="py-5 pl-5 space-y-2">
         <Link
           href={'/admin'}
           className={cn(
-            'text-primary block outline-none font-semibold w-full',
-            path == null && 'border-r-2 py-2 border-primary',
+            'block py-2 outline-none font-semibold w-full',
+            path == null && 'text-primary border-r-2 border-primary',
           )}
         >
           Dashboard
@@ -31,19 +31,18 @@ export default function SidebarAdmin() {
         <Link
           href={'/admin/profile-desa'}
           className={cn(
-            'font-semibold block outline-none w-full',
-            path == 'profile-desa' &&
-              'text-primary border-r-2 py-2 border-primary',
+            'font-semibold block py-2 outline-none w-full',
+            path == 'profile-desa' && 'text-primary border-r-2 border-primary',
           )}
         >
-          Profile Desa {path}
+          Profile Desa
         </Link>
         <Link
           href={'/admin/informasi-desa'}
           className={cn(
-            'font-semibold block outline-none w-full',
+            'font-semibold block  py-2 outline-none w-full',
             path == 'informasi-desa' &&
-              'text-primary border-r-2 py-2 border-primary',
+              'text-primary border-r-2 border-primary',
           )}
         >
           Informasi Desa
@@ -51,9 +50,8 @@ export default function SidebarAdmin() {
         <Link
           href={'/admin/transparansi'}
           className={cn(
-            'font-semibold block outline-none w-full',
-            path == 'transparansi' &&
-              'text-primary border-r-2 py-2 border-primary',
+            'font-semibold block  py-2 outline-none w-full',
+            path == 'transparansi' && 'text-primary border-r-2 border-primary',
           )}
         >
           Transparansi
@@ -61,9 +59,8 @@ export default function SidebarAdmin() {
         <Link
           href={'/admin/produk-hukum'}
           className={cn(
-            'font-semibold block outline-none w-full',
-            path == 'produk-hukum' &&
-              'text-primary border-r-2 py-2 border-primary',
+            'font-semibold block  py-2 outline-none w-full',
+            path == 'produk-hukum' && 'text-primary border-r-2 border-primary',
           )}
         >
           Produk Hukum
@@ -71,9 +68,8 @@ export default function SidebarAdmin() {
         <Link
           href={'/admin/produk-umkm'}
           className={cn(
-            'font-semibold block outline-none w-full',
-            path == 'produk-umkm' &&
-              'text-primary border-r-2 py-2 border-primary',
+            'font-semibold block  py-2 outline-none w-full',
+            path == 'produk-umkm' && 'text-primary border-r-2 border-primary',
           )}
         >
           Produk UMKM
