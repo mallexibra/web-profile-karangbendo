@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation';
 export default function SidebarAdmin() {
   const pathname = usePathname();
   const path = pathname.split('/')[2];
+  const path_one = pathname.split('/')[1];
 
   return (
     <nav className="min-w-max min-h-screen bg-white border-custom border-r-2">
@@ -23,7 +24,9 @@ export default function SidebarAdmin() {
           href={'/admin'}
           className={cn(
             'block py-2 outline-none font-semibold w-full',
-            path == null && 'text-primary border-r-2 border-primary',
+            path_one == 'admin' &&
+              path == null &&
+              'text-primary border-r-2 border-primary',
           )}
         >
           Dashboard
@@ -73,6 +76,26 @@ export default function SidebarAdmin() {
           )}
         >
           Produk UMKM
+        </Link>
+        <Link
+          href={'/umkm'}
+          className={cn(
+            'font-semibold block  py-2 outline-none w-full',
+            path_one == 'umkm' &&
+              path == null &&
+              'text-primary border-r-2 border-primary',
+          )}
+        >
+          Toko Saya
+        </Link>
+        <Link
+          href={'/umkm/toko'}
+          className={cn(
+            'font-semibold block  py-2 outline-none w-full',
+            path == 'toko' && 'text-primary border-r-2 border-primary',
+          )}
+        >
+          Produk Saya
         </Link>
       </div>
     </nav>

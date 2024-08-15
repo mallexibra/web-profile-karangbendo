@@ -2,10 +2,12 @@ export default function TextareaForm({
   children,
   label,
   placeholder,
+  rows = 5,
 }: {
   children?: string;
   label: string;
   placeholder: string;
+  rows?: number;
 }) {
   return (
     <textarea
@@ -13,7 +15,7 @@ export default function TextareaForm({
       name={label}
       id={label}
       placeholder={placeholder}
-      rows={5}
+      rows={rows}
     >
       {children}
     </textarea>

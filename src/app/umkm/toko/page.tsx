@@ -1,10 +1,10 @@
 import ContainerAdmin from '@/components/containers/ContainerAdmin';
-import SettingToko from './_section/SettingToko';
+import Toko from './_section/Toko';
 
-export default function UMKMPage() {
+export default function TokoUMKM() {
   return (
     <ContainerAdmin>
-      <SettingToko />
+      <Toko />
     </ContainerAdmin>
   );
 }
