@@ -6,6 +6,7 @@ interface ButtonProps {
   onClick?: () => void;
   size?: 'sm' | 'base' | 'lg';
   color?: 'primary' | 'warning' | 'danger';
+  className?: string;
 }
 
 export default function Button({
@@ -13,6 +14,7 @@ export default function Button({
   onClick,
   size = 'base',
   color = 'primary',
+  className,
 }: ButtonProps) {
   const sizeClasses = {
     sm: 'px-2 py-1 text-sm',
@@ -31,6 +33,7 @@ export default function Button({
       onClick={onClick}
       className={cn(
         'font-semibold rounded-md',
+        className,
         sizeClasses[size],
         colorClasses[color],
       )}
