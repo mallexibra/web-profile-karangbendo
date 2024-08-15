@@ -1,10 +1,9 @@
 import ContainerAdmin from '@/components/containers/ContainerAdmin';
-import AddUMKM from './_section/AddUMKM';
 
-export default function ProdukHukumPage() {
+export default function UMKMPage() {
   return (
     <ContainerAdmin>
-      <AddUMKM />
+      <p>Ini halaman UMKM</p>
     </ContainerAdmin>
   );
 }
