@@ -1,9 +1,27 @@
+'use client';
 import Button from '@/components/button/Button';
 import Card from '@/components/cards/Card';
-import { User } from '@prisma/client';
+import { User } from '@/types/User';
+import axiosInstance from '@/utils/axiosInstance';
 import { IconPlus } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 
 export default function TableSection() {
+  const [accounts, setAccounts] = useState<User[]>([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axiosInstance.get('/users');
+
+      setAccounts(response.data.data);
+    } catch (error) {
+      console.log(`Error fetching data: ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <Card>
       <div className="flex justify-between items-center mb-3">
@@ -47,7 +65,7 @@ export default function TableSection() {
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="text-center font-semibold py-3">
+                <td colSpan={5} className="text-center font-medium py-3">
                   Data sedang kosong...
                 </td>
               </tr>
