@@ -75,7 +75,7 @@ model PublicComplaints {
   complaint          TypeOfComplaint
   email              String?
   phone              String?
-  supportingEvidence String
+  supportingEvidence String?
 }
 
 enum TypeOfComplaint {

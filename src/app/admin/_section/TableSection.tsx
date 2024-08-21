@@ -2,11 +2,8 @@ import Button from '@/components/button/Button';
 import Card from '@/components/cards/Card';
 import { User } from '@prisma/client';
 import { IconPlus } from '@tabler/icons-react';
-import { useState } from 'react';
 
 export default function TableSection() {
-  const [accounts, setAccounts] = useState([]);
-
   return (
     <Card>
       <div className="flex justify-between items-center mb-3">
