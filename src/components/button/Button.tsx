@@ -7,6 +7,7 @@ interface ButtonProps {
   size?: 'sm' | 'base' | 'lg';
   color?: 'primary' | 'warning' | 'danger';
   className?: string;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export default function Button({
@@ -14,6 +15,7 @@ export default function Button({
   onClick,
   size = 'base',
   color = 'primary',
+  type = 'button',
   className,
 }: ButtonProps) {
   const sizeClasses = {
@@ -31,8 +33,9 @@ export default function Button({
   return (
     <button
       onClick={onClick}
+      type={type}
       className={cn(
-        'font-semibold rounded-md',
+        'font-medium rounded-md',
         className,
         sizeClasses[size],
         colorClasses[color],

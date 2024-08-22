@@ -9,7 +9,7 @@ export default function LabelForm({
 }) {
   return (
     <label htmlFor={label}>
-      <span className="font-semibold block mb-2">{label}</span>
+      <span className="font-semibold block mb-1">{label}</span>
       {children}
     </label>
   );
