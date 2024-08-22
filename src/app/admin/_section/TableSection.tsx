@@ -38,6 +38,15 @@ export default function TableSection() {
       .string()
       .min(8, 'Password minimal 8 karakter')
       .required('Password wajib diisi'),
+    confirmPassword: yup
+      .string()
+      .test('confirm-password-test', 'Password tidak sesuai', function (value) {
+        const { id, password } = this.parent;
+        if (id && value !== password) {
+          return false;
+        }
+        return true;
+      }),
     verified: yup.date().nullable(),
     position: yup.mixed<'village_head' | 'employee'>().nullable(),
     role: yup
@@ -272,6 +281,21 @@ export default function TableSection() {
               {errors.password && (
                 <p className="text-red-500 text-sm">
                   {errors.password.message}
+                </p>
+              )}
+            </LabelForm>
+
+            <LabelForm label="Konfirmasi Password">
+              <InputForm
+                {...register('confirmPassword')}
+                type="password"
+                label="Konfirmasi Password"
+                name="confirmPassword"
+                placeholder="Input konfirmasi password admin"
+              />
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-sm">
+                  {errors.confirmPassword.message}
                 </p>
               )}
             </LabelForm>
