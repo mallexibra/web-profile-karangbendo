@@ -1,10 +1,11 @@
+'use client';
 import { IconEye, IconEyeOff } from '@tabler/icons-react';
 import { forwardRef, useState } from 'react';
 
 interface InputFormProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   name: string;
-  type: 'text' | 'password' | 'file';
+  type: 'text' | 'password' | 'file' | 'number';
   placeholder?: string;
 }
 
@@ -12,10 +13,10 @@ export const InputForm = forwardRef<HTMLInputElement, InputFormProps>(
   ({ label, name, type, placeholder, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
 
-    if (type === 'text') {
+    if (type === 'text' || type === "number") {
       return (
         <input
-          type="text"
+          type={type}
           className="block w-full px-2 py-3 border-custom border text-xs bg-second rounded-md outline-none"
           placeholder={placeholder}
           name={name}
