@@ -15,10 +15,10 @@ export default function ProfileDesa() {
   const villageProfileSchema = yup.object().shape({
     visi: yup.string().required('Visi wajib diisi'),
     misi: yup.string().required('Misi wajib diisi'),
-    resident: yup.number().required('Jumlah Penduduk wajib diisi').integer(),
-    children: yup.number().required('Jumlah Anak-anak wajib diisi').integer(),
-    mature: yup.number().required('Jumlah Dewasa wajib diisi').integer(),
-    old: yup.number().required('Jumlah Lanjut Usia wajib diisi').integer(),
+    resident: yup.number().required('Jumlah Penduduk wajib diisi').transform((_, val) => (val !== '' ? Number(val) : null)),
+    children: yup.number().required('Jumlah Anak-anak wajib diisi').transform((_ : any, val : any) => (val !== '' ? Number(val) : null)),
+    mature: yup.number().required('Jumlah Dewasa wajib diisi').transform((_, val) => (val !== '' ? Number(val) : null)),
+    old: yup.number().required('Jumlah Lanjut Usia wajib diisi').transform((_, val) => (val !== '' ? Number(val) : null)),
     image: yup.mixed<File>().required('Struktur Aparatur Desa wajib diisi'),
   });
 
@@ -106,7 +106,7 @@ export default function ProfileDesa() {
           <LabelForm label="Jumlah Penduduk">
             <InputForm
               {...register('resident')}
-              type="number"
+              type="text"
               label="Jumlah Penduduk"
               name="penduduk"
               placeholder="Masukkan jumlah penduduk"
@@ -118,7 +118,7 @@ export default function ProfileDesa() {
           <LabelForm label="Jumlah Anak-anak">
             <InputForm
               {...register('children')}
-              type="number"
+              type="text"
               label="Jumlah Anak-anak"
               name="anak_anak"
               placeholder="Masukkan jumlah anak-anak"
@@ -130,7 +130,7 @@ export default function ProfileDesa() {
           <LabelForm label="Jumlah Dewasa">
             <InputForm
               {...register('mature')}
-              type="number"
+              type="text"
               label="Jumlah Dewasa"
               name="dewasa"
               placeholder="Masukkan jumlah dewasa"
@@ -142,7 +142,7 @@ export default function ProfileDesa() {
           <LabelForm label="Jumlah Lanjut Usia">
             <InputForm
               {...register('old')}
-              type="number"
+              type="text"
               label="Jumlah Lanjut Usia"
               name="lanjut_usia"
               placeholder="Masukkan jumlah lanjut usia"

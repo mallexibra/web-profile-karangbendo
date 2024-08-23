@@ -1,13 +1,12 @@
 import ContainerClient from '@/components/containers/ContainerClient';
 import Navbar from '@/components/sidebar/Navbar';
+import Header from './_section/Header';
 
 export default function HomePage() {
   return (
     <main>
-      <ContainerClient>
-        <Navbar />
-        <p>Ini halaman home</p>
-      </ContainerClient>
+      <Header />
+      <Navbar />
     </main>
   );
 }

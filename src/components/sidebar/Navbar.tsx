@@ -6,7 +6,7 @@ import { IconChevronDown, IconUser } from '@tabler/icons-react';
 
 export default function Navbar() {
   return (
-    <nav className="py-3">
+    <nav className="py-3 text-white bg-white/10 backdrop-blur border-b border-white/20 fixed left-0 top-0 right-0">
       <ContainerClient classNames="flex justify-between items-center gap-3">
         <div className="flex justify-start items-center gap-2">
           <Image src={logo} className="w-10" alt="Logo Kabupaten Banyuwangi" />
@@ -18,7 +18,7 @@ export default function Navbar() {
           <div className="relative group flex justify-center items-center cursor-pointer gap-2">
             <p>Profile Desa</p>
             <IconChevronDown className="w-4" />
-            <ul className="absolute top-5 w-max left-0 hidden group-hover:block bg-white shadow-lg mt-2 p-2 rounded-md">
+            <ul className="absolute top-5 w-max left-0 hidden group-hover:block bg-white/20 backdrop-blur shadow-lg mt-2 p-2 rounded-md">
               <li className="py-1 px-2 hover:bg-gray-100">
                 Kegiatan Masyarakat
               </li>
@@ -32,7 +32,7 @@ export default function Navbar() {
           <div className="relative group flex justify-center items-center cursor-pointer gap-2">
             <p>Informasi Desa</p>
             <IconChevronDown className="w-4" />
-            <ul className="absolute top-5 w-max left-0 hidden group-hover:block bg-white shadow-lg mt-2 p-2 rounded-md">
+            <ul className="absolute top-5 w-max left-0 hidden group-hover:block bg-white/20 backdrop-blur shadow-lg mt-2 p-2 rounded-md">
               <li className="py-1 px-2 hover:bg-gray-100">Potensi Desa</li>
               <li className="py-1 px-2 hover:bg-gray-100">Kelembagaan</li>
               <li className="py-1 px-2 hover:bg-gray-100">
@@ -46,7 +46,7 @@ export default function Navbar() {
           <div className="relative group flex justify-center items-center cursor-pointer gap-2">
             <p>Transparansi</p>
             <IconChevronDown className="w-4" />
-            <ul className="absolute top-5 w-max left-0 hidden group-hover:block bg-white shadow-lg mt-2 p-2 rounded-md">
+            <ul className="absolute top-5 w-max left-0 hidden group-hover:block bg-white/20 backdrop-blur shadow-lg mt-2 p-2 rounded-md">
               <li className="py-1 px-2 hover:bg-gray-100">Pendanaan</li>
               <li className="py-1 px-2 hover:bg-gray-100">
                 Dokumentasi Kegiatan
@@ -59,7 +59,7 @@ export default function Navbar() {
           <div className="relative group flex justify-center items-center cursor-pointer gap-2">
             <p>Produk Hukum</p>
             <IconChevronDown className="w-4" />
-            <ul className="absolute top-5 w-max left-0 hidden group-hover:block bg-white shadow-lg mt-2 p-2 rounded-md">
+            <ul className="absolute top-5 w-max left-0 hidden group-hover:block bg-white/20 backdrop-blur shadow-lg mt-2 p-2 rounded-md">
               <li className="py-1 px-2 hover:bg-gray-100">Peraturan Desa</li>
               <li className="py-1 px-2 hover:bg-gray-100">
                 Peraturan Kepala Desa
