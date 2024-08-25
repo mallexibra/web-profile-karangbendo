@@ -51,7 +51,7 @@ export const POST = async (request: Request) => {
         const bytes = await image.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const imagePath = imageVillage;
-        const path = join('./assets/village-profile', imageVillage);
+        const path = join('./public/assets/village-profile', imageVillage);
         await writeFile(path, buffer);
 
         const newProfile = await db.villageProfile.create({

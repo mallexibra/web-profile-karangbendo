@@ -15,7 +15,7 @@ const villageProfileSchema = yup.object({
     old: yup.number().required('Old is required and must be a number').integer(),
 });
 
-export const PUT = async (request: Request, { params }: { params: { id: string } }) => {
+export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const formData = await request.formData();
         const data = Object.fromEntries(formData.entries());
@@ -33,21 +33,29 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
         }
 
         let imagePath = existingVillage.image;
-        if (image) {
+        if (image && typeof image.name === 'string' && typeof image.size === 'number') {
             if (existingVillage.image) {
-                await unlink(join('./assets/village-profile', existingVillage.image));
+                await unlink(join('./public/assets/village-profile', existingVillage.image));
             }
             const imgVillage = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
             const bytes = await image.arrayBuffer();
             const buffer = Buffer.from(bytes);
             imagePath = imgVillage;
-            const path = join('./assets/village-profile', imgVillage);
+            const path = join('./public/assets/village-profile', imgVillage);
             await writeFile(path, buffer);
         }
 
         const updatedVillage = await db.villageProfile.update({
             where: { id: Number(params.id) },
-            data: { ...data, image: imagePath },
+            data: {
+                ...data,
+                id: parseInt(data.id as string, 10),
+                image: imagePath,
+                old: parseInt(data.old as string, 10),
+                mature: parseInt(data.mature as string, 10),
+                children: parseInt(data.children as string, 10),
+                resident: parseInt(data.resident as string, 10),
+            },
         });
 
         return NextResponse.json({

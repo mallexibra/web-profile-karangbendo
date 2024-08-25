@@ -2,30 +2,80 @@
 import Card from '@/components/cards/Card';
 import { InputForm } from '@/components/forms/InputForm';
 import LabelForm from '@/components/forms/LabelForm';
-import TextareaForm from '@/components/forms/TextareaForm';
 import { VillageProfile } from '@/types/VillageProfile';
 import axiosInstance from '@/utils/axiosInstance';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IconPlus } from '@tabler/icons-react';
-import { useEffect } from 'react';
+import { IconPlus, IconSquareRoundedXFilled } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 export default function ProfileDesa() {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [dataImage, setDataImage] = useState<string | null>(null);
+  const [id, setId] = useState<number | null>(null);
+
+  const MAX_FILE_SIZE = 2 * 1024 * 1024;
+  const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
+
   const villageProfileSchema = yup.object().shape({
     visi: yup.string().required('Visi wajib diisi'),
     misi: yup.string().required('Misi wajib diisi'),
-    resident: yup.number().required('Jumlah Penduduk wajib diisi').transform((_, val) => (val !== '' ? Number(val) : null)),
-    children: yup.number().required('Jumlah Anak-anak wajib diisi').transform((_ : any, val : any) => (val !== '' ? Number(val) : null)),
-    mature: yup.number().required('Jumlah Dewasa wajib diisi').transform((_, val) => (val !== '' ? Number(val) : null)),
-    old: yup.number().required('Jumlah Lanjut Usia wajib diisi').transform((_, val) => (val !== '' ? Number(val) : null)),
-    image: yup.mixed<File>().required('Struktur Aparatur Desa wajib diisi'),
+    resident: yup
+      .number()
+      .positive('Jumlah Penduduk harus bilangan positif')
+      .required('Jumlah Penduduk wajib diisi')
+      .transform((_, val) => (val !== '' ? Number(val) : null)),
+    children: yup
+      .number()
+      .positive('Jumlah Anak-anak harus bilangan positif')
+      .required('Jumlah Anak-anak wajib diisi')
+      .transform((_: any, val: any) => (val !== '' ? Number(val) : null)),
+    mature: yup
+      .number()
+      .positive('Jumlah Dewasa harus bilangan positif')
+      .required('Jumlah Dewasa wajib diisi')
+      .transform((_, val) => (val !== '' ? Number(val) : null)),
+    old: yup
+      .number()
+      .positive('Jumlah Lanjut Usia harus bilangan positif')
+      .required('Jumlah Lanjut Usia wajib diisi')
+      .transform((_, val) => (val !== '' ? Number(val) : null)),
+    image: yup
+      .mixed<File>()
+      .nullable()
+      .test(
+        'fileRequired',
+        'Struktur Aparatur Desa wajib diisi',
+        function (value) {
+          return !!dataImage || !!value;
+        },
+      )
+      .test('fileSize', 'Ukuran file maksimal 2MB', function (value) {
+        if (dataImage) return true;
+        if (value) {
+          return value.size <= MAX_FILE_SIZE;
+        }
+        return true;
+      })
+      .test(
+        'fileFormat',
+        'Format file tidak valid, hanya jpg, jpeg, dan png yang diperbolehkan',
+        function (value) {
+          if (dataImage) return true;
+          if (value) {
+            return SUPPORTED_FORMATS.includes(value.type);
+          }
+          return true;
+        },
+      ),
   });
 
   const {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(villageProfileSchema),
@@ -39,9 +89,22 @@ export default function ProfileDesa() {
   const fetchData = async () => {
     try {
       const response = await axiosInstance.get('/village-profiles');
-      const data: VillageProfile = response.data.data;
-      Object.entries(data).forEach(([key, value]) => {
-        setValue(key as keyof FormFields, value);
+      const data: VillageProfile[] = response.data.data;
+
+      const sortedData = data.sort((a, b) => a.id - b.id);
+
+      const firstData = sortedData[0];
+
+      Object.entries(firstData).forEach(([key, value]) => {
+        if (key === 'id') {
+          setId(value);
+        }
+
+        if (key === 'image') {
+          setDataImage(value);
+        } else {
+          setValue(key as keyof FormFields, value);
+        }
       });
     } catch (error) {
       console.log(`Error fetching data profile desa: ${error}`);
@@ -50,117 +113,173 @@ export default function ProfileDesa() {
 
   const submitData = async (data: any) => {
     try {
-      console.log(data);
+      const formData = new FormData();
+      for (const key in data) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+          let value = data[key];
+          if (key === 'image' && !selectedImage && dataImage) {
+            value = null;
+          }
+          formData.append(key, value);
+        }
+      }
+
+      if (id) {
+        await axiosInstance.patch(`/village-profiles/${id}`, formData);
+        fetchData();
+      } else {
+        await axiosInstance.post('/village-profiles', formData);
+        fetchData();
+      }
     } catch (error) {}
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const input = event.target;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      setSelectedImage(URL.createObjectURL(file));
+      setValue('image', file);
+    } else {
+      console.log('No file selected or fileList is empty');
+    }
   };
 
   useEffect(() => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === 'image') {
+        console.log('Image changed:', value.image);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
   return (
     <Card>
-      <form
-        action=""
-        onSubmit={handleSubmit(submitData)}
-        className="flex gap-5"
-        method="post"
-      >
-        <section className="flex flex-col gap-3 w-1/2">
-          <LabelForm label="Visi Desa">
-            <InputForm
-              {...register('visi')}
-              type="text"
-              label="Visi Desa"
-              name="visi"
-              placeholder="Masukkan visi desa"
-            />
-            {errors.visi && (
-              <p className="text-red-500 text-sm">{errors.visi.message}</p>
+      <form action="" onSubmit={handleSubmit(submitData)} method="post">
+        <div className="flex gap-5">
+          <section className="flex flex-col gap-3 w-1/2">
+            <LabelForm label="Visi Desa">
+              <InputForm
+                {...register('visi')}
+                type="text"
+                label="Visi Desa"
+                name="visi"
+                placeholder="Masukkan visi desa"
+              />
+              {errors.visi && (
+                <p className="text-red-500 text-sm">{errors.visi.message}</p>
+              )}
+            </LabelForm>
+            <LabelForm label="Misi Desa">
+              <textarea
+                {...register('misi')}
+                placeholder="Masukkan misi desa"
+                rows={3}
+                className="block w-full px-2 py-3 border-custom border text-xs bg-second rounded-md outline-none"
+              />
+              {errors.misi && (
+                <p className="text-red-500 text-sm">{errors.misi.message}</p>
+              )}
+            </LabelForm>
+            {selectedImage || dataImage ? (
+              <div className="relative">
+                <img
+                  src={selectedImage || `/assets/village-profile/${dataImage}`}
+                  alt="Struktur Aparatur Desa"
+                  className="rounded-md"
+                />
+                <IconSquareRoundedXFilled
+                  onClick={() => {
+                    setSelectedImage(null);
+                    setDataImage(null);
+                  }}
+                  className="text-red-600 absolute -top-2 -right-2 cursor-pointer"
+                />
+              </div>
+            ) : (
+              <LabelForm label="Struktur Aparatur Desa">
+                <InputForm
+                  {...register('image')}
+                  type="file"
+                  label="Struktur Aparatur Desa"
+                  name="image"
+                  onChange={handleImageChange}
+                />
+              </LabelForm>
             )}
-          </LabelForm>
-          <LabelForm label="Misi Desa">
-            <textarea
-              {...register('misi')}
-              placeholder="Masukkan misi desa"
-              rows={3}
-              className="block w-full px-2 py-3 border-custom border text-xs bg-second rounded-md outline-none"
-            />
-            {errors.misi && (
-              <p className="text-red-500 text-sm">{errors.misi.message}</p>
-            )}
-          </LabelForm>
-          <LabelForm label="Struktur Aparatur Desa">
-            <InputForm
-              {...register('image')}
-              type="file"
-              label="Struktur Aparatur Desa"
-              name="struktur"
-            />
             {errors.image && (
               <p className="text-red-500 text-sm">{errors.image.message}</p>
             )}
-          </LabelForm>
-        </section>
-        <section className="flex flex-col gap-3 w-1/2">
-          <LabelForm label="Jumlah Penduduk">
-            <InputForm
-              {...register('resident')}
-              type="text"
-              label="Jumlah Penduduk"
-              name="penduduk"
-              placeholder="Masukkan jumlah penduduk"
-            />
-            {errors.resident && (
-              <p className="text-red-500 text-sm">{errors.resident.message}</p>
-            )}
-          </LabelForm>
-          <LabelForm label="Jumlah Anak-anak">
-            <InputForm
-              {...register('children')}
-              type="text"
-              label="Jumlah Anak-anak"
-              name="anak_anak"
-              placeholder="Masukkan jumlah anak-anak"
-            />
-            {errors.children && (
-              <p className="text-red-500 text-sm">{errors.children.message}</p>
-            )}
-          </LabelForm>
-          <LabelForm label="Jumlah Dewasa">
-            <InputForm
-              {...register('mature')}
-              type="text"
-              label="Jumlah Dewasa"
-              name="dewasa"
-              placeholder="Masukkan jumlah dewasa"
-            />
-            {errors.mature && (
-              <p className="text-red-500 text-sm">{errors.mature.message}</p>
-            )}
-          </LabelForm>
-          <LabelForm label="Jumlah Lanjut Usia">
-            <InputForm
-              {...register('old')}
-              type="text"
-              label="Jumlah Lanjut Usia"
-              name="lanjut_usia"
-              placeholder="Masukkan jumlah lanjut usia"
-            />
-            {errors.old && (
-              <p className="text-red-500 text-sm">{errors.old.message}</p>
-            )}
-          </LabelForm>
-          <div className="flex justify-end mt-3">
-            <button
-              type="submit"
-              className="w-max px-3 py-2 bg-primary rounded-md text-white text-sm font-medium gap-2 flex justify-center items-center"
-            >
-              <IconPlus color="#fff" size={18} />
-              <p>Tambah Data</p>
-            </button>
-          </div>
-        </section>
+          </section>
+          <section className="flex flex-col gap-3 w-1/2">
+            <LabelForm label="Jumlah Penduduk">
+              <InputForm
+                {...register('resident')}
+                type="number"
+                label="Jumlah Penduduk"
+                name="resident"
+                placeholder="Masukkan jumlah penduduk"
+              />
+              {errors.resident && (
+                <p className="text-red-500 text-sm">
+                  {errors.resident.message}
+                </p>
+              )}
+            </LabelForm>
+            <LabelForm label="Jumlah Anak-anak">
+              <InputForm
+                {...register('children')}
+                type="number"
+                label="Jumlah Anak-anak"
+                name="children"
+                placeholder="Masukkan jumlah anak-anak"
+              />
+              {errors.children && (
+                <p className="text-red-500 text-sm">
+                  {errors.children.message}
+                </p>
+              )}
+            </LabelForm>
+            <LabelForm label="Jumlah Dewasa">
+              <InputForm
+                {...register('mature')}
+                type="number"
+                label="Jumlah Dewasa"
+                name="mature"
+                placeholder="Masukkan jumlah dewasa"
+              />
+              {errors.mature && (
+                <p className="text-red-500 text-sm">{errors.mature.message}</p>
+              )}
+            </LabelForm>
+            <LabelForm label="Jumlah Lanjut Usia">
+              <InputForm
+                {...register('old')}
+                type="number"
+                label="Jumlah Lanjut Usia"
+                name="old"
+                placeholder="Masukkan jumlah lanjut usia"
+              />
+              {errors.old && (
+                <p className="text-red-500 text-sm">{errors.old.message}</p>
+              )}
+            </LabelForm>
+          </section>
+        </div>
+        <div className="flex justify-end mt-3">
+          <button
+            type="submit"
+            className="w-max px-3 py-2 bg-primary rounded-md text-white text-sm font-medium gap-2 flex justify-center items-center"
+          >
+            <IconPlus color="#fff" size={18} />
+            <p>{id ? 'Edit' : 'Tambah'} Data</p>
+          </button>
+        </div>
       </form>
     </Card>
   );

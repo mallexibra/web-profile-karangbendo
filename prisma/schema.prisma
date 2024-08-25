@@ -42,10 +42,10 @@ model VillageProfile {
   visi     String
   misi     String
   image    String
-  resident BigInt
-  children BigInt
-  mature   BigInt
-  old      BigInt
+  resident Int
+  children Int
+  mature   Int
+  old      Int
 }
 
 model VillageApparatus {
