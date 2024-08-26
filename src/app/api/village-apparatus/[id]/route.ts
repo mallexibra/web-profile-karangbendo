@@ -9,10 +9,9 @@ import * as yup from 'yup';
 const villageApparatusSchema = yup.object({
     name: yup.string().required('Name is required and must be a string'),
     position: yup.string().required('Position is required and must be a string'),
-    profile: yup.mixed<File>().required('Image is required'),
 });
 
-export const PUT = async (request: Request, { params }: { params: { id: string } }) => {
+export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const formData = await request.formData();
         const data = Object.fromEntries(formData.entries());
@@ -30,21 +29,21 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
         }
 
         let imagePath = existingApparatus.profile;
-        if (image) {
+        if (image && typeof image.name === 'string' && typeof image.size === 'number') {
             if (existingApparatus.profile) {
-                await unlink(join('./assets/village-apparatus', existingApparatus.profile));
+                await unlink(join('./public/assets/village-apparatus', existingApparatus.profile));
             }
             const imgProfile = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
             const bytes = await image.arrayBuffer();
             const buffer = Buffer.from(bytes);
             imagePath = imgProfile;
-            const path = join('./assets/village-apparatus', imgProfile);
+            const path = join('./public/assets/village-apparatus', imgProfile);
             await writeFile(path, buffer);
         }
 
         const updatedProfile = await db.villageApparatus.update({
             where: { id: Number(params.id) },
-            data: { ...data, profile: imagePath },
+            data: { ...data, id: Number(params.id), profile: imagePath },
         });
 
         return NextResponse.json({
@@ -70,7 +69,8 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
     }
 };
 
-export const DELETE = async ({ params }: { params: { id: string } }) => {
+export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
+    console.log(params)
     try {
         const villageApparatus = await db.villageApparatus.findUnique({ where: { id: Number(params.id) } });
         if (!villageApparatus) {
@@ -82,7 +82,7 @@ export const DELETE = async ({ params }: { params: { id: string } }) => {
         }
 
         if (villageApparatus.profile) {
-            await unlink(join('./assets/village-apparatus', villageApparatus.profile));
+            await unlink(join('./public/assets/village-apparatus', villageApparatus.profile));
         }
 
         await db.villageApparatus.delete({ where: { id: Number(params.id) } });

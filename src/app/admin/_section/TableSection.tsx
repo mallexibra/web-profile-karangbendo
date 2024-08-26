@@ -7,6 +7,7 @@ import { SelectForm } from '@/components/forms/SelectForm';
 import { User } from '@/types/User';
 import axiosInstance from '@/utils/axiosInstance';
 import { formatText } from '@/utils/format';
+import { optionPosition, optionRole } from '@/utils/option';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IconPlus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -16,17 +17,7 @@ import * as yup from 'yup';
 
 export default function TableSection() {
   const [accounts, setAccounts] = useState<User[]>([]);
-  const optionRole = [
-    { label: 'Kepala Desa', value: 'village_head' },
-    { label: 'Pegawai', value: 'employee' },
-    { label: 'Admin', value: 'admin' },
-    { label: 'UMKM', value: 'umkm' },
-  ];
-  const optionPosition = [
-    { label: 'Kepala Desa', value: 'village_head' },
-    { label: 'Pegawai', value: 'employee' },
-  ];
-
+  
   const userSchema = yup.object().shape({
     name: yup.string().required('Nama wajib diisi'),
     email: yup

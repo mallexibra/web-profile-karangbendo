@@ -8,7 +8,7 @@ import * as yup from 'yup';
 const villageApparatusSchema = yup.object({
     name: yup.string().required('Name is required and must be a string'),
     position: yup.string().required('Position is required and must be a string'),
-    profile: yup.mixed<File>().required('Image is required'),
+    profile: yup.mixed<File>().required('File is required'),
 });
 
 export const GET = async () => {
@@ -37,24 +37,23 @@ export const POST = async (request: Request) => {
         };
         const image = formData.get('profile') as File;
 
-        await villageApparatusSchema.validate({ ...data, image }, { abortEarly: false });
-
+        await villageApparatusSchema.validate({ ...data, profile: image }, { abortEarly: false });
         const imgProfile = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
         const bytes = await image.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const imagePath = imgProfile;
-        const path = join('./assets/village-apparatus', imgProfile);
+        const path = join('./public/assets/village-apparatus', imgProfile);
         await writeFile(path, buffer);
 
-        const newProfile = await db.villageApparatus.create({
+        const newApparatus = await db.villageApparatus.create({
             data: {
                 ...data,
-                image: imagePath,
+                profile: imagePath,
             },
         });
 
         return NextResponse.json({
-            data: newProfile,
+            data: newApparatus,
             message: "Village apparatus created successfully",
             status: true,
         }, { status: 201 });
