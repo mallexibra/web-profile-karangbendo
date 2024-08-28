@@ -2,5 +2,5 @@ export interface VillageGovernmentFinance {
     id: number;
     name: string;
     type: 'income' | 'expenditure';
-    amount: bigint;
+    amount: number;
 }

@@ -41,7 +41,7 @@ export const POST = async (request: Request) => {
         const bytes = await image.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const imagePath = imgProfile;
-        const path = join('./assets/documentation-activities', imgProfile);
+        const path = join('./public/assets/documentation-activities', imgProfile);
         await writeFile(path, buffer);
 
         const newDocumentation = await db.documentationActivities.create({

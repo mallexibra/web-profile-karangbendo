@@ -33,7 +33,7 @@ export const POST = async (request: Request) => {
         await workPlanAndBudgetSchema.validate(data, { abortEarly: false });
 
         const newworkPlanAndBudget = await db.workPlanAndBudget.create({
-            data
+            data: { ...data, date: new Date(data.date) }
         });
 
         return NextResponse.json({

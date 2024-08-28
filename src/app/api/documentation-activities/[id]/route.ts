@@ -29,15 +29,15 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
         }
 
         let imagePath = existingDocumentationActivities.image;
-        if (image) {
+        if (image && typeof image.name === 'string' && typeof image.size === 'number') {
             if (existingDocumentationActivities.image) {
-                await unlink(join('./assets/documentation-activities', existingDocumentationActivities.image));
+                await unlink(join('./public/assets/documentation-activities', existingDocumentationActivities.image));
             }
             const imgdocumentationActivities = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
             const bytes = await image.arrayBuffer();
             const buffer = Buffer.from(bytes);
             imagePath = imgdocumentationActivities;
-            const path = join('./assets/documentation-activities', imgdocumentationActivities);
+            const path = join('./public/assets/documentation-activities', imgdocumentationActivities);
             await writeFile(path, buffer);
         }
 
@@ -69,7 +69,7 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
     }
 };
 
-export const DELETE = async ({ params }: { params: { id: string } }) => {
+export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const documentationActivities = await db.documentationActivities.findUnique({ where: { id: Number(params.id) } });
         if (!documentationActivities) {
@@ -81,7 +81,7 @@ export const DELETE = async ({ params }: { params: { id: string } }) => {
         }
 
         if (documentationActivities.image) {
-            await unlink(join('./assets/documentation-activities', documentationActivities.image));
+            await unlink(join('./public/assets/documentation-activities', documentationActivities.image));
         }
 
         await db.documentationActivities.delete({ where: { id: Number(params.id) } });

@@ -3,10 +3,8 @@ import Button from '@/components/button/Button';
 import Card from '@/components/cards/Card';
 import { InputForm } from '@/components/forms/InputForm';
 import LabelForm from '@/components/forms/LabelForm';
-import { SelectForm } from '@/components/forms/SelectForm';
 import { VillageInfrastruktur } from '@/types/VillageInfrastruktur';
 import axiosInstance from '@/utils/axiosInstance';
-import { optionPosition } from '@/utils/option';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   IconCircleXFilled,
@@ -140,7 +138,9 @@ export default function InfrastrukturDesa() {
 
   const handleDelete = async (id: number) => {
     try {
-      const response = await axiosInstance.delete(`/village-infrastruktur/${id}`);
+      const response = await axiosInstance.delete(
+        `/village-infrastruktur/${id}`,
+      );
       if (response.status) {
         Swal.fire({
           icon: 'success',
@@ -275,16 +275,21 @@ export default function InfrastrukturDesa() {
                   alt={infrastruktur.name}
                 />
                 <span className="inline-block absolute -top-2 -right-2 cursor-pointer bg-white w-max rounded-full">
-                  <IconCircleXFilled onClick={()=>{Swal.fire({
-                      title: 'Apakah anda yakin akan menghapus data ini?',
-                      showDenyButton: true,
-                      confirmButtonText: 'Yakin',
-                      denyButtonText: 'Tidak yakin',
-                    }).then((result) => {
-                      if (result.isConfirmed) {
-                        return handleDelete(infrastruktur.id);
-                      }
-                    });}} className="text-rose-600" />
+                  <IconCircleXFilled
+                    onClick={() => {
+                      Swal.fire({
+                        title: 'Apakah anda yakin akan menghapus data ini?',
+                        showDenyButton: true,
+                        confirmButtonText: 'Yakin',
+                        denyButtonText: 'Tidak yakin',
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          return handleDelete(infrastruktur.id);
+                        }
+                      });
+                    }}
+                    className="text-rose-600"
+                  />
                 </span>
                 <div className="absolute h-14 rounded-b-md text-sm flex items-end p-3 font-semibold text-white bg-gradient-to-b from-transparent to-primary w-full left-0 bottom-0 right-0">
                   <p>{infrastruktur.name}</p>

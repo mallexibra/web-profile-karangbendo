@@ -9,3 +9,8 @@ export const optionPosition = [
     { label: 'Kepala Desa', value: 'village_head' },
     { label: 'Pegawai', value: 'employee' },
 ];
+
+export const optionType = [
+    { label: 'Pendapatan', value: 'income' },
+    { label: 'Pengeluaran', value: 'expenditure' },
+];

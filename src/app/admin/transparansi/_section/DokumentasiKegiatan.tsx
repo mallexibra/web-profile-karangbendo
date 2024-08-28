@@ -1,12 +1,197 @@
+'use client';
+import Button from '@/components/button/Button';
 import Card from '@/components/cards/Card';
-import { IconPlus, IconCircleXFilled } from '@tabler/icons-react';
+import { InputForm } from '@/components/forms/InputForm';
+import LabelForm from '@/components/forms/LabelForm';
+import { DocumentationActivities } from '@/types/DocumentationActivities';
+import axiosInstance from '@/utils/axiosInstance';
+import { yupResolver } from '@hookform/resolvers/yup';
+import {
+  IconPlus,
+  IconCircleXFilled,
+  IconSquareRoundedXFilled,
+} from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
+import * as yup from 'yup';
 
 export default function DokumentasiKegiatan() {
+  const [documentation, setDocumentation] = useState<DocumentationActivities[]>(
+    [],
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const MAX_FILE_SIZE = 2 * 1024 * 1024;
+  const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
+
+  const documentationSchema = yup.object({
+    name: yup.string().required('Name is required and must be a string'),
+    image: yup
+      .mixed<File>()
+      .required()
+      .test('fileSize', 'Ukuran file maksimal 2MB', function (value: any) {
+        if (value) {
+          return value.size <= MAX_FILE_SIZE;
+        }
+        return true;
+      })
+      .test(
+        'fileFormat',
+        'Format file tidak valid, hanya jpg, jpeg, dan png yang diperbolehkan',
+        function (value: any) {
+          if (value) {
+            return SUPPORTED_FORMATS.includes(value.type);
+          }
+          return true;
+        },
+      ),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(documentationSchema),
+  });
+
+  const modalClick = () => {
+    const modal = document.getElementById('modal_add') as HTMLDialogElement;
+    if (modal) {
+      modal.showModal();
+    }
+  };
+
+  const close: any = () => {
+    const modal = document.getElementById('modal_add') as HTMLDialogElement;
+    if (modal) {
+      modal.close();
+      reset();
+      setIsModalOpen(false);
+      setSelectedImage(null);
+    }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const input = event.target;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      setSelectedImage(URL.createObjectURL(file));
+      setValue('image', file);
+    } else {
+      console.log('No file selected or fileList is empty');
+    }
+  };
+
+  const handleAddDocumentation = async (data: any) => {
+    try {
+      const formData = new FormData();
+      for (const key in data) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+          let value = data[key];
+          formData.append(key, value);
+        }
+      }
+      let response = await axiosInstance.post(
+        '/documentation-activities',
+        formData,
+      );
+
+      if (response.status) {
+        close();
+        Swal.fire({
+          icon: 'success',
+          title: 'Sukses!',
+          text: 'Sukses tambah data dokumentasi desa',
+        });
+        fetchData();
+      } else {
+        close();
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal!',
+          text: response.data.message[0] || 'Terjadi kesalahan.',
+        });
+      }
+    } catch (error: any) {
+      close();
+
+      if (error.response) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal!',
+          text: error.response.data.message || 'Terjadi kesalahan.',
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal!',
+          text: 'Terjadi kesalahan tak terduga.',
+        });
+      }
+      console.log(`Error create data dokumentasi desa: ${error}`);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/documentation-activities/${id}`,
+      );
+      if (response.status) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Sukses!',
+          text: 'Sukses delete data dokumentasi desa',
+        });
+        fetchData();
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal!',
+          text: 'Terjadi kesalahan.',
+        });
+      }
+    } catch (error: any) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: 'Terjadi kesalahan tak terduga.',
+      });
+      console.log(`Error delete data dokumentasi desa: ${error}`);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await axiosInstance.get('/documentation-activities');
+      const dataTemporary: DocumentationActivities[] = response.data.data;
+      // const data = dataTemporary.filter((user: User) => user.role == 'admin');
+
+      setDocumentation(dataTemporary);
+    } catch (error) {
+      console.log(`Error fetching data dokumentasi desa: ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    if (isModalOpen) modalClick();
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <Card>
       <div className="flex justify-between items-center mb-3">
         <p className="font-bold">Dokumentasi Kegiatan</p>
         <button
+          onClick={() => setIsModalOpen(true)}
           type="button"
           className="w-max px-3 py-2 bg-primary rounded-md cursor-pointer text-white text-sm font-medium gap-2 flex justify-center items-center"
         >
@@ -14,31 +199,95 @@ export default function DokumentasiKegiatan() {
           <p>Tambah Data</p>
         </button>
       </div>
+      <dialog id="modal_add" className="modal">
+        <div className="modal-box">
+          <button
+            type="button"
+            onClick={close}
+            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          >
+            ✕
+          </button>
+
+          <h3 className="font-bold text-lg">
+            Tambah Dokumentasi Kegiatan Desa
+          </h3>
+
+          <form
+            method="post"
+            onSubmit={handleSubmit(handleAddDocumentation)}
+            className="mt-3 flex flex-col gap-2"
+          >
+            <LabelForm label="Nama">
+              <InputForm
+                {...register('name')}
+                type="text"
+                label="Nama"
+                name="name"
+                placeholder="Input nama dokumentasi desa"
+              />
+              {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name.message}</p>
+              )}
+            </LabelForm>
+
+            <LabelForm label="Dokumentasi">
+              {selectedImage ? (
+                <div className="relative">
+                  <img
+                    src={selectedImage}
+                    alt="Dokumentasi Kegiatan Desa"
+                    className="rounded-md"
+                  />
+                  <IconSquareRoundedXFilled
+                    onClick={() => {
+                      setSelectedImage(null);
+                    }}
+                    className="text-red-600 absolute -top-2 -right-2 cursor-pointer"
+                  />
+                </div>
+              ) : (
+                <InputForm
+                  {...register('image')}
+                  type="file"
+                  label="Dokumentasi"
+                  name="image"
+                  onChange={handleImageChange}
+                />
+              )}
+              {errors.image && (
+                <p className="text-red-500 text-sm">{errors.image.message}</p>
+              )}
+            </LabelForm>
+
+            <Button type="submit" color="primary" size="base">
+              Save
+            </Button>
+          </form>
+        </div>
+      </dialog>
       <div className="flex gap-5">
-        <div className="relative w-max">
-          <img
-            src="https://images.unsplash.com/photo-1477951233099-d2c5fbd878ee?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8SGlnaHdheXxlbnwwfHwwfHx8MA%3D%3D"
-            className="rounded-md bg-cover"
-            width={215}
-            height={120}
-            alt="Highways"
-          />
-          <span className="inline-block absolute -top-2 -right-2 cursor-pointer bg-white w-max rounded-full">
-            <IconCircleXFilled className="text-rose-600" />
-          </span>
-        </div>
-        <div className="relative w-max">
-          <img
-            src="https://images.unsplash.com/photo-1477951233099-d2c5fbd878ee?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8SGlnaHdheXxlbnwwfHwwfHx8MA%3D%3D"
-            className="rounded-md bg-cover"
-            width={215}
-            height={120}
-            alt="Highways"
-          />
-          <span className="inline-block absolute -top-2 -right-2 cursor-pointer bg-white w-max rounded-full">
-            <IconCircleXFilled className="text-rose-600" />
-          </span>
-        </div>
+        {documentation.length <= 0 ? (
+          <p>Data sedang kosong!</p>
+        ) : (
+          documentation.map((item: DocumentationActivities, i: number) => (
+            <div key={i} className="relative w-max">
+              <img
+                src={`/assets/documentation-activities/${item.image}`}
+                className="rounded-md bg-cover"
+                width={215}
+                height={120}
+                alt={item.name}
+              />
+              <span className="inline-block absolute -top-2 -right-2 cursor-pointer bg-white w-max rounded-full">
+                <IconCircleXFilled
+                  onClick={() => handleDelete(item.id)}
+                  className="text-rose-600"
+                />
+              </span>
+            </div>
+          ))
+        )}
       </div>
     </Card>
   );

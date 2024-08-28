@@ -61,13 +61,13 @@ model VillageInfrastruktur {
   image String
 }
 
-  model CommunityActivities {
-    id          Int      @id @default(autoincrement())
-    name        String
-    description String
-    time        DateTime
-    image       String
-  }
+model CommunityActivities {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  time        DateTime
+  image       String
+}
 
 model PublicComplaints {
   id                 Int             @id @default(autoincrement())
@@ -86,7 +86,7 @@ model VillageGovernmentFinance {
   id     Int           @id @default(autoincrement())
   name   String
   type   TypeOfFinance
-  amount BigInt
+  amount Int
 }
 
 enum TypeOfFinance {
@@ -103,7 +103,7 @@ model DocumentationActivities {
 model WorkPlanAndBudget {
   id          Int      @id @default(autoincrement())
   name        String
-  budget      BigInt
+  budget      Int
   description String
   date        DateTime
 }
@@ -139,7 +139,7 @@ model Product {
   image       String
   name        String
   description String
-  price       BigInt
+  price       Int
   shop        Shop   @relation(fields: [shopId], references: [id])
   shopId      Int
 }

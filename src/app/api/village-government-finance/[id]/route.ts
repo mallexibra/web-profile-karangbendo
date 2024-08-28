@@ -50,7 +50,7 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
     }
 };
 
-export const DELETE = async ({ params }: { params: { id: string } }) => {
+export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const villageGovernmentFinance = await db.villageGovernmentFinance.findUnique({ where: { id: Number(params.id) } });
         if (!villageGovernmentFinance) {

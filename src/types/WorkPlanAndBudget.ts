@@ -1,7 +1,7 @@
 export interface WorkPlanAndBudget {
     id: number;
     name: string;
-    budget: bigint;
+    budget: number;
     description: string;
-    date: Date;
+    date: string;
 }

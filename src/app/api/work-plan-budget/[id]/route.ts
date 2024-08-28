@@ -9,7 +9,7 @@ const workPlanAndBudgetSchema = yup.object({
     date: yup.date().required('Date is required and must be a valid date'),
 });
 
-export const PUT = async (request: Request, { params }: { params: { id: string } }) => {
+export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const data = await request.json();
 
@@ -51,7 +51,7 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
     }
 };
 
-export const DELETE = async ({ params }: { params: { id: string } }) => {
+export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const workPlanAndBudget = await db.workPlanAndBudget.findUnique({ where: { id: Number(params.id) } });
         if (!workPlanAndBudget) {
