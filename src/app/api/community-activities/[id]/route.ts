@@ -9,19 +9,18 @@ const communityActivitiesSchema = yup.object({
     name: yup.string().required('Name is required and must be a string'),
     description: yup.string().required('Description is required and must be a string'),
     time: yup.date().required('Time is required and must be a valid date'),
-    image: yup.mixed<File>().required('Image is required')
 });
 
-export const PUT = async (request: Request, { params }: { params: { id: string } }) => {
+export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const formData = await request.formData();
         const data: any = {
             name: formData.get('name') as string,
             description: formData.get('description') as string,
-            time: formData.get('time'),
+            time: new Date(formData.get('time')?.toString() || ''),
         }
 
-        const image = formData.get('image') as File;
+        const image = formData.get('image') as File | null;
 
         await communityActivitiesSchema.validate({ ...data, image }, { abortEarly: false });
 
@@ -36,15 +35,15 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
         }
 
         let imagePath = existingCommunityActivities.image;
-        if (image) {
+        if (image && typeof image.name === 'string' && typeof image.size === 'number') {
             if (existingCommunityActivities.image) {
-                await unlink(join('./assets/community-activities', existingCommunityActivities.image));
+                await unlink(join('./public/assets/community-activities', existingCommunityActivities.image));
             }
             const imgActivities = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
             const bytes = await image.arrayBuffer();
             const buffer = Buffer.from(bytes);
             imagePath = imgActivities;
-            const path = join('./assets/community-activities', imgActivities);
+            const path = join('./public/assets/community-activities', imgActivities);
             await writeFile(path, buffer);
         }
 
@@ -89,7 +88,7 @@ export const DELETE = async (request: Request, { params }: { params: { id: strin
         }
 
         if (communityActivities.image) {
-            await unlink(join('./assets/community-activities', communityActivities.image));
+            await unlink(join('./public/assets/community-activities', communityActivities.image));
         }
 
         await db.communityActivities.delete({ where: { id: Number(params.id) } });

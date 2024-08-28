@@ -32,11 +32,11 @@ export const GET = async () => {
 export const POST = async (request: Request) => {
     try {
         const formData = await request.formData();
-        const data: any = {
-            name: formData.get('name') as string,
-            description: formData.get('description') as string,
-            time: formData.get('time'),
-        }
+        const data = {
+            name: formData.get('name')?.toString() || '',
+            description: formData.get('description')?.toString() || '',
+            time: new Date(formData.get('time')?.toString() || ''),
+        };
 
         const image = formData.get('image') as File;
 
@@ -46,7 +46,7 @@ export const POST = async (request: Request) => {
         const bytes = await image.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const imagePath = imgActivities;
-        const path = join('./assets/community-activities', imgActivities);
+        const path = join('./public/assets/community-activities', imgActivities);
         await writeFile(path, buffer);
 
         const newActivities = await db.communityActivities.create({

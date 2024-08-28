@@ -5,7 +5,7 @@ import { forwardRef, useState } from 'react';
 interface InputFormProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   name: string;
-  type: 'text' | 'password' | 'file' | 'number';
+  type: 'text' | 'password' | 'file' | 'number' | 'date';
   placeholder?: string;
 }
 
@@ -13,7 +13,7 @@ export const InputForm = forwardRef<HTMLInputElement, InputFormProps>(
   ({ label, name, type, placeholder, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
 
-    if (type === 'text' || type === "number") {
+    if (type === 'text' || type === "number" || type === "date") {
       return (
         <input
           type={type}

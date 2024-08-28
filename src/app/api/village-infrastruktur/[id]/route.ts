@@ -68,7 +68,7 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
     }
 };
 
-export const DELETE = async ({ params }: { params: { id: string } }) => {
+export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const villageInfrastruktur = await db.villageInfrastruktur.findUnique({ where: { id: Number(params.id) } });
         if (!villageInfrastruktur) {
@@ -80,7 +80,7 @@ export const DELETE = async ({ params }: { params: { id: string } }) => {
         }
 
         if (villageInfrastruktur.image) {
-            await unlink(join('./assets/village-infrastruktur', villageInfrastruktur.image));
+            await unlink(join('./public/assets/village-infrastruktur', villageInfrastruktur.image));
         }
 
         await db.villageInfrastruktur.delete({ where: { id: Number(params.id) } });

@@ -5,3 +5,21 @@ export const formatRupiah = (amount: number) => {
 export const formatText = (text: string) => {
     return text.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
+
+export function formatDate(date: Date | string): string {
+    if (typeof date === 'string') {
+        date = new Date(date);
+    }
+
+    const months = [
+        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    // Gabungkan ke format yang diinginkan
+    return `${day} ${month} ${year}`;
+}

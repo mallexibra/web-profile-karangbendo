@@ -8,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { IconPlus, IconSquareRoundedXFilled } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
 import * as yup from 'yup';
 
 export default function ProfileDesa() {
@@ -123,13 +124,27 @@ export default function ProfileDesa() {
           formData.append(key, value);
         }
       }
-
+let response;
       if (id) {
-        await axiosInstance.patch(`/village-profiles/${id}`, formData);
+      response =  await axiosInstance.patch(`/village-profiles/${id}`, formData);
+      } else {
+       response = await axiosInstance.post('/village-profiles', formData);
+      }
+      if (response.status) {
+        close();
+        Swal.fire({
+          icon: 'success',
+          title: 'Sukses!',
+          text: 'Sukses ' + id ? 'edit' : 'tambah' + ' data kegiatan masyarakat',
+        });
         fetchData();
       } else {
-        await axiosInstance.post('/village-profiles', formData);
-        fetchData();
+        close();
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal!',
+          text: response.data.message[0] || 'Terjadi kesalahan.',
+        });
       }
     } catch (error) {}
   };
