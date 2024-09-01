@@ -10,5 +10,5 @@ export interface Shop {
     userId: number;
     location: string;
     phone: string;
-    Product: Product[];
+    Product?: Product[];
 }

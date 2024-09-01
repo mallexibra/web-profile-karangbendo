@@ -1,5 +1,7 @@
+'use client';
 import Button from '@/components/button/Button';
 import Card from '@/components/cards/Card';
+import { Shop } from '@/types/Shop';
 import { formatRupiah } from '@/utils/format';
 import {
   IconCircleXFilled,
@@ -7,14 +9,46 @@ import {
   IconEyeOff,
   IconPlus,
 } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 
 export default function AddUMKM() {
+  const [umkm, setUmkm] = useState<Shop[]>([]);
+  const [type, setType] = useState<string>('add');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [id, setId] = useState<number | null>(null);
+
+  const modalClick = () => {
+    const modal = document.getElementById(
+      `modal_${type}3`,
+    ) as HTMLDialogElement;
+    if (modal) {
+      modal.showModal();
+    }
+  };
+
+  const close: any = () => {
+    const modal = document.getElementById(
+      `modal_${type}4`,
+    ) as HTMLDialogElement;
+    if (modal) {
+      modal.close();
+      setIsModalOpen(false);
+      setType('add');
+    }
+  };
+
+  useEffect(() => {
+    if (isModalOpen) modalClick();
+  }, [isModalOpen]);
   return (
     <div className="space-y-3">
       <Card>
         <div className="flex justify-between items-center">
           <p className="font-bold">UMKM Desa</p>
           <button
+            onClick={() => {
+              setIsModalOpen(true);
+            }}
             type="button"
             className="w-max px-3 py-2 bg-primary rounded-md text-white text-sm font-medium gap-2 flex justify-center items-center"
           >
@@ -22,6 +56,112 @@ export default function AddUMKM() {
             <p>Tambah UMKM</p>
           </button>
         </div>
+        <dialog id={`modal_${type}3`} className="modal">
+        <div className="modal-box">
+          <button
+            type="button"
+            onClick={close}
+            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          >
+            ✕
+          </button>
+
+          <h3 className="font-bold text-lg">
+            {type == 'view'
+              ? 'Detail'
+              : type.split('_')[0] == 'edit'
+                ? 'Edit'
+                : 'Tambah'}{' '}
+            Peraturan Desa
+          </h3>
+
+          <form
+            method="post"
+            onSubmit={handleSubmit(handleAddRegulation)}
+            className="mt-3 flex flex-col gap-2"
+          >
+            <LabelForm label="Nama Kegiatan">
+              <InputForm
+                disabled={type == 'view'}
+                {...register('title')}
+                type="text"
+                label="Nama Kegiatan"
+                name="title"
+                placeholder="Input judul peraturan"
+              />
+              {errors.title && (
+                <p className="text-red-500 text-sm">{errors.title.message}</p>
+              )}
+            </LabelForm>
+
+            <LabelForm label="Nomor">
+              <InputForm
+                disabled={type == 'view'}
+                {...register('number')}
+                type="text"
+                label="Nomor"
+                name="number"
+                placeholder="Input nomor peraturan"
+              />
+              {errors.number && (
+                <p className="text-red-500 text-sm">{errors.number.message}</p>
+              )}
+            </LabelForm>
+
+            <LabelForm label="Deskripsi">
+              <textarea
+                disabled={type == 'view'}
+                {...register('description')}
+                placeholder="Masukkan deskripsi peraturan"
+                rows={3}
+                className="block w-full px-2 py-3 border-custom border text-xs bg-second rounded-md outline-none"
+              />
+              {errors.description && (
+                <p className="text-red-500 text-sm">
+                  {errors.description.message}
+                </p>
+              )}
+            </LabelForm>
+
+            <LabelForm label="File">
+              {selectedFile ? (
+                <div className="relative bg-second w-full rounded-md p-3 border-custom border">
+                  <div className="flex items-center text-sm font-medium gap-3">
+                    <IconFile size={28} className="text-primary" />
+                    <p>{selectedFile}</p>
+                  </div>
+                  <IconSquareRoundedXFilled
+                    onClick={() => {
+                      setSelectedFile(null);
+                    }}
+                    className="text-red-600 absolute -top-2 -right-2 cursor-pointer"
+                  />
+                </div>
+              ) : (
+                <InputForm
+                  disabled={type == 'view'}
+                  {...register('file')}
+                  accept=".pdf,.doc,.docx"
+                  type="file"
+                  label="File"
+                  name="file"
+                  placeholder="Input file peraturan"
+                  onChange={handleFileChange}
+                />
+              )}
+              {errors.file && (
+                <p className="text-red-500 text-sm">{errors.file.message}</p>
+              )}
+            </LabelForm>
+
+            {type != 'view' && (
+              <Button type="submit" color="primary" size="base">
+                Save
+              </Button>
+            )}
+          </form>
+        </div>
+      </dialog>
       </Card>
       <Card>
         <div className="flex justify-between items-center mb-3">

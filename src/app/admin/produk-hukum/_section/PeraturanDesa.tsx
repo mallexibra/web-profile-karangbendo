@@ -69,8 +69,6 @@ export default function PeraturanDesa() {
     resolver: yupResolver(regulationSchema),
   });
 
-  console.log(errors);
-
   const fetchData = async () => {
     try {
       const response = await axiosInstance.get('/legal-product');
