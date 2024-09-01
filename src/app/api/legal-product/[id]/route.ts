@@ -1,4 +1,7 @@
 import { NextResponse } from 'next/server';
+import { join } from 'path';
+import { writeFile, unlink } from 'fs/promises';
+import { MD5 } from 'crypto-js';
 import db from '@/utils/database';
 import * as yup from 'yup';
 
@@ -11,23 +14,39 @@ const legalProductSchema = yup.object({
         .required('Type is required')
 });
 
-export const PUT = async (request: Request, { params }: { params: { id: string } }) => {
+export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
     try {
-        const data = await request.json();
+        const formData = await request.formData();
+        const data = Object.fromEntries(formData.entries());
+        const image = formData.get('file') as File | null;
 
         await legalProductSchema.validate(data, { abortEarly: false });
 
-        const existingLegalProduct = await db.legalProduct.findUnique({ where: { id: Number(params.id) } });
-        if (!existingLegalProduct) {
+        const existinglegalProduct = await db.legalProduct.findUnique({ where: { id: Number(params.id) } });
+        if (!existinglegalProduct) {
             return NextResponse.json({
-                error: 'Legal product not found',
-                message: 'Legal product not found',
+                error: 'Regulation not found',
+                message: 'Regulation not found',
                 status: false,
             }, { status: 404 });
         }
 
+        let filePath = existinglegalProduct.file;
+        if (image && typeof image.name === 'string' && typeof image.size === 'number') {
+            if (existinglegalProduct.file) {
+                await unlink(join('./public/assets/legal', existinglegalProduct.file));
+            }
+            const fileLegalProduct = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
+            const bytes = await image.arrayBuffer();
+            const buffer = Buffer.from(bytes);
+            filePath = fileLegalProduct;
+            const path = join('./public/assets/legal', fileLegalProduct);
+            await writeFile(path, buffer);
+        }
+
         const updateLegalProduct = await db.legalProduct.update({
-            where: { id: Number(params.id) }, data
+            where: { id: Number(params.id) },
+            data: { ...data, id: Number(params.id), file: filePath },
         });
 
         return NextResponse.json({
@@ -53,7 +72,7 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
     }
 };
 
-export const DELETE = async ({ params }: { params: { id: string } }) => {
+export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const legalProduct = await db.legalProduct.findUnique({ where: { id: Number(params.id) } });
         if (!legalProduct) {
@@ -62,6 +81,10 @@ export const DELETE = async ({ params }: { params: { id: string } }) => {
                 message: 'Legal product not found',
                 status: false,
             }, { status: 404 });
+        }
+
+        if (legalProduct.file) {
+            await unlink(join('./public/assets/legal', legalProduct.file));
         }
 
         await db.legalProduct.delete({ where: { id: Number(params.id) } });

@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import db from '@/utils/database';
 import * as yup from 'yup';
+import { MD5 } from 'crypto-js';
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
 
 const legalProductSchema = yup.object({
     title: yup.string().required('Title is required and must be a string'),
@@ -30,12 +33,32 @@ export const GET = async () => {
 
 export const POST = async (request: Request) => {
     try {
-        const data = await request.json();
+        const formData = await request.formData();
+        const data: any = {
+            title: formData.get('title') as string,
+            number: formData.get('number') as string,
+            description: formData.get('description') as string,
+            type: formData.get('type') as string,
+        };
+        const file = formData.get('file') as File | null;
 
         await legalProductSchema.validate(data, { abortEarly: false });
 
+        let filePath;
+        if (file != null) {
+            const imgProfile = `${MD5(file.name.split(".")[0]).toString()}.${file.name.split(".")[1]}`;
+            const bytes = await file.arrayBuffer();
+            const buffer = Buffer.from(bytes);
+            filePath = imgProfile;
+            const path = join('./public/assets/legal', imgProfile);
+            await writeFile(path, buffer);
+        }
+
         const newLegalProduct = await db.legalProduct.create({
-            data
+            data: {
+                ...data,
+                file: filePath,
+            },
         });
 
         return NextResponse.json({

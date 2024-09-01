@@ -227,6 +227,7 @@ export default function InfrastrukturDesa() {
               )}
             </LabelForm>
 
+            <LabelForm label="Gambar Infrastruktur">
             {selectedImage ? (
               <div className="relative">
                 <img
@@ -242,7 +243,6 @@ export default function InfrastrukturDesa() {
                 />
               </div>
             ) : (
-              <LabelForm label="Gambar Infrastruktur">
                 <InputForm
                   {...register('image')}
                   type="file"
@@ -250,11 +250,11 @@ export default function InfrastrukturDesa() {
                   name="image"
                   onChange={handleImageChange}
                 />
-              </LabelForm>
-            )}
+              )}
             {errors.image && (
               <p className="text-red-500 text-sm">{errors.image.message}</p>
             )}
+            </LabelForm>
 
             <Button type="submit" color="primary" size="base">
               Save

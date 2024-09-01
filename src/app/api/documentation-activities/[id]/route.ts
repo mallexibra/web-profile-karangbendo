@@ -1,4 +1,3 @@
-// src/app/api/documentation-activities/[id]/route.ts
 import { NextResponse } from 'next/server';
 import { join } from 'path';
 import { writeFile, unlink } from 'fs/promises';

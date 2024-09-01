@@ -114,6 +114,7 @@ model LegalProduct {
   number      String
   description String
   type        TypeOfLegal
+  file        String?
 }
 
 enum TypeOfLegal {
