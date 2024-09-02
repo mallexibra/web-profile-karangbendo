@@ -3,24 +3,14 @@ import { join } from 'path';
 import { writeFile, unlink } from 'fs/promises';
 import { MD5 } from 'crypto-js';
 import db from '@/utils/database';
-import * as yup from 'yup';
 
-const shopSchema = yup.object({
-    name: yup.string().required('Name is required and must be a string'),
-    description: yup.string().required('Description is required and must be a string'),
-    identity: yup.mixed<File>().required('Identity is required and must be a file'),
-    userId: yup.number().required('User ID is required and must be a number').integer(),
-    location: yup.string().required('Location is required and must be a string'),
-    phone: yup.string().required('Phone is required and must be a string'),
-});
-
-export const PUT = async (request: Request, { params }: { params: { id: string } }) => {
+export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const formData = await request.formData();
         const data = Object.fromEntries(formData.entries());
         const image = formData.get('identity') as File | null;
 
-        await shopSchema.validate(data, { abortEarly: false });
+        const status = data.status === 'true';
 
         const existingShop = await db.shop.findUnique({ where: { id: Number(params.id) } });
         if (!existingShop) {
@@ -32,9 +22,9 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
         }
 
         let imagePath = existingShop.identity;
-        if (image) {
+        if (image && typeof image.name === 'string' && typeof image.size === 'number') {
             if (existingShop.identity) {
-                await unlink(join('./assets/shops', existingShop.identity));
+                await unlink(join('./public/assets/shops', existingShop.identity));
             }
             const imgShop = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
             const bytes = await image.arrayBuffer();
@@ -46,7 +36,7 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
 
         const updateShop = await db.shop.update({
             where: { id: Number(params.id) },
-            data: { ...data, identity: imagePath },
+            data: { ...data, id: Number(params.id), userId: Number(data.userId), status, identity: imagePath },
         });
 
         return NextResponse.json({

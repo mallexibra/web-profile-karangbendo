@@ -128,9 +128,10 @@ model Shop {
   name        String
   description String
   identity    String
-  owner       User?      @relation(fields: [userId], references: [id])
+  owner       User?     @relation(fields: [userId], references: [id])
   userId      Int?
   location    String
+  status      Boolean   @default(false)
   phone       String
   Product     Product[]
 }

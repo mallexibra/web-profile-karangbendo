@@ -1,3 +1,5 @@
+import axiosInstance from "./axiosInstance";
+
 export const optionRole = [
     { label: 'Kepala Desa', value: 'village_head' },
     { label: 'Pegawai', value: 'employee' },
@@ -14,7 +16,3 @@ export const optionType = [
     { label: 'Pendapatan', value: 'income' },
     { label: 'Pengeluaran', value: 'expenditure' },
 ];
-
-export const optionUser = [
-    {label: 'User1', value: 1}
-]

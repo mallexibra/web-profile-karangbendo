@@ -7,8 +7,9 @@ export interface Shop {
     description: string;
     identity: string;
     owner: User;
-    userId: number;
+    userId: string;
     location: string;
+    status: boolean;
     phone: string;
     Product?: Product[];
 }
