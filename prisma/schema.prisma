@@ -128,8 +128,8 @@ model Shop {
   name        String
   description String
   identity    String
-  owner       User      @relation(fields: [userId], references: [id])
-  userId      Int
+  owner       User?      @relation(fields: [userId], references: [id])
+  userId      Int?
   location    String
   phone       String
   Product     Product[]

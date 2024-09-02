@@ -38,9 +38,9 @@ export const POST = async (request: Request) => {
             name: formData.get('name') as string,
             description: formData.get('description') as string,
             identity: formData.get('identity') as File,
-            userId: parseInt(formData.get('userId') as string, 10),
             location: formData.get('location') as string,
             phone: formData.get('phone') as string,
+            userId: formData.get('userId') as unknown as number,
         };
         const image = data.identity;
 
@@ -50,13 +50,14 @@ export const POST = async (request: Request) => {
         const bytes = await image.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const imagePath = imgShop;
-        const path = join('./assets/shops', imgShop);
+        const path = join('./public/assets/shops_identity', imgShop);
         await writeFile(path, buffer);
 
         const newShop = await db.shop.create({
             data: {
                 ...data,
-                image: imagePath,
+                userId: Number(data.userId),
+                identity: imagePath,
             },
         });
 

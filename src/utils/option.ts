@@ -14,3 +14,7 @@ export const optionType = [
     { label: 'Pendapatan', value: 'income' },
     { label: 'Pengeluaran', value: 'expenditure' },
 ];
+
+export const optionUser = [
+    {label: 'User1', value: 1}
+]
