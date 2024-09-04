@@ -133,7 +133,7 @@ model Shop {
   location    String
   status      Boolean   @default(false)
   phone       String
-  Product     Product[]
+  product     Product[]
 }
 
 model Product {

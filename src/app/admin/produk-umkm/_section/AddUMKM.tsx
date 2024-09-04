@@ -4,6 +4,7 @@ import Card from '@/components/cards/Card';
 import { InputForm } from '@/components/forms/InputForm';
 import LabelForm from '@/components/forms/LabelForm';
 import { SelectForm } from '@/components/forms/SelectForm';
+import { Product } from '@/types/Product';
 import { Shop } from '@/types/Shop';
 import { User } from '@/types/User';
 import axiosInstance from '@/utils/axiosInstance';
@@ -25,9 +26,12 @@ import * as yup from 'yup';
 export default function AddUMKM() {
   const [umkm, setUmkm] = useState<Shop[]>([]);
   const [type, setType] = useState<string>('add');
+  const [typeProduct, setTypeProduct] = useState<string>('add');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalProductOpen, setIsModalProductOpen] = useState(false);
   const [id, setId] = useState<number | null>(null);
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const [selectedFileProduct, setSelectedFileProduct] = useState<string | null>(null);
   const [dataImage, setDataImage] = useState<string | null>(null);
   const [optionUser, setOptionUser] = useState<any>([]);
 
@@ -61,6 +65,35 @@ export default function AddUMKM() {
       ),
   });
 
+  const productSchema = yup.object({
+    image: yup
+      .mixed<File>()
+      .required('Image is required')
+      .test('fileSize', 'Ukuran file maksimal 2MB', function (value: any) {
+        if (value) {
+          return value.size <= MAX_FILE_SIZE;
+        }
+        return true;
+      })
+      .test('fileFormat', 'Format file tidak valid, hanya JPG, PNG, dan GIF yang diperbolehkan', function (value: any) {
+        if (value) {
+          return SUPPORTED_FORMATS.includes(value.type);
+        }
+        return true;
+      }),
+    name: yup.string().required('Name is required and must be a string'),
+    description: yup.string().required('Description is required and must be a string'),
+    price: yup
+      .number()
+      .required('Price is required and must be a number')
+      .positive('Price must be a positive number')
+      .integer('Price must be an integer'),
+    shopId: yup
+      .number()
+      .required('Shop ID is required and must be a number')
+      .integer('Shop ID must be an integer'),
+  });
+
   const {
     register,
     handleSubmit,
@@ -90,6 +123,19 @@ export default function AddUMKM() {
       setIsModalOpen(false);
       setType('add');
       setSelectedFile(null);
+    }
+  };
+
+  const closeModal: any = () => {
+    const modal = document.getElementById(
+      `modal_${type}5`,
+    ) as HTMLDialogElement;
+    if (modal) {
+      modal.close();
+      reset();
+      setIsModalProductOpen(false);
+      setTypeProduct('add');
+      setSelectedFileProduct(null);
     }
   };
 
@@ -449,36 +495,48 @@ export default function AddUMKM() {
                 )}
               </div>
             </div>
-            <div className="flex gap-3 flex-wrap">
-              <div className="relative border border-custom bg-white rounded-md max-w-80 p-3">
-                <img
-                  src="https://images.unsplash.com/photo-1453614512568-c4024d13c247?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  className="w-full rounded-md bg-cover max-h-[512px]"
-                  alt="Produk UMKM"
-                />
-                <span className="inline-block absolute -top-2 -right-2 cursor-pointer bg-white w-max rounded-full">
-                  <IconCircleXFilled className="text-rose-600" />
-                </span>
-                <p className="font-bold mt-3 text-lg">Kopi Robusta</p>
-                <p className="font-semibold my-1 text-danger">
-                  {formatRupiah(120000)}
-                </p>
-                <p className="text-xs font-semibold">Deskripsi</p>
-                <p className="text-xs">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Mollitia animi officiis illum, consequatur id ipsam minus
-                  ratione ut exercitationem voluptate.
-                </p>
-                <div className="flex gap-3 mt-3">
-                  <Button color="warning" size="sm" className="w-full">
-                    Edit
-                  </Button>
-                  <Button color="danger" size="sm" className="w-full">
-                    Delete
-                  </Button>
-                </div>
+            <button
+              onClick={() => {
+                setIsModalProductOpen(true);
+              }}
+              type="button"
+              className="w-max px-3 py-2 bg-primary rounded-md text-white text-sm font-medium gap-2 flex justify-center items-center"
+            >
+              <IconPlus color="#fff" size={18} />
+              <p>Tambah Produk</p>
+            </button>
+            {item.product.length <= 0 ? (
+              <p className="font-medium mt-3">Produk sedang kosong!</p>
+            ) : (
+              <div className="flex gap-3 flex-wrap mt-3">
+                {item.product.map((product: Product) => (
+                  <div className="relative border border-custom bg-white rounded-md max-w-80 p-3">
+                    <img
+                      src={`/assets/products/${product.image}`}
+                      className="w-full rounded-md bg-cover max-h-[512px]"
+                      alt="Produk UMKM"
+                    />
+                    <span className="inline-block absolute -top-2 -right-2 cursor-pointer bg-white w-max rounded-full">
+                      <IconCircleXFilled className="text-rose-600" />
+                    </span>
+                    <p className="font-bold mt-3 text-lg">{product.name}</p>
+                    <p className="font-semibold my-1 text-danger">
+                      {formatRupiah(product.price)}
+                    </p>
+                    <p className="text-xs font-semibold">Deskripsi</p>
+                    <p className="text-xs">{product.description}</p>
+                    <div className="flex gap-3 mt-3">
+                      <Button color="warning" size="sm" className="w-full">
+                        Edit
+                      </Button>
+                      <Button color="danger" size="sm" className="w-full">
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
+            )}
           </Card>
         ))
       )}

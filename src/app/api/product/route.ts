@@ -13,6 +13,8 @@ const productSchema = yup.object({
     shopId: yup.number().required('Shop ID is required and must be a number').integer('Shop ID must be an integer'),
 });
 
+
+
 export const GET = async () => {
     try {
         const products = await db.product.findMany();

@@ -16,7 +16,7 @@ const shopSchema = yup.object({
 
 export const GET = async () => {
     try {
-        const shops = await db.shop.findMany();
+        const shops = await db.shop.findMany({ include: { product: true } });
         return NextResponse.json({
             data: shops,
             message: "Fetched all shops successfully",
