@@ -3,8 +3,8 @@ import { Metadata } from 'next';
 import { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Admin Keren',
-  description: 'Admin description',
+  title: 'Karangbendo | Admin',
+  description: 'Desa karangbendo - Admin',
 };
 
 export default function AdminLayout({ children }: { children: ReactNode }) {

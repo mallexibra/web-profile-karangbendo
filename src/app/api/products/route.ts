@@ -50,7 +50,7 @@ export const POST = async (request: Request) => {
         const bytes = await image.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const imagePath = imgProduct;
-        const path = join('./assets/products', imgProduct);
+        const path = join('./public/assets/products', imgProduct);
         await writeFile(path, buffer);
 
         const newProduct = await db.product.create({

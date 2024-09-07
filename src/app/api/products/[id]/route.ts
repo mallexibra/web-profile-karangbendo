@@ -13,7 +13,7 @@ const productSchema = yup.object({
     shopId: yup.number().required('Shop ID is required and must be a number').integer('Shop ID must be an integer'),
 });
 
-export const PUT = async (request: Request, { params }: { params: { id: string } }) => {
+export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const formData = await request.formData();
         const data = Object.fromEntries(formData.entries());
@@ -31,21 +31,21 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
         }
 
         let imagePath = existingProduct.image;
-        if (image) {
+        if (image && typeof image.name === 'string' && typeof image.size === 'number') {
             if (existingProduct.image) {
-                await unlink(join('./assets/products', existingProduct.image));
+                await unlink(join('./public/assets/products', existingProduct.image));
             }
             const imgProduct = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
             const bytes = await image.arrayBuffer();
             const buffer = Buffer.from(bytes);
             imagePath = imgProduct;
-            const path = join('./assets/products', imgProduct);
+            const path = join('./public/assets/products', imgProduct);
             await writeFile(path, buffer);
         }
 
         const updateProduct = await db.product.update({
             where: { id: Number(params.id) },
-            data: { ...data, image: imagePath },
+            data: { ...data, id: Number(data.id), shopId: Number(data.shopId), price: Number(data.price), image: imagePath },
         });
 
         return NextResponse.json({
@@ -71,7 +71,7 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
     }
 };
 
-export const DELETE = async ({ params }: { params: { id: string } }) => {
+export const DELETE = async (req: Request, { params }: { params: { id: string } }) => {
     try {
         const product = await db.product.findUnique({ where: { id: Number(params.id) } });
         if (!product) {
@@ -83,7 +83,7 @@ export const DELETE = async ({ params }: { params: { id: string } }) => {
         }
 
         if (product.image) {
-            await unlink(join('./assets/products', product.image));
+            await unlink(join('./public/assets/products', product.image));
         }
 
         await db.product.delete({ where: { id: Number(params.id) } });

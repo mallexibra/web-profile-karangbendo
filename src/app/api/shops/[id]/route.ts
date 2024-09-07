@@ -4,6 +4,23 @@ import { writeFile, unlink } from 'fs/promises';
 import { MD5 } from 'crypto-js';
 import db from '@/utils/database';
 
+export const GET = async (request: Request, { params }: { params: { id: string } }) => {
+    try {
+        const shop = await db.shop.findFirst({ where: { id: Number(params.id) }, include: {product: true} });
+        return NextResponse.json({
+            data: shop,
+            message: "Fetched shop successfully",
+            status: true,
+        });
+    } catch (error: any) {
+        return NextResponse.json({
+            error: 'Failed to fetch shop',
+            message: error.message,
+            status: false,
+        }, { status: 500 });
+    }
+}
+
 export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const formData = await request.formData();
@@ -36,7 +53,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
 
         const updateShop = await db.shop.update({
             where: { id: Number(params.id) },
-            data: { ...data, id: Number(params.id), userId: Number(data.userId), status, identity: imagePath },
+            data: { ...data, id: Number(params.id), ...(data.userId && { userId: Number(data.userId) }), status, identity: imagePath },
         });
 
         return NextResponse.json({
