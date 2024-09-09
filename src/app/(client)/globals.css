@@ -9,5 +9,13 @@
 @import '@fontsource/poppins/800.css';
 
 body {
-  font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif;
+}
+
+.title {
+    @apply font-bold text-2xl text-primary;
+}
+
+.border-custom {
+    @apply border-slate-400/20;
 }

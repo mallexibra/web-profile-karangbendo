@@ -306,7 +306,7 @@ export default function KegiatanMasyarakat() {
                   src={
                     selectedImage || `/assets/community-activities/${dataImage}`
                   }
-                  alt="Struktur Aparatur Desa"
+                  alt="Kegiatan Masyarakat"
                   className="rounded-md"
                 />
                 <IconSquareRoundedXFilled
@@ -317,11 +317,11 @@ export default function KegiatanMasyarakat() {
                 />
               </div>
             ) : (
-              <LabelForm label="Gambar Infrastruktur">
+              <LabelForm label="Dokumentasi Kegiatan">
                 <InputForm
                   {...register('image')}
                   type="file"
-                  label="Gambar Infrastruktur"
+                  label="Dokumentasi Kegiatan"
                   name="image"
                   onChange={handleImageChange}
                 />

@@ -20,7 +20,7 @@ export default function Navbar() {
             <IconChevronDown className="w-4" />
             <ul className="absolute top-5 w-max left-0 hidden group-hover:block bg-white/20 backdrop-blur shadow-lg mt-2 p-2 rounded-md">
               <li className="py-1 px-2 hover:bg-gray-100">
-                Kegiatan Masyarakat
+                <a href='#kegiatanmasyarakat'>Kegiatan Masyarakat</a>
               </li>
               <li className="py-1 px-2 hover:bg-gray-100">Sejarah Desa</li>
               <li className="py-1 px-2 hover:bg-gray-100">Visi dan Misi</li>
