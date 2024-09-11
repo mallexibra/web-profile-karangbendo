@@ -209,6 +209,8 @@ export default function AparaturDesa() {
       modal.close();
       reset();
       setIsModalOpen(false);
+      setSelectedImage(null)
+      setDataImage(null)
     }
   };
 
@@ -330,7 +332,7 @@ export default function AparaturDesa() {
               >
                 <img
                   src={`/assets/village-apparatus/${item.profile}`}
-                  className="w-12 h-12 rounded-md bg-cover"
+                  className="w-12 h-12 rounded-md object-cover"
                   alt="Profile Aparatur Desa"
                 />
                 <div className="text-sm mr-3">

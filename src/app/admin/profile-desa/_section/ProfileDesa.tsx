@@ -135,7 +135,7 @@ let response;
         Swal.fire({
           icon: 'success',
           title: 'Sukses!',
-          text: 'Sukses ' + id ? 'edit' : 'tambah' + ' data kegiatan masyarakat',
+          text: `Sukses ${id ? 'edit' : 'tambah'} data profile desa`,
         });
         fetchData();
       } else {

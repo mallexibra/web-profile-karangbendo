@@ -8,6 +8,10 @@
 @import '@fontsource/poppins/700.css';
 @import '@fontsource/poppins/800.css';
 
+*{
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
 }

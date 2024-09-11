@@ -6,7 +6,7 @@ import { IconChevronDown, IconUser } from '@tabler/icons-react';
 
 export default function Navbar() {
   return (
-    <nav className="py-3 text-white bg-white/10 backdrop-blur border-b border-white/20 fixed left-0 top-0 right-0">
+    <nav className="py-3 text-white bg-white/10 backdrop-blur border-b border-white/20 fixed z-50 left-0 top-0 right-0">
       <ContainerClient classNames="flex justify-between items-center gap-3">
         <div className="flex justify-start items-center gap-2">
           <Image src={logo} className="w-10" alt="Logo Kabupaten Banyuwangi" />
