@@ -16,3 +16,7 @@ export const optionType = [
     { label: 'Pendapatan', value: 'income' },
     { label: 'Pengeluaran', value: 'expenditure' },
 ];
+
+export const optionAduan = [
+    { label: 'Fasilitas', value: 'facility' },
+];
