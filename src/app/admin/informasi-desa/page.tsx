@@ -2,13 +2,17 @@ import ContainerAdmin from '@/components/containers/ContainerAdmin';
 import InfrastrukturDesa from './_section/InfrastrukturDesa';
 import KegiatanMasyarakat from './_section/KegiatanMasyarakat';
 import AduanMasyarakat from './_section/AduanMasyarakat';
+import PotensiDesa from '@/app/admin/informasi-desa/_section/PotensiDesa';
+import LembagaDesa from './_section/LembagaDesa';
 
 export default function InformasiDesaPage() {
-  return (
-    <ContainerAdmin>
-      <InfrastrukturDesa />
-      <KegiatanMasyarakat />
-      <AduanMasyarakat />
-    </ContainerAdmin>
-  );
+    return (
+        <ContainerAdmin>
+            <PotensiDesa />
+            <LembagaDesa/>
+            <InfrastrukturDesa />
+            <KegiatanMasyarakat />
+            <AduanMasyarakat />
+        </ContainerAdmin>
+    );
 }

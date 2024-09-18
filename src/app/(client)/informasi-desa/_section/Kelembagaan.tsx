@@ -3,7 +3,7 @@ import ContainerClient from "@/components/containers/ContainerClient";
 export default function Kelembagaan() {
     return (
         <ContainerClient>
-            <div id="kelembagaan" className="mt-10 pt-10">
+            <div id="kelembagaan" className="pt-24">
                 <h2 className="title">Kelembagaan</h2>
                 <p>Desa ini memiliki beberapa kelembagaan aktif seperti kelompok tani, karang taruna, dan koperasi desa yang berperan dalam pemberdayaan masyarakat.</p>
                 <div className="flex flex-wrap justify-center gap-3 mt-3">

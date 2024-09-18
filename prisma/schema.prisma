@@ -61,6 +61,17 @@ model VillageInfrastruktur {
   image String
 }
 
+model VillagePotential {
+  id    Int    @id @default(autoincrement())
+  name  String
+  image String
+}
+
+model VillageInstitution {
+  id    Int    @id @default(autoincrement())
+  name  String
+}
+
 model CommunityActivities {
   id          Int      @id @default(autoincrement())
   name        String

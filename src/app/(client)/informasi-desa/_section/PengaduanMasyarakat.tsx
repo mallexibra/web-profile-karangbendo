@@ -22,7 +22,7 @@ export default function PengaduanMasyarakat() {
     };
     return (
         <ContainerClient>
-            <div id="pengaduanmasyarakat" className="flex gap-5 mt-5 pt-10 pb-20">
+            <div id="pengaduanmasyarakat" className="flex gap-5 pt-24 pb-20">
                 <section className="w-1/2">
                     <h2 className="title">Pengaduan Masyarakat</h2>
                     <p>Masyarakat Desa Karangbendo dapat menyampaikan keluhan, saran, atau masukan mengenai pelayanan dan kondisi desa melalui form pengaduan yang disediakan. Setiap pengaduan akan ditindaklanjuti oleh aparatur desa dengan cepat dan transparan.</p>

@@ -3,7 +3,8 @@ import ContainerClient from "@/components/containers/ContainerClient";
 
 export default function PeraturanKepalaDesa(){
     return (
-        <ContainerClient classNames="mt-24">
+        <div id="peraturankepaladesa">
+            <ContainerClient classNames="pt-24">
             <h2 className="title">Peraturan Kepala Desa</h2>
             <p>Peraturan Kepala Desa adalah peraturan yang ditetapkan langsung oleh Kepala Desa untuk mengatur pelaksanaan teknis dari Peraturan Desa atau untuk mengatur hal-hal yang menjadi kewenangan Kepala Desa. Peraturan ini membantu menjalankan pemerintahan desa secara efektif dan efisien.</p>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 border border-primary">
@@ -49,5 +50,6 @@ export default function PeraturanKepalaDesa(){
                 </table>
             </div>
         </ContainerClient>
+        </div>
     )
 }

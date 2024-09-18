@@ -34,7 +34,7 @@ export default function Keuangan() {
     };
 
     return (
-        <ContainerClient classNames="flex gap-5">
+        <ContainerClient classNames="flex gap-5 pt-8">
             <section className="w-1/2 grid place-items-center">
                 <div className="w-1/2">
                     <Pie data={pieData} />

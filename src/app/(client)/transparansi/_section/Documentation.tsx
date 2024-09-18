@@ -2,7 +2,8 @@ import ContainerClient from "@/components/containers/ContainerClient";
 
 export default function Documentation() {
     return (
-        <ContainerClient classNames="mt-24">
+        <div id="dokumentasikegiatan">
+        <ContainerClient classNames="pt-24">
             <h2 className="title">Dokumentasi Kegiatan</h2>
             <div className="flex flex-wrap gap-3 mt-5">
                 {[1, 2, 3].map((item: any, i: number) => (
@@ -10,5 +11,6 @@ export default function Documentation() {
                 ))}
             </div>
         </ContainerClient>
+        </div>
     )
 }

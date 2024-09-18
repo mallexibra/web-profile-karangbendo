@@ -4,7 +4,7 @@ import React from "react";
 const PotensiDesa = () => {
     return (
         <ContainerClient>
-            <div id="potensidesa">
+            <div>
                 <h2 className="title">Potensi Desa</h2>
                 <p>Desa Karangbendo memiliki potensi alam yang melimpah, termasuk lahan pertanian yang subur, hutan bambu, dan sungai yang kaya akan ikan.</p>
                 <div className="mt-5 flex flex-wrap justify-center gap-5">

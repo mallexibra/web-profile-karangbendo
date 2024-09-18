@@ -3,7 +3,8 @@ import ContainerClient from "@/components/containers/ContainerClient";
 
 export default function WorkPlan() {
     return (
-        <ContainerClient classNames="my-24">
+        <div id="renacanakerjadananggaran">
+            <ContainerClient classNames="my-24">
             <h2 className="title">Rencana Kerja dan Anggaran</h2>
             <p>Informasi ini disajikan untuk memastikan bahwa masyarakat mengetahui program-program prioritas dan alokasi dana untuk setiap kegiatan yang direncanakan.</p>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 border border-primary">
@@ -43,5 +44,6 @@ export default function WorkPlan() {
                 </table>
             </div>
         </ContainerClient>
+        </div>
     )
 }
