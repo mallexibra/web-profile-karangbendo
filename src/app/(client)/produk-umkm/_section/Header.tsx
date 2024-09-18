@@ -4,7 +4,7 @@ import ContainerClient from '@/components/containers/ContainerClient';
 
 export default function HeaderUMKM() {
     return (
-        <div className='relative h-64' style={{
+        <div id="header" className='relative h-64' style={{
             backgroundImage: `url(${BgHeader.src})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',

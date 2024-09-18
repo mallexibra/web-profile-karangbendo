@@ -3,7 +3,7 @@ import BgHeader from '../../../assets/bgheader.png';
 
 export default function Header() {
   return (
-    <header
+    <header id="header"
       className="pt-20 min-h-screen grid place-items-center"
       style={{
         backgroundImage: `url(${BgHeader.src})`,
