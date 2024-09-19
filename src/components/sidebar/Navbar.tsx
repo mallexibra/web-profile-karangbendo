@@ -49,7 +49,7 @@ export default function Navbar() {
                     <div className="relative group flex justify-center items-center cursor-pointer gap-2">
                         <Link href='/' className={cn(pathname == "/" && 'font-semibold')}>Profile Desa</Link>
                         <IconChevronDown className="w-4" />
-                        <ul className="absolute top-5 w-max left-0 hidden group-hover:block bg-primary backdrop-blur shadow-lg mt-2 p-2 rounded-md">
+                        <ul className="absolute top-4 w-max left-0 hidden group-hover:block bg-primary backdrop-blur shadow-lg mt-2 p-2 rounded-md">
                             <li className="py-1 px-2 hover:bg-gray-100">
                                 <Link href='/#kegiatanmasyarakat'>Kegiatan Masyarakat</Link>
                             </li>
@@ -118,7 +118,7 @@ export default function Navbar() {
                             </li>
                         </ul>
                     </div>
-                    <Link href="/produk-umkm" className={cn(pathname == "/produk-umkm" && 'font-semibold')}>Produk UMKM</Link>
+                    <Link href="/produk-umkm" className={cn(pathname.startsWith("/produk-umkm") && 'font-semibold')}>Produk UMKM</Link>
                 </div>
                 <div>
                     <button className={`flex justify-center items-center gap-3 px-4 py-2 text-base font-medium rounded-md ${isNavHovered

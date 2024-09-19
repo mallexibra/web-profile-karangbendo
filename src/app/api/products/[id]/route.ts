@@ -13,6 +13,23 @@ const productSchema = yup.object({
     shopId: yup.number().required('Shop ID is required and must be a number').integer('Shop ID must be an integer'),
 });
 
+export const GET = async (request: Request, { params }: { params: { id: string } }) => {
+    try {
+        const products = await db.product.findUnique({ where: { id: Number(params.id) }, include: { shop: true } });
+        return NextResponse.json({
+            data: products,
+            message: "Fetched data product successfully",
+            status: true,
+        });
+    } catch (error: any) {
+        return NextResponse.json({
+            error: 'Failed to fetch product',
+            message: error.message,
+            status: false,
+        }, { status: 500 });
+    }
+};
+
 export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const formData = await request.formData();
@@ -21,7 +38,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
 
         await productSchema.validate(data, { abortEarly: false });
 
-        const existingProduct = await db.product.findUnique({ where: { id: Number(params.id) } });
+        const existingProduct = await db.product.findUnique({ where: { id: Number(params.id) }, include: { shop: true } });
         if (!existingProduct) {
             return NextResponse.json({
                 error: 'Product not found',

@@ -33,22 +33,26 @@ export const GET = async () => {
 export const POST = async (request: Request) => {
     try {
         const formData = await request.formData();
+        console.log("FormData:", formData)
         const data: any = {
             name: formData.get('name') as string,
             complaint: formData.get('complaint') as string,
             email: formData.get('email') as string | null,
             phone: formData.get('phone') as string | null,
-            supportingEvidence: formData.get('supportingEvidence') as File | null,
+            supportingEvidence: formData.get('image') as File | null,
         };
 
         await publicComplaintsSchema.validate(data, { abortEarly: false });
 
         const image = data.supportingEvidence;
+        if (!image) {
+            throw new Error('Supporting evidence file is missing');
+        }
         const imgProfile = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
         const bytes = await image.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const imagePath = imgProfile;
-        const path = join('./assets/public-complaints', imgProfile);
+        const path = join('./public/assets/public-complaints', imgProfile);
         await writeFile(path, buffer);
 
         const newPublicComplaints = await db.publicComplaints.create({

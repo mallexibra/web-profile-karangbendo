@@ -3,7 +3,7 @@ import ContainerClient from "@/components/containers/ContainerClient";
 export default function HistoryVillage(){
     return (
         <div id="sejarahdesa">
-            <ContainerClient classNames="min-h-[50vh] pt-20">
+            <ContainerClient classNames="pt-24">
                 <h2 className="title">Mengenal Lebih Dekat, <span className="text-black">Desa Karangbendo</span></h2>
                 <div className="flex gap-3 mt-3">
                     <img src="/assets/village-profile/karangbendo.png" className="rounded-md w-1/3 bg-cover" alt="Desa Karangbendo"/>

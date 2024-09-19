@@ -2,7 +2,7 @@ import ContainerClient from "@/components/containers/ContainerClient";
 
 export default function LocationVillage() {
     return (
-        <div className="min-h-screen flex items-center">
+        <div id="lokasidesa" className="py-24 flex items-center">
             <ContainerClient classNames="flex items-center gap-3">
             <section className="overflow-hidden w-1/2 rounded-l-md">
                 <div className="bg-primary px-5 py-3 text-white font-bold text-lg">

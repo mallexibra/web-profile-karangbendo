@@ -18,5 +18,5 @@ export const optionType = [
 ];
 
 export const optionAduan = [
-    { label: 'Fasilitas', value: 'facility' },
+    { label: 'Fasilitas', value: 'fasilitas_umum' },
 ];

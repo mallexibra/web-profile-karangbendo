@@ -35,8 +35,8 @@ export default function InformationVillage() {
     }, [])
     return (
         <>
-            <div className="min-h-[50vh]">
-                <div id="visimisi">
+            <div>
+                <div id="visimisi" className="pt-14">
                     <ContainerClient classNames="flex justify-start gap-2 pt-16">
                         <div className="w-1/3">
                             <h2 className="title">Visi</h2>
@@ -52,8 +52,8 @@ export default function InformationVillage() {
                         </div>
                     </ContainerClient>
                 </div>
-                <div id="demografi">
-                    <ContainerClient classNames="mt-8 pt-16">
+                <div id="demografidesa">
+                    <ContainerClient classNames="pt-24">
                         <h2 className="title text-center mb-7">Demografi Desa</h2>
                         <div className="flex justify-center gap-8">
                             <div className="text-center">
@@ -77,7 +77,7 @@ export default function InformationVillage() {
                 </div>
             </div>
             <div id="aparaturdesa">
-                <ContainerClient classNames="mt-8 pt-16">
+                <ContainerClient classNames="pt-24">
                     <h2 className="title text-center mb-7">Aparatur Desa</h2>
                     <img src={`/assets/village-profile/${profile.image}`} className="rounded-md w-2/3 mx-auto" alt="Struktur Aparatur Desa" />
                 </ContainerClient>

@@ -1,20 +1,43 @@
+"use client"
 import Button from "@/components/button/Button";
 import ContainerClient from "@/components/containers/ContainerClient";
+import { Product } from "@/types/Product";
+import axiosInstance from "@/utils/axiosInstance";
+import { formatRupiah } from "@/utils/format";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-export default function Produk(){
-    return(
-        <ContainerClient>
+export default function Produk() {
+    const [products, setProducts] = useState<Product[]>([])
+
+    const fetchData = async () => {
+        try {
+            const response = (await axiosInstance.get('/products')).data
+            setProducts(response.data)
+        } catch (error: any) {
+            console.log(`Error fetch data products: ${error.message}`)
+        }
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+    return (
+        <ContainerClient classNames="min-h-screen">
             <h2 className="title">Pilih berbagai produk yang dihasilkan oleh UMKM Desa Karangbendo.</h2>
             <p>Pilih berbagai produk yang dihasilkan oleh UMKM Desa Karangbendo.</p>
-            <div className="mt-5 flex flex-wrap min-h-screen items-start">
-                <div className="max-w-72 rounded-md p-3 border border-black/20">
-                    <img src="https://images.unsplash.com/photo-1726121678240-9126d5017990?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzMnx8fGVufDB8fHx8fA%3D%3D" className="rounded-md mb-3" alt="Image Produk" />
-                    <p className="font-bold text-xl">Batik Karangbendo</p>
-                    <p className="font-semibold text-rose-500">Rp. 150.000</p>
-                    <p className="font-semibold">Deskripsi</p>
-                    <p className="text-sm">Lorem ipsum dolor sit amet consectetur</p>
-                    <Button type="button" className="w-full text-center mt-3 font-medium">Detail Produk</Button>
-                </div>
+            <div className="mt-5 flex flex-wrap gap-3 items-start">
+                {products.length > 0 ? products.map((item: Product, i: number) => (
+                    <div key={i} className="max-w-72 flex flex-col h-full rounded-md p-3 border border-black/20">
+                        <div className="flex-grow">
+                            <img src={`/assets/products/${item.image}`} className="rounded-md mb-3" alt={item.name} />
+                            <p className="font-bold text-xl">{item.name}</p>
+                            <p className="font-semibold text-rose-500">{formatRupiah(item.price)}</p>
+                            <p className="font-semibold">Deskripsi</p>
+                            <p className="text-sm mb-3">{item.description}</p></div>
+                        <Link href={`/produk-umkm/${item.id}`} className="bg-primary text-white hover:bg-primary/80 px-4 py-2 block w-full text-center mt-auto font-medium rounded-md">Detail Produk</Link>
+                    </div>
+                )) : (<p>Data produk sedang kosong!</p>)}
             </div>
         </ContainerClient>
     )

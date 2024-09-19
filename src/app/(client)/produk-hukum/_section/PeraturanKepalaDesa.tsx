@@ -1,7 +1,24 @@
-import Button from "@/components/button/Button";
+"use client"
+import { LegalProduct } from "@/types/LegalProduct";
+import axiosInstance from "@/utils/axiosInstance";
+import { useEffect, useState } from "react";
 import ContainerClient from "@/components/containers/ContainerClient";
 
 export default function PeraturanKepalaDesa(){
+    const [legal, setLegal] = useState<LegalProduct[]>([])
+
+    const fetchData = async () => {
+        try {
+            const response = (await axiosInstance.get('/legal-product')).data
+            setLegal(response.data)
+        } catch (error: any) {
+            console.log(`Error fetch data legal product: ${error.message}`)
+        }
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
     return (
         <div id="peraturankepaladesa">
             <ContainerClient classNames="pt-24">
@@ -29,23 +46,27 @@ export default function PeraturanKepalaDesa(){
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="bg-white  hover:bg-gray-50">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                1
-                            </th>
-                            <td className="px-6 py-4">
-                                TES
-                            </td>
-                            <td className="px-6 py-4">
-                                123
-                            </td>
-                            <td className="px-6 py-4">
-                                123
-                            </td>
-                            <td className="px-6 py-4">
-                                <Button type="button" size="sm">Download</Button>
-                            </td>
-                        </tr>
+                    {legal.filter((item: LegalProduct) => item.type! == "village_head_regulation").length > 0 ? legal.filter((item: LegalProduct) => item.type! == "village_head_regulation").map((item: LegalProduct, i: number) => (
+                            <tr key={i} className="bg-white  hover:bg-gray-50">
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {i + 1}
+                                </th>
+                                <td className="px-6 py-4">
+                                    {item.title}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {item.number}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {item.description}
+                                </td>
+                                <td className="px-6 py-4">
+                                    <a href={`/assets/legal/${item.file}`} className="font-medium rounded-md px-2 py-1 text-sm bg-primary text-white hover:bg-primary/80" download={`${item.title}.${item.file.split('.').pop()}`}>Download</a>
+                                </td>
+                            </tr>
+                        )) : (<tr>
+                            <td colSpan={5} className="px-6 py-4 text-center font-medium">Data peraturan kepala desa sedang kosong!</td>
+                        </tr>)}
                     </tbody>
                 </table>
             </div>
