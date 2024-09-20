@@ -1,4 +1,3 @@
-// src/app/api/village-profile/[id]/route.ts
 import { NextResponse } from 'next/server';
 import { join } from 'path';
 import { writeFile, unlink } from 'fs/promises';
@@ -81,9 +80,10 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
     }
 };
 
-export const DELETE = async ({ params }: { params: { id: string } }) => {
+export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
     try {
-        const villageProfile = await db.villageProfile.findUnique({ where: { id: Number(params.id) } });
+        const villageId = Number(params.id);
+        const villageProfile = await db.villageProfile.findUnique({ where: { id: villageId } });
         if (!villageProfile) {
             return NextResponse.json({
                 error: 'Village profile not found',
@@ -93,10 +93,10 @@ export const DELETE = async ({ params }: { params: { id: string } }) => {
         }
 
         if (villageProfile.image) {
-            await unlink(join('./assets/village-profile', villageProfile.image));
+            await unlink(join('./public/assets/village-profile', villageProfile.image));
         }
 
-        await db.villageProfile.delete({ where: { id: Number(params.id) } });
+        await db.villageProfile.delete({ where: { id: villageId } });
 
         return NextResponse.json({
             message: "Village profile deleted successfully",

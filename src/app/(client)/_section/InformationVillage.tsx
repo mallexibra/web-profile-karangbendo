@@ -41,7 +41,7 @@ export default function InformationVillage() {
                     <ContainerClient classNames="flex justify-start gap-2 pt-16">
                         <div className="w-1/3">
                             <h2 className="title">Visi</h2>
-                            <p>"{profile.visi}"</p>
+                            <p>&quot;{profile.visi}&quot;</p>
                         </div>
                         <div>
                             <h2 className="title">Misi</h2>

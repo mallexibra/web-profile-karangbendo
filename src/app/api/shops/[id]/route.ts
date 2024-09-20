@@ -6,7 +6,7 @@ import db from '@/utils/database';
 
 export const GET = async (request: Request, { params }: { params: { id: string } }) => {
     try {
-        const shop = await db.shop.findFirst({ where: { id: Number(params.id) }, include: {product: true} });
+        const shop = await db.shop.findFirst({ where: { id: Number(params.id) }, include: { product: true } });
         return NextResponse.json({
             data: shop,
             message: "Fetched shop successfully",
@@ -79,9 +79,10 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
     }
 };
 
-export const DELETE = async ({ params }: { params: { id: string } }) => {
+export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
     try {
-        const shop = await db.shop.findUnique({ where: { id: Number(params.id) } });
+        const shopId = Number(params.id);
+        const shop = await db.shop.findUnique({ where: { id: shopId } });
         if (!shop) {
             return NextResponse.json({
                 error: 'Shop not found',
@@ -94,7 +95,7 @@ export const DELETE = async ({ params }: { params: { id: string } }) => {
             await unlink(join('./assets/shops', shop.identity));
         }
 
-        await db.shop.delete({ where: { id: Number(params.id) } });
+        await db.shop.delete({ where: { id: shopId } });
 
         return NextResponse.json({
             message: "Shop deleted successfully",

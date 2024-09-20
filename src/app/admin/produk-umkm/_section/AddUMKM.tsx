@@ -90,7 +90,8 @@ export default function AddUMKM() {
             .number()
             .required('Price is required and must be a number')
             .positive('Price must be a positive number')
-            .integer('Price must be an integer')
+            .integer('Price must be an integer'),
+        shopId: yup.number().nullable()
     });
 
     const {

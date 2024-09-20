@@ -1,17 +1,17 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import db from '@/utils/database';
 import bcrypt from 'bcrypt';
 
-export default NextAuth({
+const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(db),
     providers: [
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
                 email: { label: 'Email', type: 'email', placeholder: 'email@example.com' },
-                password: { label: 'Password', type: 'password' }
+                password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
@@ -19,7 +19,7 @@ export default NextAuth({
                 }
 
                 const user = await db.user.findUnique({
-                    where: { email: credentials?.email },
+                    where: { email: credentials.email },
                 });
 
                 if (user && bcrypt.compareSync(credentials.password, user.password)) {
@@ -67,4 +67,7 @@ export default NextAuth({
             return session;
         },
     },
-});
+};
+
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };

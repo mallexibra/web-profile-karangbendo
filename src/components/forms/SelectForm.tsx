@@ -43,3 +43,5 @@ export const SelectForm = forwardRef<HTMLSelectElement, InputFormProps>(
     );
   },
 );
+
+SelectForm.displayName = "SelectForm";
