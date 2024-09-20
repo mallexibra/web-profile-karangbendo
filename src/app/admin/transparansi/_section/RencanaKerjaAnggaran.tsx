@@ -263,7 +263,7 @@ export default function RencanaKerjaAnggaran() {
             </thead>
             <tbody className="bg-second font-medium">
               {plans.map((plan: WorkPlanAndBudget, i: number) => (
-                <tr>
+                <tr key={i}>
                   <td className="text-center p-3">{i + 1}</td>
                   <td>{plan.name}</td>
                   <td>{formatRupiah(plan.budget)}</td>

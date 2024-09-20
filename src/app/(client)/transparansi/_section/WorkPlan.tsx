@@ -107,7 +107,7 @@ export default function WorkPlan() {
                         </thead>
                         <tbody>
                             {plan.length > 0 ? plan.map((item: WorkPlanAndBudget, i: number) => (
-                                <tr className="bg-white  hover:bg-gray-50">
+                                <tr key={i} className="bg-white  hover:bg-gray-50">
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {i + 1}
                                     </th>

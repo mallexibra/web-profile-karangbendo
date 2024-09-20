@@ -331,7 +331,7 @@ export default function PeraturanKepalaDesa() {
             </thead>
             <tbody className="bg-second font-medium">
               {regulation.map((item: LegalProduct, i: number) => (
-                <tr>
+                <tr key={i}>
                   <td className="text-center p-3">{i + 1}</td>
                   <td>{item.title}</td>
                   <td>{item.number}</td>

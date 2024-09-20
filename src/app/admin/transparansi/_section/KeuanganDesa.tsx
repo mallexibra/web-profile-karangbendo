@@ -242,7 +242,7 @@ export default function KeuanganDesa() {
             </thead>
             <tbody className="bg-second font-medium">
               {finance.map((item: VillageGovernmentFinance, i: number) => (
-                <tr>
+                <tr key={i}>
                   <td className="text-center p-3">{i + 1}</td>
                   <td>{item.name}</td>
                   <td>

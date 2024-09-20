@@ -364,8 +364,8 @@ export default function Toko() {
                     <p className="font-medium mt-3">Produk sedang kosong!</p>
                 ) : (
                     <div className="flex gap-3 flex-wrap mt-3">
-                        {umkm.product.map((product: Product) => (
-                            <div className="border border-custom bg-white flex flex-col justify-between rounded-md max-w-80 p-3">
+                        {umkm.product.map((product: Product, i: number) => (
+                            <div key={i} className="border border-custom bg-white flex flex-col justify-between rounded-md max-w-80 p-3">
                                 <img
                                     src={`/assets/products/${product.image}`}
                                     className="w-full rounded-md bg-cover max-h-[512px]"

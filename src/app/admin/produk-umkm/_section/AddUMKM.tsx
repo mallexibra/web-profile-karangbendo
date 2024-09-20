@@ -709,8 +709,8 @@ export default function AddUMKM() {
                     <p className="font-semibold">Data umkm sedang kosong!</p>
                 </Card>
             ) : (
-                umkm.map((item: Shop) => (
-                    <Card>
+                umkm.map((item: Shop, i: number) => (
+                    <Card key={i}>
                         <div className="flex justify-between items-center mb-3">
                             <p className="font-bold">{item.name}</p>
                             <div className="flex gap-3">
@@ -765,7 +765,7 @@ export default function AddUMKM() {
                         ) : (
                             <div className="flex gap-3 flex-wrap mt-3">
                                 {item.product.map((product: Product) => (
-                                    <div className="border border-custom bg-white flex flex-col justify-between rounded-md max-w-80 p-3">
+                                    <div key={i} className="border border-custom bg-white flex flex-col justify-between rounded-md max-w-80 p-3">
                                         <img
                                             src={`/assets/products/${product.image}`}
                                             className="w-full rounded-md bg-cover max-h-[512px]"
