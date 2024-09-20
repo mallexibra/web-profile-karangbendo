@@ -6,6 +6,7 @@ import { VillageProfile } from '@/types/VillageProfile';
 import axiosInstance from '@/utils/axiosInstance';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IconPlus, IconSquareRoundedXFilled } from '@tabler/icons-react';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
@@ -203,7 +204,7 @@ let response;
             </LabelForm>
             {selectedImage || dataImage ? (
               <div className="relative">
-                <img
+                <Image
                   src={selectedImage || `/assets/village-profile/${dataImage}`}
                   alt="Struktur Aparatur Desa"
                   className="rounded-md"

@@ -2,6 +2,7 @@
 import ContainerClient from "@/components/containers/ContainerClient";
 import { VillageProfile } from "@/types/VillageProfile";
 import axiosInstance from "@/utils/axiosInstance";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function InformationVillage() {
@@ -79,7 +80,7 @@ export default function InformationVillage() {
             <div id="aparaturdesa">
                 <ContainerClient classNames="pt-24">
                     <h2 className="title text-center mb-7">Aparatur Desa</h2>
-                    <img src={`/assets/village-profile/${profile.image}`} className="rounded-md w-2/3 mx-auto" alt="Struktur Aparatur Desa" />
+                    <Image src={`/assets/village-profile/${profile.image}`} className="rounded-md w-2/3 mx-auto" alt="Struktur Aparatur Desa" />
                 </ContainerClient>
             </div>
         </>

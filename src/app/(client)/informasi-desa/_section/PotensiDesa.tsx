@@ -2,6 +2,7 @@
 import ContainerClient from "@/components/containers/ContainerClient";
 import { villagePotential } from "@/types/VillagePotential";
 import axiosInstance from "@/utils/axiosInstance";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 const PotensiDesa = () => {
@@ -26,7 +27,7 @@ const PotensiDesa = () => {
                 <p>Desa Karangbendo memiliki potensi alam yang melimpah, termasuk lahan pertanian yang subur, hutan bambu, dan sungai yang kaya akan ikan.</p>
                 <div className="mt-5 flex flex-wrap justify-start gap-5">
                     {potential.length >= 1 ? potential.map((item: villagePotential, i: number) => (<div key={i} className="space-y-2">
-                        <img src={`/assets/village-potential/${item.image}`} alt={item.name}/>
+                        <Image src={`/assets/village-potential/${item.image}`} alt={item.name}/>
                         <p className="text-center font-semibold">{item.name}</p>
                     </div>)) : (<p>Data potensi desa sedang kosong!</p>)}
                 </div>

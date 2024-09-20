@@ -15,6 +15,7 @@ import {
   IconSquareRoundedXFilled,
   IconTrash,
 } from '@tabler/icons-react';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
@@ -286,7 +287,7 @@ export default function AparaturDesa() {
 
             {selectedImage || dataImage ? (
               <div className="relative">
-                <img
+                <Image
                   src={
                     selectedImage || `/assets/village-apparatus/${dataImage}`
                   }
@@ -330,7 +331,7 @@ export default function AparaturDesa() {
                 key={i}
                 className="border border-custom flex gap-3 items-center w-max p-2 rounded-md"
               >
-                <img
+                <Image
                   src={`/assets/village-apparatus/${item.profile}`}
                   className="w-12 h-12 rounded-md object-cover"
                   alt="Profile Aparatur Desa"

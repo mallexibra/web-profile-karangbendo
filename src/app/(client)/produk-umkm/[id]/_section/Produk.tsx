@@ -6,6 +6,7 @@ import { Product } from "@/types/Product";
 import axiosInstance from "@/utils/axiosInstance";
 import { formatRupiah } from "@/utils/format";
 import { IconBrandWhatsapp, IconMapPin } from "@tabler/icons-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -56,7 +57,7 @@ export default function Produk() {
         <ContainerClient>
             <div className="flex gap-5">
                 <section className="w-1/2">
-                    <img src={`/assets/products/${product.image}`} className="rounded-md" alt={product.name} />
+                    <Image src={`/assets/products/${product.image}`} className="rounded-md" alt={product.name} />
                 </section>
                 <section className="w-1/2 space-y-2">
                     <p className="font-bold text-2xl">{product.name}</p>

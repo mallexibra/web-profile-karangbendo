@@ -11,6 +11,7 @@ import {
   IconCircleXFilled,
   IconSquareRoundedXFilled,
 } from '@tabler/icons-react';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
@@ -234,7 +235,7 @@ export default function DokumentasiKegiatan() {
             <LabelForm label="Dokumentasi">
               {selectedImage ? (
                 <div className="relative">
-                  <img
+                  <Image
                     src={selectedImage}
                     alt="Dokumentasi Kegiatan Desa"
                     className="rounded-md"
@@ -272,7 +273,7 @@ export default function DokumentasiKegiatan() {
         ) : (
           documentation.map((item: DocumentationActivities, i: number) => (
             <div key={i} className="relative w-max">
-              <img
+              <Image
                 src={`/assets/documentation-activities/${item.image}`}
                 className="rounded-md bg-cover"
                 width={215}

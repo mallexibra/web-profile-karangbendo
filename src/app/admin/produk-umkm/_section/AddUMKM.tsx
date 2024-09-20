@@ -18,6 +18,7 @@ import {
     IconPlus,
     IconSquareRoundedXFilled,
 } from '@tabler/icons-react';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
@@ -543,7 +544,7 @@ export default function AddUMKM() {
                             <div className="relative">
                                 <LabelForm label="Identitas UMKM">
                                     {selectedFile || dataImage ? (
-                                        <img
+                                        <Image
                                             src={
                                                 selectedFile || `/assets/shops_identity/${dataImage}`
                                             }
@@ -658,7 +659,7 @@ export default function AddUMKM() {
                             <div className="relative">
                                 <LabelForm label="Gambar Produk">
                                     {selectedProduk || dataProduk ? (
-                                        <img
+                                        <Image
                                             src={
                                                 selectedProduk || `/assets/products/${dataProduk}`
                                             }
@@ -766,7 +767,7 @@ export default function AddUMKM() {
                             <div className="flex gap-3 flex-wrap mt-3">
                                 {item.product.map((product: Product) => (
                                     <div key={i} className="border border-custom bg-white flex flex-col justify-between rounded-md max-w-80 p-3">
-                                        <img
+                                        <Image
                                             src={`/assets/products/${product.image}`}
                                             className="w-full rounded-md bg-cover max-h-[512px]"
                                             alt="Produk UMKM"

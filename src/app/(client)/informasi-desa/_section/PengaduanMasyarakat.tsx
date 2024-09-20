@@ -9,6 +9,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import { optionAduan } from "@/utils/option";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IconSquareRoundedXFilled } from "@tabler/icons-react";
+import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
@@ -172,7 +173,7 @@ export default function PengaduanMasyarakat() {
                             <LabelForm label="Bukti Pendukung">
                                 {selectedImage ? (
                                     <div className="relative">
-                                        <img
+                                        <Image
                                             src={selectedImage}
                                             alt="Struktur Aparatur Desa"
                                             className="rounded-md"

@@ -8,6 +8,7 @@ import axiosInstance from '@/utils/axiosInstance';
 import { formatDate } from '@/utils/format';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IconPlus, IconSquareRoundedXFilled } from '@tabler/icons-react';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
@@ -302,7 +303,7 @@ export default function KegiatanMasyarakat() {
 
             {selectedImage || dataImage ? (
               <div className="relative">
-                <img
+                <Image
                   src={
                     selectedImage || `/assets/community-activities/${dataImage}`
                   }
@@ -346,7 +347,7 @@ export default function KegiatanMasyarakat() {
               key={i}
               className="border border-custom w-max rounded-md overflow-hidden"
             >
-              <img
+              <Image
                 src={`/assets/community-activities/${activity.image}`}
                 width={252}
                 height={20}

@@ -10,6 +10,7 @@ import axiosInstance from '@/utils/axiosInstance';
 import { formatRupiah } from '@/utils/format';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IconPlus, IconCircleXFilled, IconSquareRoundedXFilled } from '@tabler/icons-react';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
@@ -316,7 +317,7 @@ export default function Toko() {
                             <div className="relative">
                                 <LabelForm label="Gambar Produk">
                                     {selectedProduk || dataProduk ? (
-                                        <img
+                                        <Image
                                             src={
                                                 selectedProduk || `/assets/products/${dataProduk}`
                                             }
@@ -366,7 +367,7 @@ export default function Toko() {
                     <div className="flex gap-3 flex-wrap mt-3">
                         {umkm.product.map((product: Product, i: number) => (
                             <div key={i} className="border border-custom bg-white flex flex-col justify-between rounded-md max-w-80 p-3">
-                                <img
+                                <Image
                                     src={`/assets/products/${product.image}`}
                                     className="w-full rounded-md bg-cover max-h-[512px]"
                                     alt="Produk UMKM"

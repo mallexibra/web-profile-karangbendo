@@ -4,6 +4,7 @@ import ContainerClient from "@/components/containers/ContainerClient";
 import { Product } from "@/types/Product";
 import axiosInstance from "@/utils/axiosInstance";
 import { formatRupiah } from "@/utils/format";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -30,7 +31,7 @@ export default function Produk() {
                 {products.length > 0 ? products.map((item: Product, i: number) => (
                     <div key={i} className="max-w-72 flex flex-col h-full rounded-md p-3 border border-black/20">
                         <div className="flex-grow">
-                            <img src={`/assets/products/${item.image}`} className="rounded-md mb-3" alt={item.name} />
+                            <Image src={`/assets/products/${item.image}`} className="rounded-md mb-3" alt={item.name} />
                             <p className="font-bold text-xl">{item.name}</p>
                             <p className="font-semibold text-rose-500">{formatRupiah(item.price)}</p>
                             <p className="font-semibold">Deskripsi</p>

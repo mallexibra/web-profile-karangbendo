@@ -3,6 +3,7 @@ import ContainerClient from "@/components/containers/ContainerClient";
 import { VillageApparatus } from "@/types/VillageApparatus";
 import axiosInstance from "@/utils/axiosInstance";
 import { formatText } from "@/utils/format";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function VillageApparatur() {
@@ -30,7 +31,7 @@ export default function VillageApparatur() {
                                 key={i}
                                 className="border border-custom flex gap-3 items-center w-max p-2 rounded-md"
                             >
-                                <img
+                                <Image
                                     src={`/assets/village-apparatus/${item.profile}`}
                                     className="w-12 h-12 rounded-md object-cover"
                                     alt="Profile Aparatur Desa"

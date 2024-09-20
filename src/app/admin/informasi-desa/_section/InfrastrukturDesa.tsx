@@ -11,6 +11,7 @@ import {
   IconPlus,
   IconSquareRoundedXFilled,
 } from '@tabler/icons-react';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
@@ -230,7 +231,7 @@ export default function InfrastrukturDesa() {
             <LabelForm label="Gambar Infrastruktur">
             {selectedImage ? (
               <div className="relative">
-                <img
+                <Image
                   src={selectedImage}
                   alt="Struktur Aparatur Desa"
                   className="rounded-md"
@@ -267,7 +268,7 @@ export default function InfrastrukturDesa() {
           infrastrukturs.map(
             (infrastruktur: VillageInfrastruktur, i: number) => (
               <div key={i} className="relative w-max">
-                <img
+                <Image
                   src={`/assets/village-infrastruktur/${infrastruktur.image}`}
                   className="rounded-md bg-cover"
                   width={215}
