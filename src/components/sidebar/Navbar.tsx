@@ -40,7 +40,7 @@ export default function Navbar() {
             onMouseLeave={() => setIsNavHovered(false)}>
             <ContainerClient classNames="flex justify-between items-center gap-3">
                 <Link href={"/"} className="flex justify-start items-center gap-2">
-                    <Image src={logo} fill className="w-10" alt="Logo Kabupaten Banyuwangi" />
+                    <Image src={logo} className="w-10" alt="Logo Kabupaten Banyuwangi" />
                     <h1 className="text-lg font-extrabold">
                         Desa <br className={cn(pathname == "/auth/login" && "hidden")} /> Karangbendo
                     </h1>
