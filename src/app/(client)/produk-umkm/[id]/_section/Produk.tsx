@@ -57,7 +57,7 @@ export default function Produk() {
         <ContainerClient>
             <div className="flex gap-5">
                 <section className="w-1/2">
-                    <Image src={`/assets/products/${product.image}`} fill className="rounded-md" alt={product.name} />
+                    <Image src={`/assets/products/${product.image}`} width={500} height={500} className="rounded-md" alt={product.name} />
                 </section>
                 <section className="w-1/2 space-y-2">
                     <p className="font-bold text-2xl">{product.name}</p>

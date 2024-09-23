@@ -17,7 +17,7 @@ export default function SidebarAdmin() {
     return (
         <nav className="min-w-max min-h-screen bg-white border-custom border-r-2">
             <div className="p-5 flex justify-center gap-2 border-custom border-b-2">
-                <Image src={LogoBanyuwangi} fill width={52} alt="Logo Banyuwangi" />
+                <Image src={LogoBanyuwangi} width={52} height={52} alt="Logo Banyuwangi" />
                 <p className="font-bold text-lg">
                     DESA <br /> KARANGBENDO
                 </p>
