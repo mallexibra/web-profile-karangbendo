@@ -33,6 +33,7 @@ export default function VillageApparatur() {
                             >
                                 <Image
                                     src={`/assets/village-apparatus/${item.profile}`}
+                                     fill
                                     className="w-12 h-12 rounded-md object-cover"
                                     alt="Profile Aparatur Desa"
                                 />

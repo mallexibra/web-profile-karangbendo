@@ -291,6 +291,7 @@ export default function AparaturDesa() {
                   src={
                     selectedImage || `/assets/village-apparatus/${dataImage}`
                   }
+                  fill
                   alt="Struktur Aparatur Desa"
                   className="rounded-md"
                 />
@@ -333,6 +334,7 @@ export default function AparaturDesa() {
               >
                 <Image
                   src={`/assets/village-apparatus/${item.profile}`}
+                  fill
                   className="w-12 h-12 rounded-md object-cover"
                   alt="Profile Aparatur Desa"
                 />

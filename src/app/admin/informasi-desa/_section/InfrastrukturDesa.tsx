@@ -233,6 +233,7 @@ export default function InfrastrukturDesa() {
               <div className="relative">
                 <Image
                   src={selectedImage}
+                  fill
                   alt="Struktur Aparatur Desa"
                   className="rounded-md"
                 />
@@ -270,6 +271,7 @@ export default function InfrastrukturDesa() {
               <div key={i} className="relative w-max">
                 <Image
                   src={`/assets/village-infrastruktur/${infrastruktur.image}`}
+                  fill
                   className="rounded-md bg-cover"
                   width={215}
                   height={120}

@@ -175,6 +175,7 @@ export default function PengaduanMasyarakat() {
                                     <div className="relative">
                                         <Image
                                             src={selectedImage}
+                                            fill
                                             alt="Struktur Aparatur Desa"
                                             className="rounded-md"
                                         />

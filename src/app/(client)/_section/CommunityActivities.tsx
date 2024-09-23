@@ -28,7 +28,7 @@ export default function CommunityActivity() {
                 <div className="mt-5 flex gap-2">
                     {data.length <= 0 ? <p>Data kegiatan masyarakat sedang kosong!</p> : data.map((item: CommunityActivities, i: number) => (
                         <div key={i} className="max-w-72 rounded-md overflow-hidden border border-custom">
-                            <Image src={`/assets/community-activities/${item.image}`} className="w-full" alt={item.name} />
+                            <Image src={`/assets/community-activities/${item.image}`} fill className="w-full" alt={item.name} />
                             <div className="p-3">
                                 <p className="font-bold text-primary">{item.name}</p>
                                 <p className="font-medium text-xs opacity-50 my-1">{formatDate(item.time)}</p>

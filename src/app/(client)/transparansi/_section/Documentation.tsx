@@ -26,7 +26,7 @@ export default function Documentation() {
                 <h2 className="title">Dokumentasi Kegiatan</h2>
                 <div className="flex flex-wrap gap-3 mt-5">
                     {documentations.length > 0 ? documentations.map((item: DocumentationActivities, i: number) => (
-                        <Image key={i} className="rounded-md max-w-64 object-cover h-full" src={`/assets/documentation-activities/${item.image}`} alt={item.name} />
+                        <Image key={i} fill className="rounded-md max-w-64 object-cover h-full" src={`/assets/documentation-activities/${item.image}`} alt={item.name} />
                     )) : (<p>Data dokumentasi kegiatan sedang kosong!</p>)}
                 </div>
             </ContainerClient>

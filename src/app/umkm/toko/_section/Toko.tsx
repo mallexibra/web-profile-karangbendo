@@ -322,6 +322,7 @@ export default function Toko() {
                                             src={
                                                 selectedProduk || `/assets/products/${dataProduk}`
                                             }
+                                            fill
                                             alt="Gambar Produk"
                                             className="rounded-md"
                                         />
@@ -370,6 +371,7 @@ export default function Toko() {
                             <div key={i} className="border border-custom bg-white flex flex-col justify-between rounded-md max-w-80 p-3">
                                 <Image
                                     src={`/assets/products/${product.image}`}
+                                    fill
                                     className="w-full rounded-md bg-cover max-h-[512px]"
                                     alt="Produk UMKM"
                                 />

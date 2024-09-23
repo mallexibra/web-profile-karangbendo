@@ -206,6 +206,7 @@ let response;
               <div className="relative">
                 <Image
                   src={selectedImage || `/assets/village-profile/${dataImage}`}
+                  fill
                   alt="Struktur Aparatur Desa"
                   className="rounded-md"
                 />

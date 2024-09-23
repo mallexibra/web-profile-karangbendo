@@ -29,7 +29,7 @@ export default function Infrastruktur() {
                 <div className="flex flex-wrap gap-3 mt-5">
                     {infrastruktur.map((item: VillageInfrastruktur, i: number)=>(
                     <div key={i} className="relative w-72 bg-primary rounded-md overflow-hidden">
-                        <Image src={`/assets/village-infrastruktur/${item.image}`} className="w-full h-full object-cover" alt={item.name} />
+                        <Image src={`/assets/village-infrastruktur/${item.image}`} fill className="w-full h-full object-cover" alt={item.name} />
                         <div className="px-3 pb-3 pt-5 bg-gradient-to-b from-transparent to-primary absolute w-full flex flex-col justify-end top-12 bottom-0">
                             <p className="font-semibold text-white">{item.name}</p>
                         </div>

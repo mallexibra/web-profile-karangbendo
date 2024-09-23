@@ -306,7 +306,7 @@ export default function KegiatanMasyarakat() {
                 <Image
                   src={
                     selectedImage || `/assets/community-activities/${dataImage}`
-                  }
+                  } fill
                   alt="Kegiatan Masyarakat"
                   className="rounded-md"
                 />

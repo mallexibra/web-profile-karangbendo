@@ -237,6 +237,7 @@ export default function DokumentasiKegiatan() {
                 <div className="relative">
                   <Image
                     src={selectedImage}
+                    fill
                     alt="Dokumentasi Kegiatan Desa"
                     className="rounded-md"
                   />

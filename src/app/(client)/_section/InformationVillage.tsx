@@ -80,7 +80,7 @@ export default function InformationVillage() {
             <div id="aparaturdesa">
                 <ContainerClient classNames="pt-24">
                     <h2 className="title text-center mb-7">Aparatur Desa</h2>
-                    <Image src={`/assets/village-profile/${profile.image}`} className="rounded-md w-2/3 mx-auto" alt="Struktur Aparatur Desa" />
+                    <Image src={`/assets/village-profile/${profile.image}`} fill className="rounded-md w-2/3 mx-auto" alt="Struktur Aparatur Desa" />
                 </ContainerClient>
             </div>
         </>
