@@ -34,7 +34,7 @@ export default function Navbar() {
     }, [headerRef]);
     return (
         <nav className={cn("py-3 text-white hover:bg-primary border-b border-white/20 fixed z-50 left-0 top-0 right-0 transition-colors duration-300", {
-            'bg-primary': isScrolled,
+            'bg-primary': pathname === "/auth/login" || isScrolled,
             'bg-white/10 backdrop-blur': !isScrolled
         })} onMouseEnter={() => setIsNavHovered(true)}
             onMouseLeave={() => setIsNavHovered(false)}>
@@ -42,7 +42,7 @@ export default function Navbar() {
                 <Link href={"/"} className="flex justify-start items-center gap-2">
                     <Image src={logo} className="w-10" alt="Logo Kabupaten Banyuwangi" />
                     <h1 className="text-lg font-extrabold">
-                        Desa <br /> Karangbendo
+                        Desa <br className={cn(pathname == "/auth/login" && "hidden")} /> Karangbendo
                     </h1>
                 </Link>
                 <div className="flex justify-center items-center gap-3">
@@ -120,12 +120,12 @@ export default function Navbar() {
                     </div>
                     <Link href="/produk-umkm" className={cn(pathname.startsWith("/produk-umkm") && 'font-semibold')}>Produk UMKM</Link>
                 </div>
-                <div>
+                <div className={cn(pathname == "/auth/login" && "hidden")}>
                     <button className={`flex justify-center items-center gap-3 px-4 py-2 text-base font-medium rounded-md ${isNavHovered
+                        ? "bg-white text-primary hover:bg-white/80"
+                        : isScrolled
                             ? "bg-white text-primary hover:bg-white/80"
-                            : isScrolled
-                                ? "bg-white text-primary hover:bg-white/80"
-                                : "bg-primary text-white hover:bg-primary/80"
+                            : "bg-primary text-white hover:bg-primary/80"
                         }`}
                         type="button"
                     >

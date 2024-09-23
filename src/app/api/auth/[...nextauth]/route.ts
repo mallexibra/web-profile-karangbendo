@@ -22,14 +22,14 @@ const authOptions: NextAuthOptions = {
                     where: { email: credentials.email },
                 });
 
-                if (user && bcrypt.compareSync(credentials.password, user.password)) {
+                if (user && await bcrypt.compare(credentials.password, user.password)) {
                     return {
                         id: String(user.id),
                         name: user.name,
                         email: user.email,
                         role: user.role ?? undefined,
                         phone: user.phone ?? undefined,
-                        position: user.position ?? undefined,
+                        position: user.position ?? undefined
                     };
                 } else {
                     return null;
@@ -38,10 +38,11 @@ const authOptions: NextAuthOptions = {
         }),
     ],
     pages: {
-        signIn: '/admin/signin',
+        signIn: '/auth/login',
     },
     session: {
         strategy: 'jwt',
+        maxAge: 24 * 60 * 60,
     },
     callbacks: {
         async jwt({ token, user }) {
