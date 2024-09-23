@@ -334,7 +334,7 @@ export default function AparaturDesa() {
               >
                 <Image
                   src={`/assets/village-apparatus/${item.profile}`}
-                  fill
+                  width={500} height={500}
                   className="w-12 h-12 rounded-md object-cover"
                   alt="Profile Aparatur Desa"
                 />

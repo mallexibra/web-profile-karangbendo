@@ -121,17 +121,16 @@ export default function Navbar() {
                     <Link href="/produk-umkm" className={cn(pathname.startsWith("/produk-umkm") && 'font-semibold')}>Produk UMKM</Link>
                 </div>
                 <div className={cn(pathname == "/auth/login" && "hidden")}>
-                    <button className={`flex justify-center items-center gap-3 px-4 py-2 text-base font-medium rounded-md ${isNavHovered
+                    <Link href={"/auth/login"} className={`flex justify-center items-center gap-3 px-4 py-2 text-base font-medium rounded-md ${isNavHovered
                         ? "bg-white text-primary hover:bg-white/80"
                         : isScrolled
                             ? "bg-white text-primary hover:bg-white/80"
                             : "bg-primary text-white hover:bg-primary/80"
                         }`}
-                        type="button"
                     >
                         <IconUser className={isNavHovered || isScrolled ? "text-primary" : "text-white"} fontWeight={'bold'} />
                         <p className="font-semibold">Login Admin</p>
-                    </button>
+                    </Link>
                 </div>
             </ContainerClient>
         </nav>
