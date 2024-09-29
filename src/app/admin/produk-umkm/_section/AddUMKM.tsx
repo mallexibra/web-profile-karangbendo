@@ -343,7 +343,7 @@ export default function AddUMKM() {
     const getUser = async () => {
         const response = await axiosInstance.get('/users');
         const data: User[] = response.data.data;
-        const option = data.map((user: User) => {
+        const option = data.filter((user: User)=> user.role == "umkm").map((user: User) => {
             return { label: user.name, value: user.id };
         });
         setOptionUser(option);
@@ -549,9 +549,10 @@ export default function AddUMKM() {
                                             src={
                                                 selectedFile || `/assets/shops_identity/${dataImage}`
                                             }
-                                            fill
+                                            width={210}
+                                            height={210}
                                             alt="Struktur Aparatur Desa"
-                                            className="rounded-md"
+                                            className="rounded-md w-full object-cover"
                                         />
                                     ) : (
                                         <InputForm

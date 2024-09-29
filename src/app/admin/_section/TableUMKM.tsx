@@ -15,7 +15,7 @@ import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import * as yup from 'yup';
 
-export default function TableSection() {
+export default function TableUMKM() {
     const [accounts, setAccounts] = useState<User[]>([]);
 
     const userSchema = yup.object().shape({
@@ -74,6 +74,7 @@ export default function TableSection() {
         try {
             delete data.confirmPassword
             let response;
+            if (data.position == "") data.position = null;
             if (!id) {
                 response = await axiosInstance.post('/users', data);
             } else {
@@ -84,7 +85,7 @@ export default function TableSection() {
                 Swal.fire({
                     icon: 'success',
                     title: 'Sukses!',
-                    text: 'Sukses tambah data akun admin',
+                    text: `Sukses tambah ${type == "add" ? "tambar" : "edit"} akun umkm`,
                 });
                 fetchData();
             } else {
@@ -122,7 +123,7 @@ export default function TableSection() {
                 Swal.fire({
                     icon: 'success',
                     title: 'Sukses!',
-                    text: 'Sukses menghapus data akun admin',
+                    text: 'Sukses menghapus data akun umkm',
                 });
                 fetchData();
             } else {
@@ -151,7 +152,7 @@ export default function TableSection() {
     };
 
     const modalClick = () => {
-        const modal = document.getElementById(`modal_${type}`) as HTMLDialogElement;
+        const modal = document.getElementById(`modal_umkm_${type}`) as HTMLDialogElement;
         if (modal) {
             modal.showModal();
         }
@@ -169,7 +170,7 @@ export default function TableSection() {
     };
 
     const close: any = () => {
-        const modal = document.getElementById(`modal_${type}`) as HTMLDialogElement;
+        const modal = document.getElementById(`modal_umkm_${type}`) as HTMLDialogElement;
         if (id) {
             setId(null);
         }
@@ -186,12 +187,13 @@ export default function TableSection() {
 
     useEffect(() => {
         fetchData();
+        setValue("role", "umkm")
     }, []);
 
     return (
         <Card>
             <div className="flex justify-between items-center mb-3">
-                <p className="font-bold">Daftar Akun Admin</p>
+                <p className="font-bold">Daftar Akun UMKM</p>
                 <button
                     type="button"
                     onClick={() => {
@@ -204,7 +206,7 @@ export default function TableSection() {
                     <p>Tambah Data</p>
                 </button>
             </div>
-            <dialog id={`modal_${type}`} className="modal">
+            <dialog id={`modal_umkm_${type}`} className="modal">
                 <div className="modal-box">
                     <button
                         type="button"
@@ -215,7 +217,7 @@ export default function TableSection() {
                     </button>
 
                     <h3 className="font-bold text-lg">
-                        {type == 'add' ? 'Tambah' : 'Edit'} Akun Admin
+                        {type == 'add' ? 'Tambah' : 'Edit'} Akun UMKM
                     </h3>
 
                     <form
@@ -292,32 +294,6 @@ export default function TableSection() {
                             )}
                         </LabelForm>
 
-                        <LabelForm label="Jabatan">
-                            <SelectForm
-                                {...register('position')}
-                                label="Jabatan"
-                                name="position"
-                                data={optionPosition}
-                            />
-                            {errors.position && (
-                                <p className="text-red-500 text-sm">
-                                    {errors.position.message}
-                                </p>
-                            )}
-                        </LabelForm>
-
-                        <LabelForm label="Role User">
-                            <SelectForm
-                                {...register('role')}
-                                label="Role User"
-                                name="role"
-                                data={optionRole}
-                            />
-                            {errors.role && (
-                                <p className="text-red-500 text-sm">{errors.role.message}</p>
-                            )}
-                        </LabelForm>
-
                         <Button type="submit" color="primary" size="base">
                             Save
                         </Button>
@@ -336,13 +312,13 @@ export default function TableSection() {
                         </tr>
                     </thead>
                     <tbody className="bg-second font-medium">
-                        {accounts.length > 0 ? (
-                            accounts.map((account: User, i: number) => (
+                        {accounts.filter((account: User, i: number)=>account.role == "umkm").length > 0 ? (
+                            accounts.filter((account: User, i: number)=>account.role == "umkm").map((account: User, i: number) => (
                                 <tr key={i}>
                                     <td className="text-center p-3">{i + 1}</td>
                                     <td>{account.name}</td>
                                     <td>{account.email}</td>
-                                    <td>{formatText(account.position!)}</td>
+                                    <td>{account.position ? formatText(account.position) : "-"}</td>
                                     <td className="space-x-2">
                                         <Button
                                             onClick={() => {
