@@ -20,6 +20,7 @@ const authOptions: NextAuthOptions = {
 
                 const user = await db.user.findUnique({
                     where: { email: credentials.email },
+                    include: { Shop: true }
                 });
 
                 if (user && await bcrypt.compare(credentials.password, user.password)) {
@@ -29,11 +30,13 @@ const authOptions: NextAuthOptions = {
                         email: user.email,
                         role: user.role ?? undefined,
                         phone: user.phone ?? undefined,
-                        position: user.position ?? undefined
+                        position: user.position ?? undefined,
+                        shop: user.Shop.length > 0 ? user.Shop[0].id : undefined
                     };
                 } else {
                     return null;
                 }
+
             },
         }),
     ],
@@ -53,6 +56,7 @@ const authOptions: NextAuthOptions = {
                 token.role = user.role;
                 token.phone = user.phone;
                 token.position = user.position;
+                token.shop = user.shop;
             }
             return token;
         },
@@ -64,6 +68,7 @@ const authOptions: NextAuthOptions = {
                 role: token.role as string,
                 phone: token.phone as string,
                 position: token.position as string,
+                shop: token.shop as string
             };
             return session;
         },

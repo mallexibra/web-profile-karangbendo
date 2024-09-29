@@ -307,7 +307,7 @@ export default function TableUMKM() {
                             <th className="text-center p-3">NO</th>
                             <th>NAMA</th>
                             <th>EMAIL</th>
-                            <th>JABATAN</th>
+                            <th>NOMOR HANDPHONE</th>
                             <th>AKSI</th>
                         </tr>
                     </thead>
@@ -318,7 +318,7 @@ export default function TableUMKM() {
                                     <td className="text-center p-3">{i + 1}</td>
                                     <td>{account.name}</td>
                                     <td>{account.email}</td>
-                                    <td>{account.position ? formatText(account.position) : "-"}</td>
+                                    <td>{account.phone}</td>
                                     <td className="space-x-2">
                                         <Button
                                             onClick={() => {

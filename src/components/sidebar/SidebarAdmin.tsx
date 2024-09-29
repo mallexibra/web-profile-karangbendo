@@ -23,63 +23,65 @@ export default function SidebarAdmin() {
                 </p>
             </div>
             <div className="py-5 pl-5 space-y-2">
-                <Link
-                    href={'/admin'}
-                    className={cn(
-                        'block py-2 outline-none font-semibold w-full',
-                        path_one == 'admin' &&
-                        path == null &&
-                        'text-primary border-r-2 border-primary',
-                    )}
-                >
-                    Dashboard
-                </Link>
-                <Link
-                    href={'/admin/profile-desa'}
-                    className={cn(
-                        'font-semibold block py-2 outline-none w-full',
-                        path == 'profile-desa' && 'text-primary border-r-2 border-primary',
-                    )}
-                >
-                    Profile Desa
-                </Link>
-                <Link
-                    href={'/admin/informasi-desa'}
-                    className={cn(
-                        'font-semibold block  py-2 outline-none w-full',
-                        path == 'informasi-desa' &&
-                        'text-primary border-r-2 border-primary',
-                    )}
-                >
-                    Informasi Desa
-                </Link>
-                <Link
-                    href={'/admin/transparansi'}
-                    className={cn(
-                        'font-semibold block  py-2 outline-none w-full',
-                        path == 'transparansi' && 'text-primary border-r-2 border-primary',
-                    )}
-                >
-                    Transparansi
-                </Link>
-                <Link
-                    href={'/admin/produk-hukum'}
-                    className={cn(
-                        'font-semibold block  py-2 outline-none w-full',
-                        path == 'produk-hukum' && 'text-primary border-r-2 border-primary',
-                    )}
-                >
-                    Produk Hukum
-                </Link>
-                <Link
-                    href={'/admin/produk-umkm'}
-                    className={cn(
-                        'font-semibold block  py-2 outline-none w-full',
-                        path == 'produk-umkm' && 'text-primary border-r-2 border-primary',
-                    )}
-                >
-                    Produk UMKM
-                </Link>
+                {session && session.user?.role != "umkm" && <>
+                    <Link
+                        href={'/admin'}
+                        className={cn(
+                            'block py-2 outline-none font-semibold w-full',
+                            path_one == 'admin' &&
+                            path == null &&
+                            'text-primary border-r-2 border-primary',
+                        )}
+                    >
+                        Dashboard
+                    </Link>
+                    <Link
+                        href={'/admin/profile-desa'}
+                        className={cn(
+                            'font-semibold block py-2 outline-none w-full',
+                            path == 'profile-desa' && 'text-primary border-r-2 border-primary',
+                        )}
+                    >
+                        Profile Desa
+                    </Link>
+                    <Link
+                        href={'/admin/informasi-desa'}
+                        className={cn(
+                            'font-semibold block  py-2 outline-none w-full',
+                            path == 'informasi-desa' &&
+                            'text-primary border-r-2 border-primary',
+                        )}
+                    >
+                        Informasi Desa
+                    </Link>
+                    <Link
+                        href={'/admin/transparansi'}
+                        className={cn(
+                            'font-semibold block  py-2 outline-none w-full',
+                            path == 'transparansi' && 'text-primary border-r-2 border-primary',
+                        )}
+                    >
+                        Transparansi
+                    </Link>
+                    <Link
+                        href={'/admin/produk-hukum'}
+                        className={cn(
+                            'font-semibold block  py-2 outline-none w-full',
+                            path == 'produk-hukum' && 'text-primary border-r-2 border-primary',
+                        )}
+                    >
+                        Produk Hukum
+                    </Link>
+                    <Link
+                        href={'/admin/produk-umkm'}
+                        className={cn(
+                            'font-semibold block  py-2 outline-none w-full',
+                            path == 'produk-umkm' && 'text-primary border-r-2 border-primary',
+                        )}
+                    >
+                        Produk UMKM
+                    </Link>
+                </>}
                 {session && session.user?.role == "umkm" && (<>
                     <Link
                         href={'/umkm'}

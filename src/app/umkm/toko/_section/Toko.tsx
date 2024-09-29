@@ -9,7 +9,8 @@ import { User } from '@/types/User';
 import axiosInstance from '@/utils/axiosInstance';
 import { formatRupiah } from '@/utils/format';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IconPlus, IconCircleXFilled, IconSquareRoundedXFilled } from '@tabler/icons-react';
+import { IconPlus, IconSquareRoundedXFilled } from '@tabler/icons-react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,7 +18,7 @@ import Swal from 'sweetalert2';
 import * as yup from "yup"
 
 export default function Toko() {
-    const [id, setId] = useState<number | null>(2);
+    const { data: session } = useSession()
     const [umkm, setUmkm] = useState<Shop>({
         id: 0,
         name: '',
@@ -78,7 +79,7 @@ export default function Toko() {
 
     const fetchData = async () => {
         try {
-            const response = await axiosInstance.get(`/shops/${id}`);
+            const response = await axiosInstance.get(`/shops/${session?.user.shop}`);
             setUmkm(response.data.data);
         } catch (error: any) {
 
@@ -158,7 +159,7 @@ export default function Toko() {
                 Swal.fire({
                     icon: 'success',
                     title: 'Sukses!',
-                    text: `Sukses ${id ? 'edit' : 'tambah'} produk`,
+                    text: `Sukses ${idProduk ? 'edit' : 'tambah'} produk`,
                 });
                 fetchData();
             } else {
@@ -231,16 +232,16 @@ export default function Toko() {
 
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [session])
     return (
         <Card>
             <div className="flex justify-between items-center mb-3">
                 <p className="font-bold">{umkm.name}</p>
                 <button
-                onClick={() => {
-                    setValueProduk('shopId', umkm.id);
-                    setIsModalProductOpen(true);
-                }}
+                    onClick={() => {
+                        setValueProduk('shopId', umkm.id);
+                        setIsModalProductOpen(true);
+                    }}
                     type="button"
                     className="w-max px-3 py-2 bg-primary rounded-md cursor-pointer text-white text-sm font-medium gap-2 flex justify-center items-center"
                 >
@@ -249,119 +250,119 @@ export default function Toko() {
                 </button>
             </div>
             <dialog id={`modal_${typeProduct}5`} className="modal">
-                    <div className="modal-box">
-                        <button
-                            type="button"
-                            onClick={closeModal}
-                            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                        >
-                            ✕
-                        </button>
+                <div className="modal-box">
+                    <button
+                        type="button"
+                        onClick={closeModal}
+                        className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                    >
+                        ✕
+                    </button>
 
-                        <h3 className="font-bold text-lg">
-                            {typeProduct == 'view'
-                                ? 'Detail'
-                                : typeProduct == 'edit'
-                                    ? 'Edit'
-                                    : 'Tambah'}{' '}
-                            Produk
-                        </h3>
+                    <h3 className="font-bold text-lg">
+                        {typeProduct == 'view'
+                            ? 'Detail'
+                            : typeProduct == 'edit'
+                                ? 'Edit'
+                                : 'Tambah'}{' '}
+                        Produk
+                    </h3>
 
-                        <form
-                            method="post"
-                            onSubmit={handleSubmitProduk(handleAddProduct)}
-                            className="mt-3 flex flex-col gap-2"
-                        >
-                            <LabelForm label="Nama Produk">
-                                <InputForm
-                                    disabled={typeProduct == 'view'}
-                                    {...registerProduk('name')}
-                                    type="text"
-                                    label="Nama Produk"
-                                    name="name"
-                                    placeholder="Input nama produk"
-                                />
-                                {errorsProduk.name && (
-                                    <p className="text-red-500 text-sm">{errorsProduk.name.message}</p>
+                    <form
+                        method="post"
+                        onSubmit={handleSubmitProduk(handleAddProduct)}
+                        className="mt-3 flex flex-col gap-2"
+                    >
+                        <LabelForm label="Nama Produk">
+                            <InputForm
+                                disabled={typeProduct == 'view'}
+                                {...registerProduk('name')}
+                                type="text"
+                                label="Nama Produk"
+                                name="name"
+                                placeholder="Input nama produk"
+                            />
+                            {errorsProduk.name && (
+                                <p className="text-red-500 text-sm">{errorsProduk.name.message}</p>
+                            )}
+                        </LabelForm>
+
+                        <LabelForm label="Harga">
+                            <InputForm
+                                disabled={typeProduct == 'view'}
+                                {...registerProduk('price')}
+                                type="number"
+                                label="Harga"
+                                name="price"
+                                placeholder="Input harga produk"
+                            />
+                            {errorsProduk.price && (
+                                <p className="text-red-500 text-sm">{errorsProduk.price.message}</p>
+                            )}
+                        </LabelForm>
+
+                        <LabelForm label="Deskripsi">
+                            <textarea
+                                disabled={typeProduct == 'view'}
+                                {...registerProduk('description')}
+                                placeholder="Masukkan deskripsi produk"
+                                rows={3}
+                                className="block w-full px-2 py-3 border-custom border text-xs bg-second rounded-md outline-none"
+                            />
+                            {errorsProduk.description && (
+                                <p className="text-red-500 text-sm">
+                                    {errorsProduk.description.message}
+                                </p>
+                            )}
+                        </LabelForm>
+
+                        <div className="relative">
+                            <LabelForm label="Gambar Produk">
+                                {selectedProduk || dataProduk ? (
+                                    <Image
+                                        src={
+                                            selectedProduk || `/assets/products/${dataProduk}`
+                                        }
+                                        fill
+                                        alt="Gambar Produk"
+                                        className="rounded-md"
+                                    />
+                                ) : (
+                                    <InputForm
+                                        disabled={typeProduct === 'view'}
+                                        {...registerProduk('image')}
+                                        accept=".png,.jpg,.jpeg"
+                                        type="file"
+                                        label="Gambar Produk"
+                                        name="image"
+                                        placeholder="Input gambar produk"
+                                        onChange={handleImageProduk}
+                                    />
                                 )}
-                            </LabelForm>
-
-                            <LabelForm label="Harga">
-                                <InputForm
-                                    disabled={typeProduct == 'view'}
-                                    {...registerProduk('price')}
-                                    type="number"
-                                    label="Harga"
-                                    name="price"
-                                    placeholder="Input harga produk"
-                                />
-                                {errorsProduk.price && (
-                                    <p className="text-red-500 text-sm">{errorsProduk.price.message}</p>
-                                )}
-                            </LabelForm>
-
-                            <LabelForm label="Deskripsi">
-                                <textarea
-                                    disabled={typeProduct == 'view'}
-                                    {...registerProduk('description')}
-                                    placeholder="Masukkan deskripsi produk"
-                                    rows={3}
-                                    className="block w-full px-2 py-3 border-custom border text-xs bg-second rounded-md outline-none"
-                                />
-                                {errorsProduk.description && (
+                                {errorsProduk.image && (
                                     <p className="text-red-500 text-sm">
-                                        {errorsProduk.description.message}
+                                        {errorsProduk.image.message}
                                     </p>
                                 )}
                             </LabelForm>
 
-                            <div className="relative">
-                                <LabelForm label="Gambar Produk">
-                                    {selectedProduk || dataProduk ? (
-                                        <Image
-                                            src={
-                                                selectedProduk || `/assets/products/${dataProduk}`
-                                            }
-                                            fill
-                                            alt="Gambar Produk"
-                                            className="rounded-md"
-                                        />
-                                    ) : (
-                                        <InputForm
-                                            disabled={typeProduct === 'view'}
-                                            {...registerProduk('image')}
-                                            accept=".png,.jpg,.jpeg"
-                                            type="file"
-                                            label="Gambar Produk"
-                                            name="image"
-                                            placeholder="Input gambar produk"
-                                            onChange={handleImageProduk}
-                                        />
-                                    )}
-                                    {errorsProduk.image && (
-                                        <p className="text-red-500 text-sm">
-                                            {errorsProduk.image.message}
-                                        </p>
-                                    )}
-                                </LabelForm>
+                            {selectedProduk || dataProduk ? (
+                                <IconSquareRoundedXFilled
+                                    onClick={() => {
+                                        setSelectedProduk(null);
+                                        setDataProduk(null);
+                                    }}
+                                    className="text-red-600 absolute top-4 -right-2 cursor-pointer"
+                                />
+                            ) : null}
+                        </div>
 
-                                {selectedProduk || dataProduk ? (
-                                    <IconSquareRoundedXFilled
-                                        onClick={() => {
-                                            setSelectedProduk(null);
-                                            setDataProduk(null);
-                                        }}
-                                        className="text-red-600 absolute top-4 -right-2 cursor-pointer"
-                                    />
-                                ) : null}
-                            </div>
-
-                                <Button type="submit" color="primary" size="base">
-                                    Save
-                                </Button>
-                        </form>
-                    </div>
-                </dialog>
+                        <Button type="submit" color="primary" size="base">
+                            Save
+                        </Button>
+                    </form>
+                </div>
+            </dialog>
             <div className="flex gap-3 flex-wrap">
                 {umkm.product.length <= 0 ? (
                     <p className="font-medium mt-3">Produk sedang kosong!</p>

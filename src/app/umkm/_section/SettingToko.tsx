@@ -3,16 +3,16 @@ import Button from '@/components/button/Button';
 import Card from '@/components/cards/Card';
 import { InputForm } from '@/components/forms/InputForm';
 import LabelForm from '@/components/forms/LabelForm';
-import TextareaForm from '@/components/forms/TextareaForm';
 import axiosInstance from '@/utils/axiosInstance';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import * as yup from "yup";
 
 export default function SettingToko() {
-    const [id, setId] = useState<number | null>(2);
+    const {data: session} = useSession();
     const umkmSchema = yup.object({
         name: yup.string().required('Nama wajib diisi'),
         description: yup.string().required('Deskripsi wajib diisi'),
@@ -26,7 +26,7 @@ export default function SettingToko() {
 
     const fetchData = async () => {
         try {
-            const response = (await axiosInstance.get(`/shops/${id}`)).data.data;
+            const response = session && (await axiosInstance.get(`/shops/${session.user?.shop}`)).data.data;
             setValue('name', response.name);
             setValue('phone', response.phone);
             setValue('location', response.location);

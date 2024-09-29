@@ -6,9 +6,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import * as yup from "yup";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/sidebar/Navbar";
+import Link from "next/link";
 
 export default function Login() {
     const router = useRouter()
@@ -17,7 +18,7 @@ export default function Login() {
         password: yup.string().min(8, "Password minimal 8 karakter").required("Password wajib diisi")
     });
 
-    const { register, handleSubmit, reset, formState: {errors} } = useForm({
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({
         resolver: yupResolver(loginSchema)
     });
 
@@ -36,15 +37,15 @@ export default function Login() {
                     text: "Email/Password Anda Salah!",
                 });
             } else {
-                const userRole = response?.user?.role;
-
                 Swal.fire({
                     icon: 'success',
                     title: 'Sukses!',
                     text: 'Anda sukses login',
                 });
 
-                if (userRole === 'umkm') {
+                const session = await getSession();
+
+                if (session?.user?.role === 'umkm') {
                     router.push('/umkm');
                 } else {
                     router.push('/admin');
@@ -87,10 +88,10 @@ export default function Login() {
                             placeholder="••••••••"
                             {...register("password")}
                         />
-                         {errors.password && (<p className="text-red-500 text-sm">{errors.password.message}</p>)}
+                        {errors.password && (<p className="text-red-500 text-sm">{errors.password.message}</p>)}
                     </LabelForm>
 
-                    <div className="flex items-center justify-between">
+                    {/* <div className="flex items-center justify-between">
                         <div className="flex items-center">
                             <input
                                 id="remember-me"
@@ -108,11 +109,14 @@ export default function Login() {
                                 Forgot your password?
                             </a>
                         </div>
-                    </div>
+                    </div> */}
 
-                    <Button type="submit" color="primary" size="base">
-                        Login
-                    </Button>
+                    <div className="flex flex-col gap-2">
+                        <Button type="submit" color="primary" size="base">
+                            Login
+                        </Button>
+                        <Link href={"/"} className="underline text-primary text-sm text-center hover:text-primary/75">Halaman Desa Karangbendo</Link>
+                    </div>
                 </form>
             </div>
         </main>
