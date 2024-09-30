@@ -16,8 +16,8 @@ export default function Header() {
           <div className="w-max px-3 py-2 font-medium text-xs bg-primary/35 border border-primary rounded-md mx-auto">
             Selamat Datang
           </div>
-          <h1 className="font-extrabold text-5xl">DESA KARANGBENDO</h1>
-          <p className="font-medium text-xl max-w-2xl">
+          <h1 className="font-extrabold text-3xl md:text-5xl">DESA KARANGBENDO</h1>
+          <p className="font-medium text-base md:text-xl max-w-2xl">
             Nikmati Keindahan Alam dan Kekayaan Budaya Lokal. Temukan Pesona
             Desa Kami yang Memikat!
           </p>

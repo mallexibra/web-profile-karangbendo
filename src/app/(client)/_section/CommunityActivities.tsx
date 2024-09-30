@@ -22,7 +22,7 @@ export default function CommunityActivity() {
     }, [])
     return (
         <div id="kegiatanmasyarakat">
-            <ContainerClient classNames="pt-24">
+            <ContainerClient classNames="md:pt-24 pt-12">
                 <h1 className="title">Kegiatan Masyarakat</h1>
                 <p>Kegiatan rutin masyarakat meliputi arisan, gotong royong membersihkan lingkungan, kegiatan keagamaan, dan festival budaya tahunan.</p>
                 <div className="mt-5 flex gap-2">

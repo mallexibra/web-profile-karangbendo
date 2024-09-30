@@ -37,15 +37,15 @@ export default function InformationVillage() {
     return (
         <>
             <div>
-                <div id="visimisi" className="pt-14">
-                    <ContainerClient classNames="flex justify-start gap-2 pt-16">
-                        <div className="w-1/3">
-                            <h2 className="title">Visi</h2>
-                            <p>&quot;{profile.visi}&quot;</p>
+                <div id="visimisi" className="md:pt-14 pt-12">
+                    <ContainerClient classNames="flex md:flex-row flex-col justify-start gap-2 pt-16">
+                        <div className="md:w-1/3 w-full">
+                            <h2 className="title text-center md:text-start">Visi</h2>
+                            <p className="md:text-start text-center">&quot;{profile.visi}&quot;</p>
                         </div>
                         <div>
-                            <h2 className="title">Misi</h2>
-                            <ol className="list-decimal pl-5">
+                            <h2 className="title text-center md:text-start">Misi</h2>
+                            <ol className="list-decimal md:pl-5 px-6">
                                 {profile.misi.split('\r\n').map((misi: string, i: number) => (
                                     <li key={i}>{misi}</li>
                                 ))}

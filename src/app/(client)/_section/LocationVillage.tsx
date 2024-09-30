@@ -3,8 +3,8 @@ import ContainerClient from "@/components/containers/ContainerClient";
 export default function LocationVillage() {
     return (
         <div id="lokasidesa" className="py-24 flex items-center">
-            <ContainerClient classNames="flex items-center gap-3">
-            <section className="overflow-hidden w-1/2 rounded-l-md">
+            <ContainerClient classNames="flex md:flex-row flex-col items-center gap-3">
+            <section className="overflow-hidden md:w-1/2 w-full rounded-md md:rounded-l-md">
                 <div className="bg-primary px-5 py-3 text-white font-bold text-lg">
                     <p>Peta Lokasi Desa Karangbendo</p>
                 </div>
