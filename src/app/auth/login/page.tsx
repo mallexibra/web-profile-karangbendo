@@ -8,11 +8,12 @@ import Swal from "sweetalert2";
 import * as yup from "yup";
 import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/sidebar/Navbar";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Login() {
     const router = useRouter()
+    const [isMobile, setIsMobile] = useState(false);
     const loginSchema = yup.object().shape({
         email: yup.string().email("Email tidak valid").required("Email wajib diisi"),
         password: yup.string().min(8, "Password minimal 8 karakter").required("Password wajib diisi")
@@ -60,6 +61,37 @@ export default function Login() {
             console.log(`Error login user: ${error}`);
         }
     };
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth <= 768) {
+                setIsMobile(true);
+            } else {
+                setIsMobile(false);
+            }
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
+    if (isMobile) {
+        return (
+            <main className="flex items-center justify-center min-h-screen bg-gray-100">
+                <div className="w-full max-w-md p-8 space-y-8 bg-white border border-primary/30 shadow-lg rounded-lg text-center">
+                    <h1 className="text-2xl font-bold text-primary mb-2">Tidak Dapat Diakses</h1>
+                    <p className="text-gray-600">Website ini tidak dapat diakses melalui layar mobile.</p>
+                    <Link href="/" className="underline text-primary text-sm hover:text-primary/75">
+                        Kembali ke Halaman Utama
+                    </Link>
+                </div>
+            </main>
+        );
+    }
 
     return (
         <main className="flex items-center justify-center min-h-screen bg-gray-100">
