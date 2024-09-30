@@ -117,8 +117,8 @@ export default function PengaduanMasyarakat() {
     };
     return (
         <ContainerClient>
-            <div id="pengaduanmasyarakat" className="flex gap-5 pt-24 pb-20">
-                <section className="w-1/2">
+            <div id="pengaduanmasyarakat" className="flex md:flex-row flex-col gap-5 pt-24 pb-20">
+                <section className="md:w-1/2">
                     <h2 className="title">Pengaduan Masyarakat</h2>
                     <p>Masyarakat Desa Karangbendo dapat menyampaikan keluhan, saran, atau masukan mengenai pelayanan dan kondisi desa melalui form pengaduan yang disediakan. Setiap pengaduan akan ditindaklanjuti oleh aparatur desa dengan cepat dan transparan.</p>
                     <p className="font-semibold mt-3">Alamat</p>
@@ -128,7 +128,7 @@ export default function PengaduanMasyarakat() {
                     <p className="font-semibold mt-3">Email</p>
                     <p>desa.karangbendo@example.com</p>
                 </section>
-                <section className="w-1/2">
+                <section className="md:w-1/2">
                     <Card classNames="w-full">
                         <form
                             method="post"
