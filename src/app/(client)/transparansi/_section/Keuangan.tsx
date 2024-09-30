@@ -64,13 +64,13 @@ export default function Keuangan() {
     }, [])
 
     return (
-        <ContainerClient classNames="flex gap-5 pt-8">
-            <section className="w-1/2 grid place-items-center">
+        <ContainerClient classNames="flex flex-col md:flex-row gap-5 pt-8">
+            <section className="md:w-1/2 w-full grid place-items-center">
                 <div className="w-1/2">
                     <Pie data={pieData} />
                 </div>
             </section>
-            <section className="w-1/2">
+            <section className="md:w-1/2 w-full">
                 <Card classNames="w-full">
                     <div className="flex gap-3">
                         <button type="button" onClick={() => setBtnActive('pendapatan')} className={cn("px-2 py-1 text-sm font-medium rounded-md border border-primary", btnActive == "pendapatan" ? 'bg-primary text-white' : 'bg-primary/10 text-primary')}>
