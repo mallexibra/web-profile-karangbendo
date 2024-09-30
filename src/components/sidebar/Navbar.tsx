@@ -71,7 +71,7 @@ export default function Navbar() {
                         )}
                     </button>
                 </div>
-                <div className={cn('flex md:hidden flex-col gap-2 mb-3', { hidden: isOpen })}>
+                <div className={cn('flex md:hidden flex-col gap-2 mt-3 mb-3', { hidden: isOpen })}>
                     <div className="flex flex-col justify-center items-center gap-3">
                         <div className={cn('relative group flex justify-center items-center cursor-pointer gap-2', { hidden: isOpen && windowWidth < 768 })}>
                             <Link href='/' className={cn(pathname == "/" && 'font-semibold')}>Profile Desa</Link>
@@ -148,12 +148,12 @@ export default function Navbar() {
                         <Link href="/produk-umkm" className={cn(pathname.startsWith("/produk-umkm") && 'font-semibold', { hidden: isOpen && windowWidth < 768 })}>Produk UMKM</Link>
                     </div>
                     <div className={cn(pathname == "/auth/login" && "hidden", { hidden: isOpen && windowWidth < 768 })}>
-                        <Link href={"/auth/login"} className={`flex justify-center items-center gap-3 px-4 py-2 text-base font-medium rounded-md ${isNavHovered
+                        <Link href={"/auth/login"} className={`flex justify-center items-center gap-3 px-4 py-2 md:text-base text-sm font-medium rounded-md ${isNavHovered
                             ? "bg-white text-primary hover:bg-white/80"
                             : isScrolled
-                                ? "bg-white text-primary hover:bg-white/80"
+                                ? "bg-white md:bg-white text-primary hover:bg-white/80"
                                 : "bg-primary text-white hover:bg-primary/80"}`}>
-                            <IconUser /> Masuk
+                            <IconUser className='w-5' /> Masuk
                         </Link>
                     </div>
                 </div>
