@@ -18,7 +18,7 @@ body {
 }
 
 .title {
-    @apply font-bold text-2xl text-primary;
+    @apply font-bold md:text-2xl text-xl text-primary;
 }
 
 .border-custom {

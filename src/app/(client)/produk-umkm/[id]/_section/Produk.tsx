@@ -55,11 +55,11 @@ export default function Produk() {
 
     return (
         <ContainerClient>
-            <div className="flex gap-5">
-                <section className="w-1/2">
+            <div className="flex flex-col md:flex-row gap-5">
+                <section className="md:w-1/2 w-full">
                     <Image src={`/assets/products/${product.image}`} width={500} height={500} className="rounded-md" alt={product.name} />
                 </section>
-                <section className="w-1/2 space-y-2">
+                <section className="md:w-1/2 w-full space-y-2">
                     <p className="font-bold text-2xl">{product.name}</p>
                     <p className="text-rose-500 font-semibold text-lg">{formatRupiah(product.price!)}</p>
                     <div className="flex justify-start items-center gap-3">
