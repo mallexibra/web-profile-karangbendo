@@ -234,9 +234,9 @@ export default function InfrastrukturDesa() {
               <div className="relative">
                 <Image
                   src={selectedImage}
-                  fill
-                  alt="Struktur Potensi Desa"
-                  className="rounded-md"
+                  width={500} height={300}
+                  alt="Potensi Desa"
+                  className="rounded-md w-full object-cover"
                 />
                 <IconSquareRoundedXFilled
                   onClick={() => {

@@ -237,9 +237,9 @@ export default function DokumentasiKegiatan() {
                 <div className="relative">
                   <Image
                     src={selectedImage}
-                    fill
+                    width={500} height={300}
                     alt="Dokumentasi Kegiatan Desa"
-                    className="rounded-md"
+                    className="rounded-md w-full object-cover"
                   />
                   <IconSquareRoundedXFilled
                     onClick={() => {

@@ -291,9 +291,9 @@ export default function AparaturDesa() {
                   src={
                     selectedImage || `/assets/village-apparatus/${dataImage}`
                   }
-                  fill
+                  width={500} height={300}
                   alt="Struktur Aparatur Desa"
-                  className="rounded-md"
+                  className="rounded-md w-full object-cover"
                 />
                 <IconSquareRoundedXFilled
                   onClick={() => {

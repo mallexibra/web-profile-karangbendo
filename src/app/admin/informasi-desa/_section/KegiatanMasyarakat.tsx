@@ -306,9 +306,9 @@ export default function KegiatanMasyarakat() {
                 <Image
                   src={
                     selectedImage || `/assets/community-activities/${dataImage}`
-                  } fill
+                  } width={500} height={300}
                   alt="Kegiatan Masyarakat"
-                  className="rounded-md"
+                  className="rounded-md w-full object-cover"
                 />
                 <IconSquareRoundedXFilled
                   onClick={() => {
