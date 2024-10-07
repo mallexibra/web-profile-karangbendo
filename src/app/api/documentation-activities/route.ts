@@ -37,7 +37,8 @@ export const POST = async (request: Request) => {
 
         await documentationActivitiesSchema.validate({ ...data, image }, { abortEarly: false });
 
-        const imgProfile = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
+        const timestamp = Date.now();
+        const imgProfile = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
         const bytes = await image.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const imagePath = imgProfile;

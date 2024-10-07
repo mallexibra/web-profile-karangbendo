@@ -38,11 +38,12 @@ export const POST = async (request: Request) => {
         const image = formData.get('profile') as File;
 
         await villageApparatusSchema.validate({ ...data, profile: image }, { abortEarly: false });
-        const imgProfile = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
+        const timestamp = Date.now();
+        const imgProfile = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
         const bytes = await image.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const imagePath = imgProfile;
-        const path = join('/assets/village-apparatus', imgProfile);
+        const path = join('./public/assets/village-apparatus', imgProfile);
         await writeFile(path, buffer);
 
         const newApparatus = await db.villageApparatus.create({

@@ -47,7 +47,8 @@ export const POST = async (request: Request) => {
 
         await villageProfileSchema.validate({ ...data, image }, { abortEarly: false });
 
-        const imageVillage = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
+        const timestamp = Date.now();
+        const imageVillage = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
         const bytes = await image.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const imagePath = imageVillage;

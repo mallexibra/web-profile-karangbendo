@@ -36,7 +36,8 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
             if (existinglegalProduct.file) {
                 await unlink(join('./public/assets/legal', existinglegalProduct.file));
             }
-            const fileLegalProduct = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
+            const timestamp = Date.now();
+            const fileLegalProduct = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
             const bytes = await image.arrayBuffer();
             const buffer = Buffer.from(bytes);
             filePath = fileLegalProduct;

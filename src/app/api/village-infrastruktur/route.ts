@@ -37,7 +37,8 @@ export const POST = async (request: Request) => {
 
         await villageInfrastrukturSchema.validate({ ...data, image }, { abortEarly: false });
 
-        const imgInfrastruktur = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
+        const timestamp = Date.now();
+        const imgInfrastruktur = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
         const bytes = await image.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const imagePath = imgInfrastruktur;

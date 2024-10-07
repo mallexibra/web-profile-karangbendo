@@ -39,7 +39,8 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
             if (existingCommunityActivities.image) {
                 await unlink(join('./public/assets/community-activities', existingCommunityActivities.image));
             }
-            const imgActivities = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
+            const timestamp = Date.now();
+            const imgActivities = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
             const bytes = await image.arrayBuffer();
             const buffer = Buffer.from(bytes);
             imagePath = imgActivities;

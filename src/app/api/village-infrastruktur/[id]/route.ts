@@ -32,7 +32,8 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
             if (existingVillageInfrastruktur.image) {
                 await unlink(join('./assets/village-infrastruktur', existingVillageInfrastruktur.image));
             }
-            const imgInfrastruktur = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
+            const timestamp = Date.now();
+            const imgInfrastruktur = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
             const bytes = await image.arrayBuffer();
             const buffer = Buffer.from(bytes);
             imagePath = imgInfrastruktur;

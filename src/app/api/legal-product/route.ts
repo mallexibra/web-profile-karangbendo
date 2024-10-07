@@ -46,7 +46,8 @@ export const POST = async (request: Request) => {
 
         let filePath;
         if (file != null) {
-            const imgProfile = `${MD5(file.name.split(".")[0]).toString()}.${file.name.split(".")[1]}`;
+            const timestamp = Date.now();
+            const imgProfile = `${timestamp}_${MD5(file.name.split(".")[0]).toString()}.${file.name.split(".")[1]}`;
             const bytes = await file.arrayBuffer();
             const buffer = Buffer.from(bytes);
             filePath = imgProfile;

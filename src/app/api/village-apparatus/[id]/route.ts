@@ -33,7 +33,8 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
             if (existingApparatus.profile) {
                 await unlink(join('./public/assets/village-apparatus', existingApparatus.profile));
             }
-            const imgProfile = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
+            const timestamp = Date.now();
+            const imgProfile = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
             const bytes = await image.arrayBuffer();
             const buffer = Buffer.from(bytes);
             imagePath = imgProfile;

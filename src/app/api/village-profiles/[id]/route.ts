@@ -36,7 +36,8 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
             if (existingVillage.image) {
                 await unlink(join('./public/assets/village-profile', existingVillage.image));
             }
-            const imgVillage = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
+            const timestamp = Date.now();
+            const imgVillage = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
             const bytes = await image.arrayBuffer();
             const buffer = Buffer.from(bytes);
             imagePath = imgVillage;

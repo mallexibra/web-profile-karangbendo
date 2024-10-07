@@ -43,7 +43,8 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
             if (existingShop.identity) {
                 await unlink(join('./public/assets/shops', existingShop.identity));
             }
-            const imgShop = `${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
+            const timestamp = Date.now();
+            const imgShop = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
             const bytes = await image.arrayBuffer();
             const buffer = Buffer.from(bytes);
             imagePath = imgShop;
