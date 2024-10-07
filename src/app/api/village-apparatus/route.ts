@@ -42,7 +42,7 @@ export const POST = async (request: Request) => {
         const bytes = await image.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const imagePath = imgProfile;
-        const path = join('./public/assets/village-apparatus', imgProfile);
+        const path = join('/assets/village-apparatus', imgProfile);
         await writeFile(path, buffer);
 
         const newApparatus = await db.villageApparatus.create({
