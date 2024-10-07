@@ -3,6 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import db from '@/utils/database';
 import bcrypt from 'bcrypt';
+import { Shop } from '@/types/Shop';
 
 const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(db),
@@ -31,12 +32,22 @@ const authOptions: NextAuthOptions = {
                         role: user.role ?? undefined,
                         phone: user.phone ?? undefined,
                         position: user.position ?? undefined,
-                        shop: user.Shop.length > 0 ? user.Shop[0].id : undefined
+                        shop: user.Shop?.map((shop: any) => ({
+                            id: shop.id,
+                            name: shop.name,
+                            description: shop.description,
+                            identity: shop.identity,
+                            userId: shop.userId,
+                            location: shop.location,
+                            status: shop.status,
+                            phone: shop.phone,
+                            owner: shop.owner ?? null,
+                            product: shop.product ?? []
+                        })) ?? null
                     };
                 } else {
                     return null;
                 }
-
             },
         }),
     ],
@@ -56,7 +67,7 @@ const authOptions: NextAuthOptions = {
                 token.role = user.role;
                 token.phone = user.phone;
                 token.position = user.position;
-                token.shop = user.shop;
+                token.shop = user.shop ?? [];
             }
             return token;
         },
@@ -68,7 +79,18 @@ const authOptions: NextAuthOptions = {
                 role: token.role as string,
                 phone: token.phone as string,
                 position: token.position as string,
-                shop: token.shop as string
+                shop: token.shop?.map((shop: any) => ({
+                    id: shop.id,
+                    name: shop.name,
+                    description: shop.description,
+                    identity: shop.identity,
+                    userId: shop.userId,
+                    location: shop.location,
+                    status: shop.status,
+                    phone: shop.phone,
+                    owner: shop.owner ?? null,
+                    product: shop.product ?? []
+                })) ?? null
             };
             return session;
         },

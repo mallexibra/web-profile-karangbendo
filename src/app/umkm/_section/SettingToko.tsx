@@ -13,6 +13,7 @@ import * as yup from "yup";
 
 export default function SettingToko() {
     const {data: session} = useSession();
+    const shopId = session?.user?.shop?.[0]?.id ?? null;
     const umkmSchema = yup.object({
         name: yup.string().required('Nama wajib diisi'),
         description: yup.string().required('Deskripsi wajib diisi'),
@@ -32,7 +33,7 @@ export default function SettingToko() {
             setValue('location', response.location);
             setValue('description', response.description);
         } catch (error: any) {
-
+            console.log(`Error: ${error.message}`)
         }
     }
 
@@ -46,13 +47,13 @@ export default function SettingToko() {
                 }
             }
 
-            const response = await axiosInstance.patch(`/shops/${id}`, formData);
+            const response = await axiosInstance.patch(`/shops/${shopId}`, formData);
 
             if (response.status) {
                 Swal.fire({
                     icon: 'success',
                     title: 'Sukses!',
-                    text: `Sukses ${id ? 'edit' : 'tambah'} data umkm desa`,
+                    text: `Sukses ${shopId ? 'update' : 'tambah'} data umkm desa`,
                 });
                 fetchData();
             } else {

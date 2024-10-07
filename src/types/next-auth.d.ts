@@ -1,18 +1,8 @@
-import NextAuth from 'next-auth';
-import { DefaultUser } from 'next-auth';
+import NextAuth, { DefaultUser } from 'next-auth';
+import { Shop } from './Shop';
+import { Product } from './Product';
 
 declare module 'next-auth' {
-    interface Session {
-        user: {
-            id: string;
-            name: string;
-            email: string;
-            role?: string;
-            phone?: string;
-            position?: string;
-        };
-    }
-
     interface User extends DefaultUser {
         id: string;
         name: string;
@@ -20,6 +10,11 @@ declare module 'next-auth' {
         role?: string;
         phone?: string;
         position?: string;
+        shop?: (Shop & { owner?: User | null; product?: Product[] | null })[] | null;
+    }
+
+    interface Session {
+        user: User;
     }
 }
 
@@ -28,8 +23,9 @@ declare module 'next-auth/jwt' {
         id: string;
         name: string;
         email: string;
-        role?: string; // Sesuaikan dengan kebutuhan
+        role?: string;
         phone?: string;
         position?: string;
+        shop?: (Shop & { owner?: User | null; product?: Product[] | null })[] | null;
     }
 }
