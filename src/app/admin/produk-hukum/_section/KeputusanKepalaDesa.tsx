@@ -110,7 +110,7 @@ export default function KeputusanKepalaDesa() {
 
   const modalClick = () => {
     const modal = document.getElementById(
-      `modal_${type}3`,
+      `modal_${type}_keputusan_kepaladesa3`,
     ) as HTMLDialogElement;
     if (modal) {
       modal.showModal();
@@ -119,7 +119,7 @@ export default function KeputusanKepalaDesa() {
 
   const close: any = () => {
     const modal = document.getElementById(
-      `modal_${type}3`,
+      `modal_${type}_keputusan_kepaladesa3`,
     ) as HTMLDialogElement;
     if (modal) {
       modal.close();
@@ -211,7 +211,7 @@ export default function KeputusanKepalaDesa() {
           <p>Tambah Data</p>
         </button>
       </div>
-      <dialog id={`modal_${type}3`} className="modal">
+      <dialog id={`modal_${type}_keputusan_kepaladesa3`} className="modal">
         <div className="modal-box">
           <button
             type="button"

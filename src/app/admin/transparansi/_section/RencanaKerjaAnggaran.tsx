@@ -114,7 +114,7 @@ export default function RencanaKerjaAnggaran() {
   const handleAddFinance = async (data: any) => {
     let response;
     if (id) {
-      response = await axiosInstance.put(`/work-plan-budget/${id}`, data);
+      response = await axiosInstance.patch(`/work-plan-budget/${id}`, data);
     } else {
       response = await axiosInstance.post('/work-plan-budget', data);
     }

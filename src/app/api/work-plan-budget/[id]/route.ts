@@ -25,7 +25,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
         }
 
         const updateWorkPlanAndBudget = await db.workPlanAndBudget.update({
-            where: { id: Number(params.id) }, data
+            where: { id: Number(params.id) }, data: {...data, date: new Date(data.date)}
         });
 
         return NextResponse.json({

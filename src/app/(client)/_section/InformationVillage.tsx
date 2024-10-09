@@ -62,15 +62,15 @@ export default function InformationVillage() {
                                 <p className="font-bold text-primary">Penduduk</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-2xl text-primary font-bold">{profile.children} <span className="text-sm font-normal">%</span></p>
+                                <p className="text-2xl text-primary font-bold">{Math.round(Number(profile.children))} <span className="text-sm font-normal">%</span></p>
                                 <p className="font-bold text-primary">Anak-anak</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-2xl text-primary font-bold">{profile.mature} <span className="text-sm font-normal">%</span></p>
+                                <p className="text-2xl text-primary font-bold">{Math.round(Number(profile.mature))} <span className="text-sm font-normal">%</span></p>
                                 <p className="font-bold text-primary">Dewasa</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-2xl text-primary font-bold">{profile.old} <span className="text-sm font-normal">%</span></p>
+                                <p className="text-2xl text-primary font-bold">{Math.round(Number(profile.old))} <span className="text-sm font-normal">%</span></p>
                                 <p className="font-bold text-primary">Lanjut Usia</p>
                             </div>
                         </div>

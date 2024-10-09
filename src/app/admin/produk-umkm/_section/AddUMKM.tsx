@@ -666,9 +666,9 @@ export default function AddUMKM() {
                                             src={
                                                 selectedProduk || `/assets/products/${dataProduk}`
                                             }
-                                            fill
+                                            width={500} height={300}
                                             alt="Gambar Produk"
-                                            className="rounded-md"
+                                            className="rounded-md object-cover w-full"
                                         />
                                     ) : (
                                         <InputForm
@@ -773,8 +773,8 @@ export default function AddUMKM() {
                                     <div key={i} className="border border-custom bg-white flex flex-col justify-between rounded-md max-w-80 p-3">
                                         <Image
                                             src={`/assets/products/${product.image}`}
-                                            fill
-                                            className="w-full rounded-md bg-cover max-h-[512px]"
+                                            width={512} height={100}
+                                            className="w-full rounded-md object-cover bg-cover max-h-[512px]"
                                             alt="Produk UMKM"
                                         />
                                         <p className="font-bold mt-3 text-lg">{product.name}</p>

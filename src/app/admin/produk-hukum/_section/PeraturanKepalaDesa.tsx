@@ -108,7 +108,7 @@ export default function PeraturanKepalaDesa() {
 
   const modalClick = () => {
     const modal = document.getElementById(
-      `modal_${type}3`,
+      `modal_${type}_peraturankepaladesa3`,
     ) as HTMLDialogElement;
     if (modal) {
       modal.showModal();
@@ -117,7 +117,7 @@ export default function PeraturanKepalaDesa() {
 
   const close: any = () => {
     const modal = document.getElementById(
-      `modal_${type}3`,
+      `modal_${type}_peraturankepaladesa3`,
     ) as HTMLDialogElement;
     if (modal) {
       modal.close();
@@ -209,7 +209,7 @@ export default function PeraturanKepalaDesa() {
           <p>Tambah Data</p>
         </button>
       </div>
-      <dialog id={`modal_${type}3`} className="modal">
+      <dialog id={`modal_${type}_peraturankepaladesa3`} className="modal">
         <div className="modal-box">
           <button
             type="button"
@@ -233,12 +233,12 @@ export default function PeraturanKepalaDesa() {
             onSubmit={handleSubmit(handleAddRegulation)}
             className="mt-3 flex flex-col gap-2"
           >
-            <LabelForm label="Nama Kegiatan">
+            <LabelForm label="Nama Peraturan">
               <InputForm
                 disabled={type == 'view'}
                 {...register('title')}
                 type="text"
-                label="Nama Kegiatan"
+                label="Nama Peraturan"
                 name="title"
                 placeholder="Input judul peraturan"
               />

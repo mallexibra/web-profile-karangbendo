@@ -12,9 +12,9 @@ const villagePotentialSchema = yup.object({
 
 export const GET = async () => {
     try {
-        const villagePotential = await db.villagePotential.findMany();
+        const villagePotentials = await db.villagePotential.findMany();
         return NextResponse.json({
-            data: villagePotential,
+            data: villagePotentials,
             message: "Fetched all village potential successfully",
             status: true,
         });

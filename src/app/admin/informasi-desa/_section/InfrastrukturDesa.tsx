@@ -51,14 +51,14 @@ export default function InfrastrukturDesa() {
   });
 
   const modalClick = () => {
-    const modal = document.getElementById('modal_add') as HTMLDialogElement;
+    const modal = document.getElementById('modal_add_infrastruktur') as HTMLDialogElement;
     if (modal) {
       modal.showModal();
     }
   };
 
   const close: any = () => {
-    const modal = document.getElementById('modal_add') as HTMLDialogElement;
+    const modal = document.getElementById('modal_add_infrastruktur') as HTMLDialogElement;
     if (modal) {
       modal.close();
       reset();
@@ -198,7 +198,7 @@ export default function InfrastrukturDesa() {
           <p>Tambah Data</p>
         </button>
       </div>
-      <dialog id="modal_add" className="modal">
+      <dialog id="modal_add_infrastruktur" className="modal">
         <div className="modal-box">
           <button
             type="button"
@@ -208,7 +208,7 @@ export default function InfrastrukturDesa() {
             ✕
           </button>
 
-          <h3 className="font-bold text-lg">Tambah Apparatur Desa</h3>
+          <h3 className="font-bold text-lg">Tambah Infrastruktur Desa</h3>
 
           <form
             method="post"
@@ -221,7 +221,7 @@ export default function InfrastrukturDesa() {
                 type="text"
                 label="Nama"
                 name="name"
-                placeholder="Input nama apparatur desa"
+                placeholder="Input nama infrastruktur desa"
               />
               {errors.name && (
                 <p className="text-red-500 text-sm">{errors.name.message}</p>
@@ -264,14 +264,13 @@ export default function InfrastrukturDesa() {
           </form>
         </div>
       </dialog>
-      <div className="flex gap-5 flex-wrap">
+      <div className="flex items-start gap-5 flex-wrap">
         {infrastrukturs.length > 0 ? (
           infrastrukturs.map(
             (infrastruktur: VillageInfrastruktur, i: number) => (
               <div key={i} className="relative w-max">
                 <Image
                   src={`/assets/village-infrastruktur/${infrastruktur.image}`}
-                  fill
                   className="rounded-md bg-cover"
                   width={215}
                   height={120}
