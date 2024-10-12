@@ -22,7 +22,7 @@ export default function Documentation() {
     }, [])
 
     return (
-        <div id="dokumentasikegiatan">
+        <div data-aos="fade-down" id="dokumentasikegiatan">
             <ContainerClient classNames="pt-24">
                 <h2 className="title">Dokumentasi Kegiatan</h2>
                 <div className="flex flex-wrap gap-3 mt-5">

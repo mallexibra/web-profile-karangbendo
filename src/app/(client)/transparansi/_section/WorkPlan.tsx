@@ -74,7 +74,7 @@ export default function WorkPlan() {
                             <p>{formatRupiah(itemPlan.budget)}</p>
                         </div>
                         <div>
-                            <h4 className="font-semibold">Waktu Kegiatan</h4>
+                            <h4 className="font-semibold">Jadwal Kegiatan</h4>
                             <p>{formatDate(itemPlan.date)}</p>
                         </div>
                         <div>
@@ -85,9 +85,9 @@ export default function WorkPlan() {
                 </div>
             </dialog>
             <ContainerClient classNames="my-24">
-                <h2 className="title">Rencana Kerja dan Anggaran</h2>
-                <p>Informasi ini disajikan untuk memastikan bahwa masyarakat mengetahui program-program prioritas dan alokasi dana untuk setiap kegiatan yang direncanakan.</p>
-                <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 border border-primary">
+                <h2 data-aos="fade-down" className="title">Rencana Kerja dan Anggaran</h2>
+                <p data-aos="fade-down">Informasi ini disajikan untuk memastikan bahwa masyarakat mengetahui program-program prioritas dan alokasi dana untuk setiap kegiatan yang direncanakan.</p>
+                <div data-aos="fade-down" className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 border border-primary">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className="text-sm text-gray-700 uppercase bg-primary text-white">
                             <tr>

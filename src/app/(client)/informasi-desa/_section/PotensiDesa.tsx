@@ -22,7 +22,7 @@ const PotensiDesa = () => {
     }, [])
     return (
         <ContainerClient>
-            <div>
+            <div data-aos="fade-down">
                 <h2 className="title">Potensi Desa</h2>
                 <p>Desa Karangbendo memiliki potensi alam yang melimpah, termasuk lahan pertanian yang subur, hutan bambu, dan sungai yang kaya akan ikan.</p>
                 <div className="mt-5 flex flex-wrap justify-start gap-5">

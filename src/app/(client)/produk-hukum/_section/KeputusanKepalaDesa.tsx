@@ -20,7 +20,7 @@ export default function KeputusanKepalaDesa() {
         fetchData()
     }, [])
     return (
-        <div id="keputusankepaladesa">
+        <div data-aos="fade-down" id="keputusankepaladesa">
             <ContainerClient classNames="py-24">
                 <h2 className="title">Keputusan Kepala Desa</h2>
                 <p>Keputusan Kepala Desa adalah keputusan yang diambil oleh Kepala Desa untuk menyelesaikan masalah tertentu atau untuk menetapkan sesuatu yang bersifat individual dan konkrit. Keputusan ini sering kali diperlukan untuk pelaksanaan program-program desa atau untuk menyelesaikan sengketa yang terjadi.</p>

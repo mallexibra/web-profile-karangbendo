@@ -23,7 +23,7 @@ export default function VillageApparatur() {
     }, [])
     return (
         <ContainerClient classNames="mt-8">
-            <div className="flex gap-3 justify-center flex-wrap">
+            <div data-aos="fade-down" className="flex gap-3 justify-center flex-wrap">
                 {apparatus.length > 0 ? (
                     apparatus.map((item: VillageApparatus, i: number) => {
                         return (

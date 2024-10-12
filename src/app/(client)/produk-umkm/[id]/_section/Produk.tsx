@@ -1,11 +1,10 @@
 "use client"
-import Button from "@/components/button/Button";
 import ContainerClient from "@/components/containers/ContainerClient";
 import Spinner from "@/components/loading/Spinner";
 import { Product } from "@/types/Product";
 import axiosInstance from "@/utils/axiosInstance";
 import { formatRupiah } from "@/utils/format";
-import { IconBrandWhatsapp, IconMapPin } from "@tabler/icons-react";
+import { IconBrandWhatsapp, IconMapPin, IconUser } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -56,15 +55,19 @@ export default function Produk() {
     return (
         <ContainerClient>
             <div className="flex flex-col md:flex-row gap-5">
-                <section className="md:w-1/2 w-full">
+                <section data-aos="fade-left" className="md:w-1/2 w-full">
                     <Image src={`/assets/products/${product.image}`} width={500} height={500} className="rounded-md" alt={product.name} />
                 </section>
-                <section className="md:w-1/2 w-full space-y-2">
+                <section data-aos="fade-right" className="md:w-1/2 w-full space-y-2">
                     <p className="font-bold text-2xl">{product.name}</p>
                     <p className="text-rose-500 font-semibold text-lg">{formatRupiah(product.price!)}</p>
                     <div className="flex justify-start items-center gap-3">
                         <IconMapPin className="text-rose-500" />
                         <p className="font-semibold text-lg">{product.shop?.location!}</p>
+                    </div>
+                    <div className="flex justify-start items-center gap-3">
+                        <IconUser className="text-rose-500" />
+                        <p className="font-semibold text-lg">{product.shop?.owner.name}</p>
                     </div>
                     <p>{product.description}</p>
                     <Link href={whatsappLink} target="_blank" className="px-4 py-2 text-base w-max bg-primary text-white hover:bg-primary/80 flex items-center justify-center font-medium rounded-md mt-5 gap-3">

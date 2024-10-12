@@ -11,7 +11,7 @@ export default function HeaderTransparancy() {
         }}>
             <div id='pendanaan' className='p-6 rounded-t-2xl w-full bg-white absolute bottom-0'>
                 <ContainerClient>
-                    <div className='bg-primary rounded-tl-2xl w-max p-3'>
+                    <div data-aos="fade-down" className='bg-primary rounded-tl-2xl w-max p-3'>
                         <p className='font-bold text-lg text-white uppercase'>Transparansi</p>
                     </div>
                 </ContainerClient>

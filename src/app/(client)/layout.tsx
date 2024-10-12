@@ -2,6 +2,7 @@ import Footer from '@/components/footer/Footer';
 import './globals.css';
 import type { Metadata } from 'next';
 import ButtonOverlay from '@/components/button/ButtonOverlay';
+import AOSWrapper from './AOSWrapper';
 
 export const metadata: Metadata = {
     title: 'Desa Karangbendo | Profile Desa',
@@ -32,8 +33,9 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
+                <AOSWrapper/>
                 {children}
-                <ButtonOverlay/>
+                <ButtonOverlay />
                 <Footer />
             </body>
         </html>

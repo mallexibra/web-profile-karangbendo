@@ -23,7 +23,7 @@ export default function Infrastruktur() {
     }, [])
     return (
         <ContainerClient>
-            <div id="infrastrukturdesa" className="pt-24">
+            <div data-aos="fade-down" id="infrastrukturdesa" className="pt-24">
                 <h2 className="title">Infrastruktur Desa</h2>
                 <p>Desa Karangbendo memiliki infrastruktur yang memadai, termasuk jalan aspal, sekolah dasar, puskesmas, dan balai desa yang digunakan untuk berbagai kegiatan masyarakat.</p>
                 <div className="flex flex-wrap gap-3 mt-5">

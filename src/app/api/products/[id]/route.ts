@@ -15,7 +15,15 @@ const productSchema = yup.object({
 
 export const GET = async (request: Request, { params }: { params: { id: string } }) => {
     try {
-        const products = await db.product.findUnique({ where: { id: Number(params.id) }, include: { shop: true } });
+        const products = await db.product.findUnique({
+            where: { id: Number(params.id) }, include: {
+                shop: {
+                    include: {
+                        owner: true,
+                    },
+                }
+            }
+        });
         return NextResponse.json({
             data: products,
             message: "Fetched data product successfully",
