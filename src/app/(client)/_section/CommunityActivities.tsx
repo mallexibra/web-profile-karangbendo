@@ -84,7 +84,7 @@ export default function CommunityActivity() {
             <ContainerClient classNames="md:pt-24 pt-12">
                 <h1 className="title" data-aos="fade-down">Kegiatan Masyarakat</h1>
                 <p data-aos="fade-down">Kegiatan rutin masyarakat meliputi arisan, gotong royong membersihkan lingkungan, kegiatan keagamaan, dan festival budaya tahunan.</p>
-                <div className="mt-5 flex items-start gap-2" data-aos="fade-down">
+                <div className="mt-5 flex flex-col md:flex-row justify-center md:justify-start items-center md:items-start gap-2" data-aos="fade-down">
                     {data.length <= 0 ? <p>Data kegiatan masyarakat sedang kosong!</p> : data.map((item: CommunityActivities, i: number) => (
                         <div key={i} onClick={() => {
                             modalClick()

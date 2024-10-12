@@ -153,7 +153,7 @@ export default function Navbar() {
                             : isScrolled
                                 ? "bg-white md:bg-white text-primary hover:bg-white/80"
                                 : "bg-primary text-white hover:bg-primary/80"}`}>
-                            <IconUser className='w-5' /> Masuk
+                            <IconUser className='w-5' /> Login
                         </Link>
                     </div>
                 </div>
@@ -246,7 +246,7 @@ export default function Navbar() {
                             : isScrolled
                                 ? "bg-white text-primary hover:bg-white/80"
                                 : "bg-primary text-white hover:bg-primary/80"}`}>
-                            <IconUser className='w-6' /> Login Admin
+                            <IconUser className='w-6' /> Login
                         </Link>
                     </div>
                 </div>

@@ -8,6 +8,7 @@ interface ButtonProps {
   color?: 'primary' | 'warning' | 'danger';
   className?: string;
   type?: 'button' | 'submit' | 'reset';
+  disable?: boolean;
 }
 
 export default function Button({
@@ -17,6 +18,7 @@ export default function Button({
   color = 'primary',
   type = 'button',
   className,
+  disable = false
 }: ButtonProps) {
   const sizeClasses = {
     sm: 'px-2 py-1 text-sm',
@@ -30,16 +32,23 @@ export default function Button({
     danger: 'bg-danger text-white hover:bg-danger/80',
   };
 
+  const disabledClasses = {
+    primary: 'bg-primary/60 text-white cursor-not-allowed',
+    warning: 'bg-warning/60 text-white cursor-not-allowed',
+    danger: 'bg-danger/60 text-white cursor-not-allowed',
+  };
+
   return (
     <button
-      onClick={onClick}
+      onClick={!disable ? onClick : undefined}
       type={type}
       className={cn(
-        'font-medium rounded-md',
+        'font-medium rounded-md transition-colors',
         className,
         sizeClasses[size],
-        colorClasses[color],
+        disable ? disabledClasses[color] : colorClasses[color],
       )}
+      disabled={disable}
     >
       {children}
     </button>

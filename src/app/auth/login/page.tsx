@@ -12,8 +12,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Login() {
-    const router = useRouter()
+    const router = useRouter();
     const [isMobile, setIsMobile] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
     const loginSchema = yup.object().shape({
         email: yup.string().email("Email tidak valid").required("Email wajib diisi"),
         password: yup.string().min(8, "Password minimal 8 karakter").required("Password wajib diisi")
@@ -24,6 +26,8 @@ export default function Login() {
     });
 
     const handleLogin = async (data: any) => {
+        setIsLoading(true);
+
         try {
             const response: any = await signIn("credentials", {
                 email: data.email,
@@ -56,9 +60,11 @@ export default function Login() {
             Swal.fire({
                 icon: 'error',
                 title: 'Gagal!',
-                text: "error.response?.data?.message || 'Terjadi kesalahan tak terduga.'",
+                text: error.response?.data?.message || 'Terjadi kesalahan tak terduga.',
             });
             console.log(`Error login user: ${error}`);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -95,7 +101,6 @@ export default function Login() {
 
     return (
         <main className="flex items-center justify-center min-h-screen bg-gray-100">
-            {/* <Navbar/> */}
             <div className="w-full max-w-md p-8 space-y-8 bg-white border border-primary/30 shadow-lg rounded-lg">
                 <div className="text-center">
                     <h1 className="text-3xl font-bold text-primary mb-2">Login UMKM / Admin</h1>
@@ -123,31 +128,13 @@ export default function Login() {
                         {errors.password && (<p className="text-red-500 text-sm">{errors.password.message}</p>)}
                     </LabelForm>
 
-                    {/* <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                            <input
-                                id="remember-me"
-                                name="remember-me"
-                                type="checkbox"
-                                className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                            />
-                            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                                Remember me
-                            </label>
-                        </div>
-
-                        <div className="text-sm">
-                            <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                                Forgot your password?
-                            </a>
-                        </div>
-                    </div> */}
-
                     <div className="flex flex-col gap-2">
-                        <Button type="submit" color="primary" size="base">
-                            Login
+                        <Button type="submit" color="primary" size="base" disable={isLoading}>
+                            {isLoading ? "Loading..." : "Login"}
                         </Button>
-                        <Link href={"/"} className="underline text-primary text-sm text-center hover:text-primary/75">Halaman Desa Karangbendo</Link>
+                        <Link href={"/"} className="underline text-primary text-sm text-center hover:text-primary/75">
+                            Halaman Desa Karangbendo
+                        </Link>
                     </div>
                 </form>
             </div>
