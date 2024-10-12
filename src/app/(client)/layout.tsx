@@ -1,6 +1,7 @@
 import Footer from '@/components/footer/Footer';
 import './globals.css';
 import type { Metadata } from 'next';
+import ButtonOverlay from '@/components/button/ButtonOverlay';
 
 export const metadata: Metadata = {
     title: 'Desa Karangbendo | Profile Desa',
@@ -30,7 +31,9 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body>{children}
+            <body>
+                {children}
+                <ButtonOverlay/>
                 <Footer />
             </body>
         </html>

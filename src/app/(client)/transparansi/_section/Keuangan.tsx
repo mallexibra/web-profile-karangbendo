@@ -80,14 +80,14 @@ export default function Keuangan() {
                             Pengeluaran
                         </button>
                     </div>
-                    <table cellPadding={12} className="font-semibold">
+                    <table cellPadding={12} className="font-semibold table-fixed">
                         <tbody>
                             {filteredData.length > 0 ? (
                                 filteredData.map((item, index) => (
                                     <tr key={index}>
                                         <td>{index + 1}</td>
-                                        <td>{item.name}</td>
-                                        <td>{formatRupiah(item.amount)}</td>
+                                        <td className="w-full">{item.name}</td>
+                                        <td className="w-full whitespace-nowrap">{formatRupiah(item.amount)}</td>
                                     </tr>
                                 ))
                             ) : (

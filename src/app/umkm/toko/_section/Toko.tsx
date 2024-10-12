@@ -19,6 +19,7 @@ import * as yup from "yup"
 
 export default function Toko() {
     const { data: session } = useSession()
+    const shopId = session?.user?.shop?.[0]?.id ?? null;
     const [umkm, setUmkm] = useState<Shop>({
         id: 0,
         name: '',
@@ -79,7 +80,7 @@ export default function Toko() {
 
     const fetchData = async () => {
         try {
-            const response = await axiosInstance.get(`/shops/${session?.user.shop}`);
+            const response = await axiosInstance.get(`/shops/${shopId}`);
             setUmkm(response.data.data);
         } catch (error: any) {
 
@@ -372,8 +373,8 @@ export default function Toko() {
                             <div key={i} className="border border-custom bg-white flex flex-col justify-between rounded-md max-w-80 p-3">
                                 <Image
                                     src={`/assets/products/${product.image}`}
-                                    fill
-                                    className="w-full rounded-md bg-cover max-h-[512px]"
+                                    width={500} height={200}
+                                    className="w-full rounded-md object-cover bg-cover max-h-[512px]"
                                     alt="Produk UMKM"
                                 />
                                 <p className="font-bold mt-3 text-lg">{product.name}</p>

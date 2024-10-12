@@ -27,7 +27,7 @@ export default function SettingToko() {
 
     const fetchData = async () => {
         try {
-            const response = session && (await axiosInstance.get(`/shops/${session.user?.shop}`)).data.data;
+            const response = session && (await axiosInstance.get(`/shops/${shopId}`)).data.data;
             setValue('name', response.name);
             setValue('phone', response.phone);
             setValue('location', response.location);
@@ -114,13 +114,13 @@ export default function SettingToko() {
                             </p>
                         )}
                     </LabelForm>
-                    <LabelForm label="Nomor Whatsapp">
+                    <LabelForm label="Nomor HP/WA">
                         <InputForm
                             {...register('phone')}
-                            label="Nomor Whatsapp"
+                            label="Nomor HP/WA"
                             name="phone"
                             type="text"
-                            placeholder="Masukkan nomor whatsapp"
+                            placeholder="Masukkan nomor HP/WA"
                         />
                         {errors.phone && (
                             <p className="text-red-500 text-sm">{errors.phone.message}</p>

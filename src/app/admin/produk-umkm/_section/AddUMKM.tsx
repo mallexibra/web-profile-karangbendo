@@ -497,28 +497,28 @@ export default function AddUMKM() {
                                 )}
                             </LabelForm>
 
-                            <LabelForm label="Nomor Telpon">
+                            <LabelForm label="Nomor HP/WA">
                                 <InputForm
                                     disabled={type == 'view'}
                                     {...registerUmkm('phone')}
                                     type="text"
-                                    label="Nomor Telpon"
+                                    label="Nomor HP/WA"
                                     name="phone"
-                                    placeholder="Input nomor telpon"
+                                    placeholder="Input nomor HP/WA"
                                 />
                                 {errorsUmkm.phone && (
                                     <p className="text-red-500 text-sm">{errorsUmkm.phone.message}</p>
                                 )}
                             </LabelForm>
 
-                            <LabelForm label="Lokasi">
+                            <LabelForm label="Alamat">
                                 <InputForm
                                     disabled={type == 'view'}
                                     {...registerUmkm('location')}
                                     type="text"
-                                    label="Lokasi"
+                                    label="Alamat"
                                     name="location"
-                                    placeholder="Input lokasi UMKM"
+                                    placeholder="Input alamat UMKM"
                                 />
                                 {errorsUmkm.location && (
                                     <p className="text-red-500 text-sm">

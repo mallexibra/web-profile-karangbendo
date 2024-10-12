@@ -10,9 +10,11 @@ export default function HeaderTransparancy() {
             backgroundPosition: 'center',
         }}>
             <div id='pendanaan' className='p-6 rounded-t-2xl w-full bg-white absolute bottom-0'>
-                <div className='bg-primary rounded-tl-2xl w-max p-3'>
-                    <p className='font-bold text-lg text-white uppercase'>Transparansi</p>
-                </div>
+                <ContainerClient>
+                    <div className='bg-primary rounded-tl-2xl w-max p-3'>
+                        <p className='font-bold text-lg text-white uppercase'>Transparansi</p>
+                    </div>
+                </ContainerClient>
             </div>
         </div>
     )

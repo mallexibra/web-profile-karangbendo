@@ -85,7 +85,7 @@ export default function TableUMKM() {
                 Swal.fire({
                     icon: 'success',
                     title: 'Sukses!',
-                    text: `Sukses tambah ${type == "add" ? "tambar" : "edit"} akun umkm`,
+                    text: `Sukses ${type == "add" ? "tambah" : "edit"} akun umkm`,
                 });
                 fetchData();
             } else {
