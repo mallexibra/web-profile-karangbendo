@@ -1,6 +1,9 @@
+import cloudinary from "@/utils/cloudinary";
 import db from "@/utils/database"
+import { UploadApiResponse } from "cloudinary";
 import { MD5 } from "crypto-js";
 import { writeFile } from "fs/promises";
+import { imageOptimizer } from "next/dist/server/image-optimizer";
 import { NextResponse } from "next/server";
 import { join } from "path";
 import * as yup from 'yup';
@@ -43,17 +46,35 @@ export const POST = async (request: Request) => {
         await communityActivitiesSchema.validate({ ...data, image }, { abortEarly: false });
 
         const timestamp = Date.now();
-        const imgActivities = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
-        const bytes = await image.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        const imagePath = imgActivities;
-        const path = join('./public/assets/community-activities', imgActivities);
-        await writeFile(path, buffer);
+        const imgActivities = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}`;
+
+        const buffer = await image.arrayBuffer();
+
+        const uploadPromise = new Promise<UploadApiResponse>((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                {
+                    folder: 'community-activities',
+                    public_id: imgActivities,
+                },
+                (error, result) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result as UploadApiResponse)
+                    }
+                }
+            );
+
+            stream.end(Buffer.from(buffer));
+        });
+
+        const uploadResponse = await uploadPromise;
 
         const newActivities = await db.communityActivities.create({
             data: {
-                ...data, image: imagePath
-            }
+                ...data,
+                image: uploadResponse.secure_url
+            },
         });
 
         return NextResponse.json({

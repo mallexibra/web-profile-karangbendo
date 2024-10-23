@@ -305,7 +305,7 @@ export default function KegiatanMasyarakat() {
               <div className="relative">
                 <Image
                   src={
-                    selectedImage || `/assets/community-activities/${dataImage}`
+                    selectedImage || `${dataImage}`
                   } width={500} height={300}
                   alt="Kegiatan Masyarakat"
                   className="rounded-md w-full object-cover"
@@ -348,7 +348,7 @@ export default function KegiatanMasyarakat() {
               className="border border-custom w-max rounded-md overflow-hidden"
             >
               <Image
-                src={`/assets/community-activities/${activity.image}`}
+                src={activity.image}
                 width={252}
                 height={20}
                 className="bg-cover w-full h-32 rounded-t-md"
