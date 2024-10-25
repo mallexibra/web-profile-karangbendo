@@ -206,7 +206,7 @@ export default function ProfileDesa() {
                             {selectedImage || dataImage ? (
                                 <div className="relative">
                                     <Image
-                                        src={selectedImage || `/assets/village-profile/${dataImage}`}
+                                        src={selectedImage || dataImage!}
                                         width={500} height={500}
                                         alt="Struktur Aparatur Desa"
                                         className="rounded-md w-full object-cover"

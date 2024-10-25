@@ -61,7 +61,7 @@ export default function KeputusanKepalaDesa() {
                                     {item.description}
                                 </td>
                                 <td className="px-6 py-4">
-                                    <a href={`/assets/legal/${item.file}`} className="font-medium rounded-md px-2 py-1 text-sm bg-primary text-white hover:bg-primary/80" download={`${item.title}.${item.file.split('.').pop()}`}>Download</a>
+                                    <a href={item.file} className="font-medium rounded-md px-2 py-1 text-sm bg-primary text-white hover:bg-primary/80" download={`${item.title}.${item.file.split('.').pop()}`}>Download</a>
                                 </td>
                             </tr>
                         )) : (<tr>

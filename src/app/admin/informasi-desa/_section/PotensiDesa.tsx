@@ -271,7 +271,7 @@ export default function InfrastrukturDesa() {
             (potential: villagePotential, i: number) => (
               <div key={i} className="relative w-max">
                 <Image
-                  src={`/assets/village-potential/${potential.image}`}
+                  src={potential.image}
                   className="rounded-md bg-cover"
                   width={215}
                   height={120}

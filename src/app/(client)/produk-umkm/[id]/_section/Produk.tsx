@@ -56,7 +56,7 @@ export default function Produk() {
         <ContainerClient>
             <div className="flex flex-col md:flex-row gap-5">
                 <section data-aos="fade-left" className="md:w-1/2 w-full">
-                    <Image src={`/assets/products/${product.image}`} width={500} height={500} className="rounded-md" alt={product.name} />
+                    <Image src={product.image!} width={500} height={500} className="rounded-md" alt={product.name} />
                 </section>
                 <section data-aos="fade-right" className="md:w-1/2 w-full space-y-2">
                     <p className="font-bold text-2xl">{product.name}</p>

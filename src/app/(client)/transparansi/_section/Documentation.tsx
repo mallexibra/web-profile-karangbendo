@@ -28,7 +28,7 @@ export default function Documentation() {
                 <div className="flex flex-col md:flex-row justify-center md:justify-start items-center md:items-start flex-wrap gap-3 mt-5">
                     {documentations.length > 0 ? documentations.map((item: DocumentationActivities, i: number) => (
                         <div key={i} className="relative w-max bg-primary rounded-md overflow-hidden">
-                            <Image key={i} width={500} height={500} className="rounded-md max-w-64 object-cover h-full" src={`/assets/documentation-activities/${item.image}`} alt={item.name} />
+                            <Image key={i} width={500} height={500} className="rounded-md max-w-64 object-cover h-full" src={item.image} alt={item.name} />
                             <div className="px-3 pb-3 pt-5 bg-gradient-to-b from-transparent to-primary absolute w-full flex flex-col justify-end top-12 bottom-0">
                                 <p className="font-semibold text-white">{item.name}</p>
                             </div>

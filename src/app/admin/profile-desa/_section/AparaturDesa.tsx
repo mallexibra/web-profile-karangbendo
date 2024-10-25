@@ -289,7 +289,7 @@ export default function AparaturDesa() {
               <div className="relative">
                 <Image
                   src={
-                    selectedImage || `/assets/village-apparatus/${dataImage}`
+                    selectedImage || dataImage!
                   }
                   width={500} height={300}
                   alt="Struktur Aparatur Desa"
@@ -333,7 +333,7 @@ export default function AparaturDesa() {
                 className="border border-custom flex gap-3 items-center w-max p-2 rounded-md"
               >
                 <Image
-                  src={`/assets/village-apparatus/${item.profile}`}
+                  src={item.profile}
                   width={500} height={500}
                   className="w-12 h-12 rounded-md object-cover"
                   alt="Profile Aparatur Desa"

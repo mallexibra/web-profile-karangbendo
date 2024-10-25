@@ -32,7 +32,7 @@ export default function Produk() {
                     {products.length > 0 ? products.map((item: Product, i: number) => (
                         <div key={i} className="w-full md:max-w-72 flex flex-col h-full rounded-md p-3 border border-black/20">
                             <div className="flex-grow">
-                                <Image src={`/assets/products/${item.image}`} width={500} height={500} className="rounded-md mb-3" alt={item.name} />
+                                <Image src={item.image} width={500} height={500} className="rounded-md mb-3" alt={item.name} />
                                 <p className="font-bold text-xl">{item.name}</p>
                                 <p className="font-semibold text-rose-500">{formatRupiah(item.price)}</p>
                                 <p className="font-semibold">Deskripsi</p>

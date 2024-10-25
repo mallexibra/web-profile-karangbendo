@@ -65,7 +65,7 @@ export default function CommunityActivity() {
                     </h3>
 
                     <div className="mt-5 space-y-3">
-                        <Image src={`/assets/community-activities/${item.image}`} width={500} height={200} className="w-full rounded-md object-cover" alt={item.name} />
+                        <Image src={item.image} width={500} height={200} className="w-full rounded-md object-cover" alt={item.name} />
                         <div>
                             <h4 className="font-semibold">Nama Kegiatan</h4>
                             <p>{item.name}</p>
@@ -90,7 +90,7 @@ export default function CommunityActivity() {
                             modalClick()
                             setItem(item)
                         }} className="max-w-72 rounded-md overflow-hidden cursor-pointer border border-custom">
-                            <Image src={`/assets/community-activities/${item.image}`} width={500} height={200} className="w-full object-cover" alt={item.name} />
+                            <Image src={item.image} width={500} height={200} className="w-full object-cover" alt={item.name} />
                             <div className="p-3">
                                 <p className="font-bold text-primary">{item.name}</p>
                                 <p className="font-medium text-xs opacity-50 my-1">{formatDate(item.time)}</p>

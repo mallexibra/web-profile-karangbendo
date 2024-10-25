@@ -80,7 +80,7 @@ export default function InformationVillage() {
             <div id="aparaturdesa">
                 <ContainerClient classNames="pt-24">
                     <h2 data-aos="fade-down" className="title text-center mb-7">Aparatur Desa</h2>
-                    <Image data-aos="fade-down" src={`/assets/village-profile/${profile.image}`} width={1200} height={500} className="rounded-md w-2/3 mx-auto" alt="Struktur Aparatur Desa" />
+                    <Image data-aos="fade-down" src={profile.image} width={1200} height={500} className="rounded-md w-2/3 mx-auto" alt="Struktur Aparatur Desa" />
                 </ContainerClient>
             </div>
         </>

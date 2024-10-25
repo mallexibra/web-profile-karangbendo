@@ -27,7 +27,7 @@ const PotensiDesa = () => {
                 <p>Desa Karangbendo memiliki potensi alam yang melimpah, termasuk lahan pertanian yang subur, hutan bambu, dan sungai yang kaya akan ikan.</p>
                 <div className="mt-5 flex flex-col md:flex-row justify-center md:justify-start items-center md:items-start flex-wrap md:gap-5">
                     {potential.length >= 1 ? potential.map((item: villagePotential, i: number) => (<div key={i} className="space-y-2 w-full md:w-52">
-                        <Image src={`/assets/village-potential/${item.image}`} className="object-cover w-full md:w-52 rounded-md" width={200} height={200} alt={item.name} />
+                        <Image src={item.image} className="object-cover w-full md:w-52 rounded-md" width={200} height={200} alt={item.name} />
                         <p className="text-center font-semibold">{item.name}</p>
                     </div>)) : (<p>Data potensi desa sedang kosong!</p>)}
                 </div>

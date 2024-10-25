@@ -270,7 +270,7 @@ export default function InfrastrukturDesa() {
             (infrastruktur: VillageInfrastruktur, i: number) => (
               <div key={i} className="relative w-max">
                 <Image
-                  src={`/assets/village-infrastruktur/${infrastruktur.image}`}
+                  src={infrastruktur.image}
                   className="rounded-md bg-cover"
                   width={215}
                   height={120}

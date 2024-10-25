@@ -322,7 +322,7 @@ export default function Toko() {
                                 {selectedProduk || dataProduk ? (
                                     <Image
                                         src={
-                                            selectedProduk || `/assets/products/${dataProduk}`
+                                            selectedProduk || dataProduk!
                                         }
                                         fill
                                         alt="Gambar Produk"
@@ -372,7 +372,7 @@ export default function Toko() {
                         {umkm.product.map((product: Product, i: number) => (
                             <div key={i} className="border border-custom bg-white flex flex-col justify-between rounded-md max-w-80 p-3">
                                 <Image
-                                    src={`/assets/products/${product.image}`}
+                                    src={product.image}
                                     width={500} height={200}
                                     className="w-full rounded-md object-cover bg-cover max-h-[512px]"
                                     alt="Produk UMKM"

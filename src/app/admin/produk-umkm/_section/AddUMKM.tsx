@@ -547,7 +547,7 @@ export default function AddUMKM() {
                                     {selectedFile || dataImage ? (
                                         <Image
                                             src={
-                                                selectedFile || `/assets/shops_identity/${dataImage}`
+                                                selectedFile || dataImage!
                                             }
                                             width={210}
                                             height={210}
@@ -664,7 +664,7 @@ export default function AddUMKM() {
                                     {selectedProduk || dataProduk ? (
                                         <Image
                                             src={
-                                                selectedProduk || `/assets/products/${dataProduk}`
+                                                selectedProduk || dataProduk
                                             }
                                             width={500} height={300}
                                             alt="Gambar Produk"
@@ -772,7 +772,7 @@ export default function AddUMKM() {
                                 {item.product.map((product: Product) => (
                                     <div key={i} className="border border-custom bg-white flex flex-col justify-between rounded-md max-w-80 p-3">
                                         <Image
-                                            src={`/assets/products/${product.image}`}
+                                            src={product.image}
                                             width={512} height={100}
                                             className="w-full rounded-md object-cover bg-cover max-h-[512px]"
                                             alt="Produk UMKM"

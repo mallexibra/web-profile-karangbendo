@@ -275,7 +275,7 @@ export default function DokumentasiKegiatan() {
           documentation.map((item: DocumentationActivities, i: number) => (
             <div key={i} className="relative w-max">
               <Image
-                src={`/assets/documentation-activities/${item.image}`}
+                src={item.image}
                 className="rounded-md bg-cover"
                 width={215}
                 height={120}

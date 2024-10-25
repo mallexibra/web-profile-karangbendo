@@ -338,7 +338,7 @@ export default function PeraturanKepalaDesa() {
                   <td>{item.description}</td>
                   <td>
                     <div className="flex items-center gap-3">
-                      <a href={`/assets/legal/${item.file}`} download={`${item.title}.${item.file.split('.').pop()}`} target="_blank">
+                      <a href={item.file} download={`${item.title}.${item.file.split('.').pop()}`} target="_blank">
                         <IconFileDownload className="text-primary" />
                       </a>
                       <IconEdit
