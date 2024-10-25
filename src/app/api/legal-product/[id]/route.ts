@@ -93,7 +93,7 @@ export const DELETE = async (request: Request, { params }: { params: { id: strin
         }
 
         if (legalProduct.file) {
-            await cloudinary.uploader.destroy(legalProduct.file.split('/').pop().split('.')[0]);
+            await cloudinary.uploader.destroy(legalProduct.file.split('/').pop()!.split('.')[0]);
         }
 
         await db.legalProduct.delete({ where: { id: Number(params.id) } });
