@@ -664,7 +664,7 @@ export default function AddUMKM() {
                                     {selectedProduk || dataProduk ? (
                                         <Image
                                             src={
-                                                selectedProduk || dataProduk
+                                                selectedProduk || dataProduk!
                                             }
                                             width={500} height={300}
                                             alt="Gambar Produk"
