@@ -28,7 +28,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
         let imagePath = existingApparatus.profile;
         if (image && typeof image.name === 'string' && typeof image.size === 'number') {
             if (existingApparatus.profile) {
-                const publicId = existingApparatus.profile.split('/').pop().split('.')[0]; await cloudinary.uploader.destroy(publicId);
+                const publicId = existingApparatus.profile.split('/').pop()!.split('.')[0]; await cloudinary.uploader.destroy(publicId);
             }
 
             const timestamp = Date.now();

@@ -59,7 +59,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
 
         if (image && typeof image.name === 'string' && typeof image.size === 'number') {
             if (existingProduct.image) {
-                const publicId = existingProduct.image.split('/').pop().split('.')[0];
+                const publicId = existingProduct.image.split('/').pop()!.split('.')[0];
                 await cloudinary.uploader.destroy(publicId);
             }
 
@@ -121,7 +121,7 @@ export const DELETE = async (req: Request, { params }: { params: { id: string } 
         }
 
         if (product.image) {
-            const publicId = product.image.split('/').pop().split('.')[0];
+            const publicId = product.image.split('/').pop()!.split('.')[0];
             await cloudinary.uploader.destroy(publicId);
         }
 

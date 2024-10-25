@@ -33,7 +33,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
         let filePath = existingLegalProduct.file;
         if (image && typeof image.name === 'string' && typeof image.size === 'number') {
             if (existingLegalProduct.file) {
-                await cloudinary.uploader.destroy(existingLegalProduct.file.split('/').pop().split('.')[0]);
+                await cloudinary.uploader.destroy(existingLegalProduct.file.split('/').pop()!.split('.')[0]);
             }
             const timestamp = Date.now();
             const imgProfile = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}`;

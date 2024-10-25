@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import db from '@/utils/database';
 import cloudinary from '@/utils/cloudinary';
 import * as yup from 'yup';
+import { UploadApiResponse } from 'cloudinary';
+import { MD5 } from 'crypto-js';
 
 const villageProfileSchema = yup.object({
     visi: yup.string().required('Visi is required and must be a string'),
@@ -32,15 +34,38 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
         let imagePath = existingVillage.image;
 
         if (image && typeof image.name === 'string' && typeof image.size === 'number') {
+
             if (existingVillage.image) {
                 const publicId = existingVillage.image.split('/').pop()!.split('.')[0];
                 await cloudinary.uploader.destroy(`village_profile/${publicId}`);
             }
 
-            const { secure_url } = await cloudinary.uploader.upload(image, {
-                folder: 'village_profile',
+
+            const timestamp = Date.now();
+            const imgVillage = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}`;
+
+            const buffer = await image.arrayBuffer();
+
+            const uploadPromise = new Promise<UploadApiResponse>((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    {
+                        folder: 'village_profile',
+                        public_id: imgVillage,
+                    },
+                    (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result as UploadApiResponse);
+                        }
+                    }
+                );
+
+                stream.end(Buffer.from(buffer));
             });
-            imagePath = secure_url;
+
+            const uploadResponse = await uploadPromise;
+            imagePath = uploadResponse.secure_url;
         }
 
         const updatedVillage = await db.villageProfile.update({
@@ -64,7 +89,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
     } catch (error: any) {
         if (error.name === 'ValidationError') {
             return NextResponse.json({
-                error: 'validation',
+                error: 'Validation error',
                 message: error.errors,
                 status: false,
             }, { status: 400 });
@@ -88,6 +113,7 @@ export const DELETE = async (request: Request, { params }: { params: { id: strin
                 status: false,
             }, { status: 404 });
         }
+
 
         if (villageProfile.image) {
             const publicId = villageProfile.image.split('/').pop()!.split('.')[0];
