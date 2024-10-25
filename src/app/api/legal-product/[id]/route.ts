@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
-import { join } from 'path';
-import { writeFile, unlink } from 'fs/promises';
 import { MD5 } from 'crypto-js';
 import db from '@/utils/database';
 import * as yup from 'yup';
+import cloudinary from '@/utils/cloudinary';
 
 const legalProductSchema = yup.object({
     title: yup.string().required('Title is required and must be a string'),
@@ -22,8 +21,8 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
 
         await legalProductSchema.validate(data, { abortEarly: false });
 
-        const existinglegalProduct = await db.legalProduct.findUnique({ where: { id: Number(params.id) } });
-        if (!existinglegalProduct) {
+        const existingLegalProduct = await db.legalProduct.findUnique({ where: { id: Number(params.id) } });
+        if (!existingLegalProduct) {
             return NextResponse.json({
                 error: 'Regulation not found',
                 message: 'Regulation not found',
@@ -31,18 +30,27 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
             }, { status: 404 });
         }
 
-        let filePath = existinglegalProduct.file;
+        let filePath = existingLegalProduct.file;
         if (image && typeof image.name === 'string' && typeof image.size === 'number') {
-            if (existinglegalProduct.file) {
-                await unlink(join('./public/assets/legal', existinglegalProduct.file));
+            if (existingLegalProduct.file) {
+                await cloudinary.uploader.destroy(existingLegalProduct.file.split('/').pop().split('.')[0]);
             }
             const timestamp = Date.now();
-            const fileLegalProduct = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
-            const bytes = await image.arrayBuffer();
-            const buffer = Buffer.from(bytes);
-            filePath = fileLegalProduct;
-            const path = join('./public/assets/legal', fileLegalProduct);
-            await writeFile(path, buffer);
+            const imgProfile = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}`;
+            const buffer = Buffer.from(await image.arrayBuffer());
+
+            const uploadResponse = await new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    { folder: 'legal-products', public_id: imgProfile },
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result?.secure_url);
+                    }
+                );
+                stream.end(buffer);
+            });
+
+            filePath = uploadResponse as string;
         }
 
         const updateLegalProduct = await db.legalProduct.update({
@@ -85,7 +93,7 @@ export const DELETE = async (request: Request, { params }: { params: { id: strin
         }
 
         if (legalProduct.file) {
-            await unlink(join('./public/assets/legal', legalProduct.file));
+            await cloudinary.uploader.destroy(legalProduct.file.split('/').pop().split('.')[0]);
         }
 
         await db.legalProduct.delete({ where: { id: Number(params.id) } });

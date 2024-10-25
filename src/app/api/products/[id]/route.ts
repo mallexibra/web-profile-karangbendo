@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
-import { join } from 'path';
-import { writeFile, unlink } from 'fs/promises';
 import { MD5 } from 'crypto-js';
 import db from '@/utils/database';
 import * as yup from 'yup';
+import cloudinary from '@/utils/cloudinary';
 
 const productSchema = yup.object({
     image: yup.mixed<File>().required('Image is required'),
@@ -15,8 +14,9 @@ const productSchema = yup.object({
 
 export const GET = async (request: Request, { params }: { params: { id: string } }) => {
     try {
-        const products = await db.product.findUnique({
-            where: { id: Number(params.id) }, include: {
+        const product = await db.product.findUnique({
+            where: { id: Number(params.id) },
+            include: {
                 shop: {
                     include: {
                         owner: true,
@@ -25,7 +25,7 @@ export const GET = async (request: Request, { params }: { params: { id: string }
             }
         });
         return NextResponse.json({
-            data: products,
+            data: product,
             message: "Fetched data product successfully",
             status: true,
         });
@@ -55,23 +55,35 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
             }, { status: 404 });
         }
 
-        let imagePath = existingProduct.image;
+        let imageUrl = existingProduct.image;
+
         if (image && typeof image.name === 'string' && typeof image.size === 'number') {
             if (existingProduct.image) {
-                await unlink(join('./public/assets/products', existingProduct.image));
+                const publicId = existingProduct.image.split('/').pop().split('.')[0];
+                await cloudinary.uploader.destroy(publicId);
             }
+
             const timestamp = Date.now();
-            const imgProduct = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
-            const bytes = await image.arrayBuffer();
-            const buffer = Buffer.from(bytes);
-            imagePath = imgProduct;
-            const path = join('./public/assets/products', imgProduct);
-            await writeFile(path, buffer);
+            const imgProduct = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}`;
+            const buffer = Buffer.from(await image.arrayBuffer());
+
+            const uploadResponse = await new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    { folder: 'products', public_id: imgProduct },
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result?.secure_url);
+                    }
+                );
+                stream.end(buffer);
+            });
+
+            imageUrl = uploadResponse as string;
         }
 
         const updateProduct = await db.product.update({
             where: { id: Number(params.id) },
-            data: { ...data, id: Number(data.id), shopId: Number(data.shopId), price: Number(data.price), image: imagePath },
+            data: { ...data, id: Number(data.id), shopId: Number(data.shopId), price: Number(data.price), image: imageUrl },
         });
 
         return NextResponse.json({
@@ -109,7 +121,8 @@ export const DELETE = async (req: Request, { params }: { params: { id: string } 
         }
 
         if (product.image) {
-            await unlink(join('./public/assets/products', product.image));
+            const publicId = product.image.split('/').pop().split('.')[0];
+            await cloudinary.uploader.destroy(publicId);
         }
 
         await db.product.delete({ where: { id: Number(params.id) } });

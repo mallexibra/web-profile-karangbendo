@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
-import { join } from 'path';
-import { writeFile } from 'fs/promises';
 import { MD5 } from 'crypto-js';
 import db from '@/utils/database';
 import * as yup from 'yup';
-
+import cloudinary from '@/utils/cloudinary';
 const shopSchema = yup.object({
     name: yup.string().required('Name is required and must be a string'),
     description: yup.string().required('Description is required and must be a string'),
@@ -42,23 +40,35 @@ export const POST = async (request: Request) => {
             phone: formData.get('phone') as string,
             userId: formData.get('userId') as unknown as number,
         };
-        const image = data.identity;
 
         await shopSchema.validate(data, { abortEarly: false });
 
+        const image = data.identity;
+        if (!image) {
+            throw new Error('Identity file is missing');
+        }
+
         const timestamp = Date.now();
-        const imgShop = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
-        const bytes = await image.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        const imagePath = imgShop;
-        const path = join('./public/assets/shops_identity', imgShop);
-        await writeFile(path, buffer);
+        const imgShop = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}`;
+
+        const buffer = Buffer.from(await image.arrayBuffer());
+
+        const uploadResponse = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                { folder: 'shops_identity', public_id: imgShop },
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result?.secure_url);
+                }
+            );
+            stream.end(buffer);
+        });
 
         const newShop = await db.shop.create({
             data: {
                 ...data,
                 userId: Number(data.userId),
-                identity: imagePath,
+                identity: uploadResponse as string,
             },
         });
 

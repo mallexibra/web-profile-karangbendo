@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
-import { join } from 'path';
-import { writeFile } from 'fs/promises';
 import { MD5 } from 'crypto-js';
 import db from '@/utils/database';
 import * as yup from 'yup';
+import cloudinary from '@/utils/cloudinary';
 
 const productSchema = yup.object({
     image: yup.mixed<File>().required('Image is required'),
@@ -12,8 +11,6 @@ const productSchema = yup.object({
     price: yup.number().required('Price is required and must be a number').positive('Price must be a positive number').integer('Price must be an integer'),
     shopId: yup.number().required('Shop ID is required and must be a number').integer('Shop ID must be an integer'),
 });
-
-
 
 export const GET = async () => {
     try {
@@ -47,23 +44,30 @@ export const POST = async (request: Request) => {
         await productSchema.validate(data, { abortEarly: false });
 
         const timestamp = Date.now();
-        const imgProduct = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
-        const bytes = await image.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        const imagePath = imgProduct;
-        const path = join('./public/assets/products', imgProduct);
-        await writeFile(path, buffer);
+        const imgProduct = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}`;
+        const buffer = Buffer.from(await image.arrayBuffer());
+
+        const uploadResponse = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                { folder: 'products', public_id: imgProduct },
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result?.secure_url);
+                }
+            );
+            stream.end(buffer);
+        });
 
         const newProduct = await db.product.create({
             data: {
                 ...data,
-                image: imagePath,
+                image: uploadResponse as string,
             },
         });
 
         return NextResponse.json({
             data: newProduct,
-            message: "Products created successfully",
+            message: "Product created successfully",
             status: true,
         }, { status: 201 });
 
@@ -77,7 +81,7 @@ export const POST = async (request: Request) => {
         }
 
         return NextResponse.json({
-            error: 'Failed to create products',
+            error: 'Failed to create product',
             message: error.message,
             status: false,
         }, { status: 500 });

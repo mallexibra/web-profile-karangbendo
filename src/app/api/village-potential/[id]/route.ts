@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
-import { join } from 'path';
-import { unlink } from 'fs/promises';
 import db from '@/utils/database';
-
+import cloudinary from '@/utils/cloudinary';
 export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const villagePotential = await db.villagePotential.findUnique({ where: { id: Number(params.id) } });
@@ -15,7 +13,8 @@ export const DELETE = async (request: Request, { params }: { params: { id: strin
         }
 
         if (villagePotential.image) {
-            await unlink(join('./public/assets/village-potential', villagePotential.image));
+            const publicId = villagePotential.image.split('/').pop()!.split('.')[0];
+            await cloudinary.uploader.destroy(`village_potential/${publicId}`);
         }
 
         await db.villagePotential.delete({ where: { id: Number(params.id) } });

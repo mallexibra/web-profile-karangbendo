@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
-import { join } from 'path';
-import { writeFile, unlink } from 'fs/promises';
 import { MD5 } from 'crypto-js';
 import db from '@/utils/database';
 import * as yup from 'yup';
+import cloudinary from '@/utils/cloudinary';
 
 const documentationActivitiesSchema = yup.object({
     name: yup.string().required('Name is required and must be a string'),
@@ -28,17 +27,29 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
         }
 
         let imagePath = existingDocumentationActivities.image;
+
         if (image && typeof image.name === 'string' && typeof image.size === 'number') {
             if (existingDocumentationActivities.image) {
-                await unlink(join('./public/assets/documentation-activities', existingDocumentationActivities.image));
+                const publicId = existingDocumentationActivities.image.split('/').pop()?.split('.')[0];
+                if (publicId) await cloudinary.uploader.destroy(`documentation-activities/${publicId}`);
             }
+
             const timestamp = Date.now();
-            const imgdocumentationActivities = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
-            const bytes = await image.arrayBuffer();
-            const buffer = Buffer.from(bytes);
-            imagePath = imgdocumentationActivities;
-            const path = join('./public/assets/documentation-activities', imgdocumentationActivities);
-            await writeFile(path, buffer);
+            const imgDoc = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}`;
+            const buffer = Buffer.from(await image.arrayBuffer());
+
+            const uploadResponse = await new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    { folder: 'documentation-activities', public_id: imgDoc },
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result?.secure_url);
+                    }
+                );
+                stream.end(buffer);
+            });
+
+            imagePath = uploadResponse as string;
         }
 
         const updateDocumentationActivities = await db.documentationActivities.update({
@@ -81,7 +92,8 @@ export const DELETE = async (request: Request, { params }: { params: { id: strin
         }
 
         if (documentationActivities.image) {
-            await unlink(join('./public/assets/documentation-activities', documentationActivities.image));
+            const publicId = documentationActivities.image.split('/').pop()?.split('.')[0];
+            if (publicId) await cloudinary.uploader.destroy(`documentation-activities/${publicId}`);
         }
 
         await db.documentationActivities.delete({ where: { id: Number(params.id) } });

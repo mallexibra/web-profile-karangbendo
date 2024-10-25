@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
-import { join } from 'path';
-import { writeFile, unlink } from 'fs/promises';
-import { MD5 } from 'crypto-js';
 import db from '@/utils/database';
+import cloudinary from '@/utils/cloudinary';
 import * as yup from 'yup';
 
 const villageProfileSchema = yup.object({
@@ -32,24 +30,23 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
         }
 
         let imagePath = existingVillage.image;
+
         if (image && typeof image.name === 'string' && typeof image.size === 'number') {
             if (existingVillage.image) {
-                await unlink(join('./public/assets/village-profile', existingVillage.image));
+                const publicId = existingVillage.image.split('/').pop()!.split('.')[0];
+                await cloudinary.uploader.destroy(`village_profile/${publicId}`);
             }
-            const timestamp = Date.now();
-            const imgVillage = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
-            const bytes = await image.arrayBuffer();
-            const buffer = Buffer.from(bytes);
-            imagePath = imgVillage;
-            const path = join('./public/assets/village-profile', imgVillage);
-            await writeFile(path, buffer);
+
+            const { secure_url } = await cloudinary.uploader.upload(image, {
+                folder: 'village_profile',
+            });
+            imagePath = secure_url;
         }
 
         const updatedVillage = await db.villageProfile.update({
             where: { id: Number(params.id) },
             data: {
                 ...data,
-                id: parseInt(data.id as string, 10),
                 image: imagePath,
                 old: parseInt(data.old as string, 10),
                 mature: parseInt(data.mature as string, 10),
@@ -83,8 +80,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
 
 export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
     try {
-        const villageId = Number(params.id);
-        const villageProfile = await db.villageProfile.findUnique({ where: { id: villageId } });
+        const villageProfile = await db.villageProfile.findUnique({ where: { id: Number(params.id) } });
         if (!villageProfile) {
             return NextResponse.json({
                 error: 'Village profile not found',
@@ -94,10 +90,11 @@ export const DELETE = async (request: Request, { params }: { params: { id: strin
         }
 
         if (villageProfile.image) {
-            await unlink(join('./public/assets/village-profile', villageProfile.image));
+            const publicId = villageProfile.image.split('/').pop()!.split('.')[0];
+            await cloudinary.uploader.destroy(`village_profile/${publicId}`);
         }
 
-        await db.villageProfile.delete({ where: { id: villageId } });
+        await db.villageProfile.delete({ where: { id: Number(params.id) } });
 
         return NextResponse.json({
             message: "Village profile deleted successfully",

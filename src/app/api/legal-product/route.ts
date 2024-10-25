@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import db from '@/utils/database';
 import * as yup from 'yup';
 import { MD5 } from 'crypto-js';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import cloudinary from '@/utils/cloudinary';
 
 const legalProductSchema = yup.object({
     title: yup.string().required('Title is required and must be a string'),
@@ -47,12 +46,21 @@ export const POST = async (request: Request) => {
         let filePath;
         if (file != null) {
             const timestamp = Date.now();
-            const imgProfile = `${timestamp}_${MD5(file.name.split(".")[0]).toString()}.${file.name.split(".")[1]}`;
-            const bytes = await file.arrayBuffer();
-            const buffer = Buffer.from(bytes);
-            filePath = imgProfile;
-            const path = join('./public/assets/legal', imgProfile);
-            await writeFile(path, buffer);
+            const imgProfile = `${timestamp}_${MD5(file.name.split(".")[0]).toString()}`;
+            const buffer = Buffer.from(await file.arrayBuffer());
+
+            const uploadResponse = await new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    { folder: 'legal-products', public_id: imgProfile },
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result?.secure_url);
+                    }
+                );
+                stream.end(buffer);
+            });
+
+            filePath = uploadResponse as string;
         }
 
         const newLegalProduct = await db.legalProduct.create({

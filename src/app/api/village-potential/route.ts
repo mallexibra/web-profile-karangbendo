@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
-import { join } from 'path';
-import { writeFile } from 'fs/promises';
 import { MD5 } from 'crypto-js';
 import db from '@/utils/database';
 import * as yup from 'yup';
-
+import cloudinary from '@/utils/cloudinary';
 const villagePotentialSchema = yup.object({
     name: yup.string().required('Name is required and must be a string'),
     image: yup.mixed<File>().required('Image is required'),
@@ -38,17 +36,24 @@ export const POST = async (request: Request) => {
         await villagePotentialSchema.validate({ ...data, image }, { abortEarly: false });
 
         const timestamp = Date.now();
-        const villagePotential = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}.${image.name.split(".")[1]}`;
-        const bytes = await image.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        const imagePath = villagePotential;
-        const path = join('./public/assets/village-potential', villagePotential);
-        await writeFile(path, buffer);
+        const imgPotential = `${timestamp}_${MD5(image.name.split('.')[0]).toString()}`;
+        const buffer = Buffer.from(await image.arrayBuffer());
+
+        const uploadedImage = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                { folder: 'village_potential', public_id: imgPotential },
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result?.secure_url);
+                }
+            );
+            stream.end(buffer);
+        });
 
         const newProfile = await db.villagePotential.create({
             data: {
                 ...data,
-                image: imagePath,
+                image: uploadedImage as string,
             },
         });
 
