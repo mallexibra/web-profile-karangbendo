@@ -3,7 +3,14 @@ export const formatRupiah = (amount: number) => {
 }
 
 export const formatText = (text: string) => {
-    return text.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    const customMappings: { [key: string]: string } = {
+        village_head: "Kepala Desa",
+        employee: "Pegawai",
+        admin: "Admin",
+        umkm: "UMKM"
+    };
+
+    return customMappings[text];
 }
 
 export function formatDate(date: Date | string): string {
@@ -20,6 +27,5 @@ export function formatDate(date: Date | string): string {
     const month = months[date.getMonth()];
     const year = date.getFullYear();
 
-    // Gabungkan ke format yang diinginkan
     return `${day} ${month} ${year}`;
 }
