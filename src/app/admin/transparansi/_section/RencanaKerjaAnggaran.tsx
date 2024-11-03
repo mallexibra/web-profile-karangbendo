@@ -19,6 +19,9 @@ export default function RencanaKerjaAnggaran() {
     const [type, setType] = useState<string>('add');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [id, setId] = useState<number | null>(null);
+    const [loading, setLoading] = useState(false);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     const workPlanBudgetSchema = yup.object({
         name: yup.string().required('Nama wajib diisi'),
@@ -28,7 +31,8 @@ export default function RencanaKerjaAnggaran() {
             .required('Jumlah anggaran wajib diisi')
             .transform((_, val) => (val !== '' ? Number(val) : null)),
         description: yup.string().required('Deskripsi wajib diisi'),
-        date: yup.string().required('Tanggal wajib diisi'),
+        date: yup.date().transform((value, originalValue) => originalValue === "" ? null : value)
+            .min(today, 'Jadwal kegiatan tidak bisa di hari sebelumnya').required('Jadwal kegiatan wajib diisi'),
     });
 
     const {
@@ -53,6 +57,13 @@ export default function RencanaKerjaAnggaran() {
         }
     };
 
+    const formatDateToYYYYMMDD = (date: any) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     type FormFields = Pick<
         WorkPlanAndBudget,
         'name' | 'description' | 'date' | 'budget'
@@ -61,7 +72,8 @@ export default function RencanaKerjaAnggaran() {
     const handleEdit = (data: FormFields) => {
         Object.entries(data).forEach(([key, value]) => {
             if (key == 'date') {
-                setValue('date', value.toString().split('T')[0]);
+                const formattedDate = formatDateToYYYYMMDD(new Date(value));
+                setValue(key as keyof FormFields, formattedDate);
             } else {
                 setValue(key as keyof FormFields, value);
             }
@@ -98,7 +110,7 @@ export default function RencanaKerjaAnggaran() {
                 Swal.fire({
                     icon: 'success',
                     title: 'Sukses!',
-                    text: 'Sukses delete data rencana anggaran desa',
+                    text: 'Sukses delete data rencana kerja dan anggaran desa',
                 });
                 fetchData();
             } else {
@@ -113,28 +125,39 @@ export default function RencanaKerjaAnggaran() {
     };
 
     const handleAddFinance = async (data: any) => {
-        let response;
-        if (id) {
-            response = await axiosInstance.patch(`/work-plan-budget/${id}`, data);
-        } else {
-            response = await axiosInstance.post('/work-plan-budget', data);
-        }
+        setLoading(true);
+        try {
+            let response;
+            if (id) {
+                response = await axiosInstance.patch(`/work-plan-budget/${id}`, data);
+            } else {
+                response = await axiosInstance.post('/work-plan-budget', data);
+            }
 
-        if (response.status) {
-            close();
-            Swal.fire({
-                icon: 'success',
-                title: 'Sukses!',
-                text: `Sukses ${id ? 'edit' : 'tambah'} data rencana anggaran desa`,
-            });
-            fetchData();
-        } else {
-            close();
+            if (response.status) {
+                close();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sukses!',
+                    text: `Sukses ${id ? 'edit' : 'tambah'} data rencana kerja dan anggaran desa`,
+                });
+                fetchData();
+            } else {
+                close();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: response.data.message[0] || 'Terjadi kesalahan.',
+                });
+            }
+        } catch (error: any) {
             Swal.fire({
                 icon: 'error',
                 title: 'Gagal!',
-                text: response.data.message[0] || 'Terjadi kesalahan.',
+                text: error.message || 'Terjadi kesalahan.',
             });
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -204,21 +227,21 @@ export default function RencanaKerjaAnggaran() {
                             )}
                         </LabelForm>
 
-                        <LabelForm label='Status Program Kerja'>
+                        {/* <LabelForm label='Status Program Kerja'>
                             <SelectForm label={'Status Program Kerja'} name={'status'} data={[{ label: 'Selesai', value: 'selesai' }, { label: 'Belum Selesai', value: 'belum' }]} />
-                        </LabelForm>
+                        </LabelForm> */}
 
-                        <LabelForm label="Tanggal Kegiatan">
+                        <LabelForm label="Jadwal Kegiatan">
                             <InputForm
                                 disabled={type == 'view'}
                                 {...register('date')}
                                 type="date"
-                                label="Tanggal Kegiatan"
+                                label="Jadwal Kegiatan"
                                 name="date"
-                                placeholder="Input tanggal rencana kegiatan"
+                                placeholder="Input jadwal kegiatan"
                             />
-                            {errors.name && (
-                                <p className="text-red-500 text-sm">{errors.name.message}</p>
+                            {errors.date && (
+                                <p className="text-red-500 text-sm">{errors.date.message}</p>
                             )}
                         </LabelForm>
 
@@ -246,12 +269,12 @@ export default function RencanaKerjaAnggaran() {
                                 name="budget"
                                 placeholder="Input jumlah anggaran"
                             />
-                            {errors.name && (
-                                <p className="text-red-500 text-sm">{errors.name.message}</p>
+                            {errors.budget && (
+                                <p className="text-red-500 text-sm">{errors.budget.message}</p>
                             )}
                         </LabelForm>
 
-                        <LabelForm label="Jumlah Anggaran Terpakai">
+                        {/* <LabelForm label="Jumlah Anggaran Terpakai">
                             <InputForm
                                 disabled={type == 'view'}
                                 type="number"
@@ -259,11 +282,11 @@ export default function RencanaKerjaAnggaran() {
                                 name="budget"
                                 placeholder="Input jumlah anggaran terpakai"
                             />
-                        </LabelForm>
+                        </LabelForm> */}
 
                         {type != 'view' && (
-                            <Button type="submit" color="primary" size="base">
-                                Save
+                            <Button type="submit" color="primary" size="base" disable={loading}>
+                                {loading ? "Loading..." : "Save"}
                             </Button>
                         )}
                     </form>

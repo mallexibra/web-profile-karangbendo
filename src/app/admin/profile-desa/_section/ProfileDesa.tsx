@@ -45,30 +45,32 @@ export default function ProfileDesa() {
             .transform((_, val) => (val !== '' ? Number(val) : null)),
         image: yup
             .mixed<File>()
-            .nullable()
             .test(
                 'fileRequired',
                 'Struktur Aparatur Desa wajib diisi',
                 function (value) {
-                    return !!dataImage || !!value;
+                    console.log(!dataImage, !!value, !id);
+                    const isDataImageValid = !dataImage;
+                    const isValueValid = value instanceof FileList;
+                    const isIdValid = !!id;
+                    console.log(isDataImageValid , isValueValid , isIdValid)
+                    return isDataImageValid || isValueValid || isIdValid;
                 },
             )
             .test('fileSize', 'Ukuran file maksimal 2MB', function (value) {
-                if (dataImage) return true;
                 if (value) {
                     return value.size <= MAX_FILE_SIZE;
                 }
-                return true;
+                return false;
             })
             .test(
                 'fileFormat',
                 'Format file tidak valid, hanya jpg, jpeg, dan png yang diperbolehkan',
                 function (value) {
-                    if (dataImage) return true;
                     if (value) {
                         return SUPPORTED_FORMATS.includes(value.type);
                     }
-                    return true;
+                    return false;
                 },
             ),
     });
@@ -81,6 +83,7 @@ export default function ProfileDesa() {
         formState: { errors },
     } = useForm({
         resolver: yupResolver(villageProfileSchema),
+        context: { isEdit: !!id }
     });
 
     type FormFields = Pick<

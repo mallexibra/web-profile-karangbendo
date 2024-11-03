@@ -5,15 +5,26 @@ import { InputForm } from '@/components/forms/InputForm';
 import LabelForm from '@/components/forms/LabelForm';
 import axiosInstance from '@/utils/axiosInstance';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { IconLoader } from '@tabler/icons-react';
 import { useSession } from 'next-auth/react';
-import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import * as yup from "yup";
 
 export default function SettingToko() {
-    const {data: session} = useSession();
+    const { data: session, status } = useSession();
+    const router = useRouter();
     const shopId = session?.user?.shop?.[0]?.id ?? null;
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (status === "unauthenticated") {
+            router.push("/auth/login");
+        }
+    }, [status, router]);
+
     const umkmSchema = yup.object({
         name: yup.string().required('Nama wajib diisi'),
         description: yup.string().required('Deskripsi wajib diisi'),
@@ -26,18 +37,24 @@ export default function SettingToko() {
     })
 
     const fetchData = async () => {
+        setLoading(true);
         try {
-            const response = session && (await axiosInstance.get(`/shops/${shopId}`)).data.data;
-            setValue('name', response.name);
-            setValue('phone', response.phone);
-            setValue('location', response.location);
-            setValue('description', response.description);
+            if (session) {
+                const response = (await axiosInstance.get(`/shops/${shopId}`)).data.data;
+                setValue('name', response.name);
+                setValue('phone', response.phone);
+                setValue('location', response.location);
+                setValue('description', response.description);
+            }
         } catch (error: any) {
             console.log(`Error: ${error.message}`)
+        } finally {
+            setLoading(false);
         }
     }
 
-    const updateUmkm = async (data: any)=>{
+    const updateUmkm = async (data: any) => {
+        setLoading(true);
         try {
             const formData = new FormData();
             for (const key in data) {
@@ -78,12 +95,26 @@ export default function SettingToko() {
                 });
             }
             console.log(`Error edit umkm`);
+        } finally {
+            setLoading(false);
         }
     }
 
     useEffect(() => {
-        fetchData()
-    })
+        if (session) {
+            fetchData();
+        }
+    }, [session]);
+
+    if (status === "loading") {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <IconLoader className="animate-spin text-primary" size={40} />
+                <p className="ml-2 text-primary text-lg">Loading...</p>
+            </div>
+        );
+    }
+    
     return (
         <Card>
             <form onSubmit={handleSubmit(updateUmkm)} className="flex gap-3" method="post">
@@ -143,8 +174,8 @@ export default function SettingToko() {
                         )}
                     </LabelForm>
                     <div className="flex justify-end mt-5">
-                        <Button type='submit' color="primary" size="sm">
-                            Simpan
+                        <Button type='submit' color="primary" size="sm" disable={loading}>
+                            {loading ? "Loading..." : "Save"}
                         </Button>
                     </div>
                 </section>

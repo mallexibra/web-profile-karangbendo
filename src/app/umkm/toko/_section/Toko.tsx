@@ -9,16 +9,18 @@ import { User } from '@/types/User';
 import axiosInstance from '@/utils/axiosInstance';
 import { formatRupiah } from '@/utils/format';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IconPlus, IconSquareRoundedXFilled } from '@tabler/icons-react';
+import { IconLoader, IconPlus, IconSquareRoundedXFilled } from '@tabler/icons-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import * as yup from "yup"
 
 export default function Toko() {
-    const { data: session } = useSession()
+    const { data: session, status } = useSession();
+    const router = useRouter();
     const shopId = session?.user?.shop?.[0]?.id ?? null;
     const [umkm, setUmkm] = useState<Shop>({
         id: 0,
@@ -32,12 +34,20 @@ export default function Toko() {
         phone: '',
         product: []
     });
+
+    useEffect(() => {
+        if (status === "unauthenticated") {
+            router.push("/auth/login");
+        }
+    }, [status, router]);
+
     const [dataProduk, setDataProduk] = useState<string | null>(null);
     const [selectedProduk, setSelectedProduk] = useState<string | null>(null);
     const [idProduk, setIdProduk] = useState<number | null>(null);
     const [isModalProductOpen, setIsModalProductOpen] = useState(false);
     const [typeProduct, setTypeProduct] = useState<string>('add');
     const [dataImage, setDataImage] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
 
     const MAX_FILE_SIZE = 2 * 1024 * 1024;
     const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
@@ -46,25 +56,44 @@ export default function Toko() {
         image: yup
             .mixed<File>()
             .nullable()
-            .test('fileSize', 'Ukuran file maksimal 2MB', function (value: any) {
+            .test(
+                'fileRequired',
+                'Gambar produk wajib diisi',
+                function (value) {
+                    if (idProduk != null) return true;
+                    const isValueValid = value instanceof File;
+                    return isValueValid;
+                },
+            )
+            .test('fileSize', 'Ukuran file maksimal 2MB', function (value) {
+                if (idProduk != null) return true;
                 if (value) {
                     return value.size <= MAX_FILE_SIZE;
                 }
-                return true;
+                return false;
             })
-            .test('fileFormat', 'Format file tidak valid, hanya JPG, PNG, dan GIF yang diperbolehkan', function (value: any) {
-                if (value) {
-                    return SUPPORTED_FORMATS.includes(value.type);
-                }
-                return true;
-            }),
-        name: yup.string().required('Name is required and must be a string'),
-        description: yup.string().required('Description is required and must be a string'),
+            .test(
+                'fileFormat',
+                'Format file tidak valid, hanya jpg, jpeg, dan png yang diperbolehkan',
+                function (value) {
+                    if (idProduk != null) return true;
+                    if (value) {
+                        return SUPPORTED_FORMATS.includes(value.type);
+                    }
+                    return false;
+                },
+            ),
+        name: yup.string().required('Nama wajib diisi'),
+        description: yup.string().required('Deskripsi wajib diisi'),
         price: yup
             .number()
-            .required('Price is required and must be a number')
-            .positive('Price must be a positive number')
-            .integer('Price must be an integer'),
+            .transform((value, originalValue) =>
+                originalValue === "" ? null : value
+            )
+            .nullable()
+            .required('Harga wajib diisi')
+            .positive('Harga harus berupa angka positif')
+            .integer('Harga harus berupa angka'),
         shopId: yup.number().nullable()
     });
 
@@ -75,7 +104,7 @@ export default function Toko() {
         setValue: setValueProduk,
         formState: { errors: errorsProduk },
     } = useForm({
-        resolver: yupResolver(productSchema),
+        resolver: yupResolver(productSchema)
     });
 
     const fetchData = async () => {
@@ -106,6 +135,8 @@ export default function Toko() {
             setIsModalProductOpen(false);
             setTypeProduct('add');
             setSelectedProduk(null);
+            setDataImage(null);
+            setDataProduk(null);
         }
     };
 
@@ -136,6 +167,7 @@ export default function Toko() {
     };
 
     const handleAddProduct = async (data: any) => {
+        setLoading(true);
         try {
             const formData = new FormData();
             for (const key in data) {
@@ -188,6 +220,8 @@ export default function Toko() {
                 });
             }
             console.log(`Error create data produk: ${error}`);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -203,6 +237,14 @@ export default function Toko() {
                 });
                 fetchData();
             } else {
+                if (status === "loading") {
+                    return (
+                        <div className="flex items-center justify-center min-h-screen">
+                            <IconLoader className="animate-spin text-primary" size={40} />
+                            <p className="ml-2 text-primary text-lg">Loading...</p>
+                        </div>
+                    );
+                }
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal!',
@@ -232,8 +274,20 @@ export default function Toko() {
     }, [isModalProductOpen]);
 
     useEffect(() => {
-        fetchData()
-    }, [session])
+        if (session) {
+            fetchData();
+        }
+    }, [session]);
+
+    if (status === "loading") {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <IconLoader className="animate-spin text-primary" size={40} />
+                <p className="ml-2 text-primary text-lg">Loading...</p>
+            </div>
+        );
+    }
+
     return (
         <Card>
             <div className="flex justify-between items-center mb-3">
@@ -324,9 +378,8 @@ export default function Toko() {
                                         src={
                                             selectedProduk || dataProduk!
                                         }
-                                        fill
-                                        alt="Gambar Produk"
-                                        className="rounded-md"
+                                        width={500} height={300} alt="Gambar Produk"
+                                        className="rounded-md object-cover w-full"
                                     />
                                 ) : (
                                     <InputForm
@@ -358,8 +411,8 @@ export default function Toko() {
                             ) : null}
                         </div>
 
-                        <Button type="submit" color="primary" size="base">
-                            Save
+                        <Button type="submit" color="primary" size="base" disable={loading}>
+                            {loading ? "Loading..." : "Save"}
                         </Button>
                     </form>
                 </div>

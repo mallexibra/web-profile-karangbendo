@@ -37,6 +37,7 @@ export default function AddUMKM() {
     const [dataImage, setDataImage] = useState<string | null>(null);
     const [dataProduk, setDataProduk] = useState<string | null>(null);
     const [optionUser, setOptionUser] = useState<any>([]);
+    const [loading, setLoading] = useState(false);
 
     const MAX_FILE_SIZE = 2 * 1024 * 1024;
     const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
@@ -46,24 +47,35 @@ export default function AddUMKM() {
         userId: yup.string().required('Pemilik Usaha wajib diisi'),
         description: yup.string().required('Deskripsi wajib diisi'),
         location: yup.string().required('Lokasi wajib diisi'),
-        phone: yup.string().required('Nomor Telpon wajib diisi'),
+        phone: yup.string().required('Nomor Telpon wajib diisi').matches(/^[0-9]+$/, 'Nomor Telepon hanya boleh berisi angka'),
         identity: yup
             .mixed<File>()
             .nullable()
-            .test('fileSize', 'Ukuran file maksimal 2MB', function (value: any) {
+            .test(
+                'fileRequired',
+                'Identitas wajib diisi',
+                function (value) {
+                    if (id != null) return true;
+                    const isValueValid = value instanceof File;
+                    return isValueValid;
+                },
+            )
+            .test('fileSize', 'Ukuran file maksimal 2MB', function (value) {
+                if (id != null) return true;
                 if (value) {
                     return value.size <= MAX_FILE_SIZE;
                 }
-                return true;
+                return false;
             })
             .test(
                 'fileFormat',
-                'Format file tidak valid, hanya word dan pdf yang diperbolehkan',
-                function (value: any) {
+                'Format file tidak valid, hanya jpg, jpeg, dan png yang diperbolehkan',
+                function (value) {
+                    if (id != null) return true;
                     if (value) {
                         return SUPPORTED_FORMATS.includes(value.type);
                     }
-                    return true;
+                    return false;
                 },
             ),
     });
@@ -72,25 +84,44 @@ export default function AddUMKM() {
         image: yup
             .mixed<File>()
             .nullable()
-            .test('fileSize', 'Ukuran file maksimal 2MB', function (value: any) {
+            .test(
+                'fileRequired',
+                'Gambar produk wajib diisi',
+                function (value) {
+                    if (idProduk != null) return true;
+                    const isValueValid = value instanceof File;
+                    return isValueValid;
+                },
+            )
+            .test('fileSize', 'Ukuran file maksimal 2MB', function (value) {
+                if (idProduk != null) return true;
                 if (value) {
                     return value.size <= MAX_FILE_SIZE;
                 }
-                return true;
+                return false;
             })
-            .test('fileFormat', 'Format file tidak valid, hanya JPG, PNG, dan GIF yang diperbolehkan', function (value: any) {
-                if (value) {
-                    return SUPPORTED_FORMATS.includes(value.type);
-                }
-                return true;
-            }),
-        name: yup.string().required('Name is required and must be a string'),
-        description: yup.string().required('Description is required and must be a string'),
+            .test(
+                'fileFormat',
+                'Format file tidak valid, hanya jpg, jpeg, dan png yang diperbolehkan',
+                function (value) {
+                    if (idProduk != null) return true;
+                    if (value) {
+                        return SUPPORTED_FORMATS.includes(value.type);
+                    }
+                    return false;
+                },
+            ),
+        name: yup.string().required('Nama wajib diisi'),
+        description: yup.string().required('Deskripsi wajib diisi'),
         price: yup
             .number()
-            .required('Price is required and must be a number')
-            .positive('Price must be a positive number')
-            .integer('Price must be an integer'),
+            .transform((value, originalValue) =>
+                originalValue === "" ? null : value
+            )
+            .nullable()
+            .required('Harga wajib diisi')
+            .positive('Harga harus berupa angka positif')
+            .integer('Harga harus berupa angka'),
         shopId: yup.number().nullable()
     });
 
@@ -102,6 +133,7 @@ export default function AddUMKM() {
         formState: { errors: errorsUmkm },
     } = useForm({
         resolver: yupResolver(umkmSchema),
+        context: { isEdit: !!id }
     });
 
     const {
@@ -112,6 +144,7 @@ export default function AddUMKM() {
         formState: { errors: errorsProduk },
     } = useForm({
         resolver: yupResolver(productSchema),
+        context: { isEdit: !!idProduk }
     });
 
     const modalClick = () => {
@@ -147,7 +180,7 @@ export default function AddUMKM() {
 
     const closeModal: any = () => {
         const modal = document.getElementById(
-            `modal_${type}5`,
+            `modal_${typeProduct}5`,
         ) as HTMLDialogElement;
         if (modal) {
             modal.close();
@@ -172,6 +205,7 @@ export default function AddUMKM() {
     };
 
     const handleAddUMKM = async (data: any) => {
+        setLoading(true);
         try {
             const formData = new FormData();
             for (const key in data) {
@@ -223,10 +257,13 @@ export default function AddUMKM() {
                 });
             }
             console.log(`Error create data umkm desa: ${error}`);
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleAddProduct = async (data: any) => {
+        setLoading(true);
         try {
             const formData = new FormData();
             for (const key in data) {
@@ -279,10 +316,12 @@ export default function AddUMKM() {
                 });
             }
             console.log(`Error create data produk: ${error}`);
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleDeleteProduct= async (id: number)=>{
+    const handleDeleteProduct = async (id: number) => {
         try {
             const response = await axiosInstance.delete(`/products/${id}`);
 
@@ -343,7 +382,7 @@ export default function AddUMKM() {
     const getUser = async () => {
         const response = await axiosInstance.get('/users');
         const data: User[] = response.data.data;
-        const option = data.filter((user: User)=> user.role == "umkm").map((user: User) => {
+        const option = data.filter((user: User) => user.role == "umkm").map((user: User) => {
             return { label: user.name, value: user.id };
         });
         setOptionUser(option);
@@ -380,6 +419,7 @@ export default function AddUMKM() {
     };
 
     const changeStatus = async (id: number, data: boolean) => {
+        setLoading(true);
         try {
             const formData = new FormData();
             formData.append('status', `${data}`);
@@ -414,6 +454,8 @@ export default function AddUMKM() {
                 });
             }
             console.log(`Error update status umkm desa: ${error}`);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -585,8 +627,8 @@ export default function AddUMKM() {
                             </div>
 
                             {type != 'view' && (
-                                <Button type="submit" color="primary" size="base">
-                                    Save
+                                <Button type="submit" color="primary" size="base" disable={loading}>
+                                    {loading ? "Loading..." : "Save"}
                                 </Button>
                             )}
                         </form>
@@ -701,8 +743,8 @@ export default function AddUMKM() {
                             </div>
 
                             {typeProduct != 'view' && (
-                                <Button type="submit" color="primary" size="base">
-                                    Save
+                                <Button type="submit" color="primary" size="base" disable={loading}>
+                                    {loading ? "Loading..." : "Save"}
                                 </Button>
                             )}
                         </form>
@@ -717,7 +759,9 @@ export default function AddUMKM() {
                 umkm.map((item: Shop, i: number) => (
                     <Card key={i}>
                         <div className="flex justify-between items-center mb-3">
-                            <p className="font-bold">{item.name}</p>
+                            <p className="font-bold">{item.name} {item.status ? (<span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Aktif</span>
+                            ) : (<span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Non-Aktif</span>
+                            )}</p>
                             <div className="flex gap-3">
                                 <Button
                                     onClick={() => {
@@ -739,8 +783,8 @@ export default function AddUMKM() {
                                         color="danger"
                                         className="flex items-center gap-2"
                                     >
-                                        <IconEyeOff color="#fff" size={18} />
-                                        <p>Non-aktif</p>
+                                        {loading ? "Loading..." : (<><IconEyeOff color="#fff" size={18} />
+                                            <p>Non-aktif</p></>)}
                                     </Button>
                                 ) : (
                                     <Button
@@ -748,8 +792,8 @@ export default function AddUMKM() {
                                         color="primary"
                                         className="flex items-center gap-2"
                                     >
-                                        <IconEye color="#fff" size={18} />
-                                        <p>Aktif</p>
+                                        {loading ? "Loading..." : (<><IconEye color="#fff" size={18} />
+                                            <p>Aktif</p></>)}
                                     </Button>
                                 )}
                             </div>
@@ -793,18 +837,18 @@ export default function AddUMKM() {
                                             }} color="warning" size="sm" className="w-full">
                                                 Edit
                                             </Button>
-                                            <Button onClick={()=>{
-                                                    Swal.fire({
-                                                        title: 'Apakah anda yakin akan menghapus data ini?',
-                                                        showDenyButton: true,
-                                                        confirmButtonText: 'Yakin',
-                                                        denyButtonText: 'Tidak yakin',
-                                                    }).then((result) => {
-                                                        if (result.isConfirmed) {
-                                                            handleDeleteProduct(product.id)
-                                                        }
-                                                    });
-                                                }} color="danger" size="sm" className="w-full">
+                                            <Button onClick={() => {
+                                                Swal.fire({
+                                                    title: 'Apakah anda yakin akan menghapus data ini?',
+                                                    showDenyButton: true,
+                                                    confirmButtonText: 'Yakin',
+                                                    denyButtonText: 'Tidak yakin',
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        handleDeleteProduct(product.id)
+                                                    }
+                                                });
+                                            }} color="danger" size="sm" className="w-full">
                                                 Delete
                                             </Button>
                                         </div>

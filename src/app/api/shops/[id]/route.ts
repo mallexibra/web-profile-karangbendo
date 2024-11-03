@@ -56,6 +56,8 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
             imagePath = uploadResponse as string;
         }
 
+        delete data.product
+
         const updateShop = await db.shop.update({
             where: { id: Number(params.id) },
             data: { ...data, id: Number(params.id), ...(data.userId && { userId: Number(data.userId) }), status, identity: imagePath },

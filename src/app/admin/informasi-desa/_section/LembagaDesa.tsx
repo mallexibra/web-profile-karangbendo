@@ -21,9 +21,10 @@ export default function LembagaDesa() {
     const [type, setType] = useState<'add' | 'edit'>('add');
     const [id, setId] = useState<number | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const villageInstitutionSchema = yup.object({
-        name: yup.string().required('Name is required and must be a string'),
+        name: yup.string().required('Nama wajib diisi'),
     });
 
     const modalClick = () => {
@@ -47,6 +48,7 @@ export default function LembagaDesa() {
     };
 
     const handleAddInstitutions = async (data: any) => {
+        setLoading(true);
         try {
             let response;
             if (!id) {
@@ -91,6 +93,8 @@ export default function LembagaDesa() {
                 });
             }
             console.log(`Error create data lembaga desa: ${error}`);
+        }finally{
+            setLoading(false);
         }
     };
 
@@ -207,8 +211,8 @@ export default function LembagaDesa() {
                             )}
                         </LabelForm>
 
-                        <Button type="submit" color="primary" size="base">
-                            Save
+                        <Button type="submit" color="primary" size="base" disable={loading}>
+                            {loading ? "Loading..." : "Save"}
                         </Button>
                     </form>
                 </div>

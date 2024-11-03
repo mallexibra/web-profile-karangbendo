@@ -21,42 +21,45 @@ export default function KegiatanMasyarakat() {
   const [dataImage, setDataImage] = useState<string | null>(null);
   const [type, setType] = useState<string>('add');
   const [id, setId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const MAX_FILE_SIZE = 2 * 1024 * 1024;
   const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
 
   const communityActivitiesSchema = yup.object({
-    name: yup.string().required('Name is required'),
-    description: yup.string().required('Description is required'),
-    time: yup.string().required('Time is required'),
+    name: yup.string().required('Nama wajib diisi'),
+    description: yup.string().required('Deskripsi wajib diisi'),
+    time: yup.string().required('Tanggal wajib diisi'),
     image: yup
       .mixed<File>()
-      .nullable()
       .test(
         'fileRequired',
-        'Struktur Aparatur Desa wajib diisi',
+        'Gambar wajib diisi',
         function (value) {
-          return !!dataImage || !!value;
+            const isDataImageValid = !!dataImage;
+            const isValueValid = value instanceof File;
+            const isIdValid = !!id;
+            console.log(isDataImageValid, isValueValid, isIdValid)
+            return isDataImageValid || isValueValid || isIdValid;
         },
-      )
-      .test('fileSize', 'Ukuran file maksimal 2MB', function (value) {
-        if (dataImage) return true;
+    )
+    .test('fileSize', 'Ukuran file maksimal 2MB', function (value) {
         if (value) {
-          return value.size <= MAX_FILE_SIZE;
+            console.log("Value: ", value.size, MAX_FILE_SIZE)
+            return value.size <= MAX_FILE_SIZE;
         }
-        return true;
-      })
-      .test(
+        return false;
+    })
+    .test(
         'fileFormat',
         'Format file tidak valid, hanya jpg, jpeg, dan png yang diperbolehkan',
         function (value) {
-          if (dataImage) return true;
-          if (value) {
-            return SUPPORTED_FORMATS.includes(value.type);
-          }
-          return true;
+            if (value) {
+                return SUPPORTED_FORMATS.includes(value.type);
+            }
+            return false;
         },
-      ),
+    ),
   });
 
   const modalClick = () => {
@@ -121,6 +124,7 @@ export default function KegiatanMasyarakat() {
   };
 
   const handleAddCommunityActivities = async (data: any) => {
+    setLoading(true);
     try {
       const formData = new FormData();
       for (const key in data) {
@@ -175,6 +179,8 @@ export default function KegiatanMasyarakat() {
         });
       }
       console.log(`Error create data community activities: ${error}`);
+    }finally{
+        setLoading(false);
     }
   };
 
@@ -296,8 +302,8 @@ export default function KegiatanMasyarakat() {
                 name="time"
                 placeholder="Input tanggal kegiatan masyarakat"
               />
-              {errors.name && (
-                <p className="text-red-500 text-sm">{errors.name.message}</p>
+              {errors.time && (
+                <p className="text-red-500 text-sm">{errors.time.message}</p>
               )}
             </LabelForm>
 
@@ -332,8 +338,8 @@ export default function KegiatanMasyarakat() {
               <p className="text-red-500 text-sm">{errors.image.message}</p>
             )}
 
-            <Button type="submit" color="primary" size="base">
-              Save
+            <Button type="submit" color="primary" size="base" disable={loading}>
+              {loading ? "Loading..." : "Save"}
             </Button>
           </form>
         </div>

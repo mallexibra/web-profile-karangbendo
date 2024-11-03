@@ -21,7 +21,7 @@ model User {
   role     Role      @default(admin)
   password String
   verified DateTime?
-  position Position?
+  position String?
   Shop     Shop[]
 }
 
@@ -30,11 +30,6 @@ enum Role {
   employee
   admin
   umkm
-}
-
-enum Position {
-  village_head
-  employee
 }
 
 model VillageProfile {
@@ -84,8 +79,7 @@ model PublicComplaints {
   id                 Int             @id @default(autoincrement())
   name               String
   complaint          TypeOfComplaint
-  email              String?
-  phone              String?
+  emailOrPhone       String?
   supportingEvidence String?
 }
 
@@ -142,7 +136,7 @@ model Shop {
   owner       User?     @relation(fields: [userId], references: [id])
   userId      Int?
   location    String
-  status      Boolean   @default(false)
+  status      Boolean   @default(true)
   phone       String
   product     Product[]
 }

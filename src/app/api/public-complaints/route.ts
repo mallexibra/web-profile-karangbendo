@@ -34,8 +34,7 @@ export const POST = async (request: Request) => {
         const data: any = {
             name: formData.get('name') as string,
             complaint: formData.get('complaint') as string,
-            email: formData.get('email') as string | null,
-            phone: formData.get('phone') as string | null,
+            emailOrPhone: formData.get('emailOrPhone') as string | null,
             supportingEvidence: formData.get('supportingEvidence') as File | null,
         };
 

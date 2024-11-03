@@ -29,7 +29,7 @@ export default function Produk() {
                 <h2 className="title">Pilih berbagai produk yang dihasilkan oleh UMKM Desa Karangbendo.</h2>
                 <p>Pilih berbagai produk yang dihasilkan oleh UMKM Desa Karangbendo.</p>
                 <div className="mt-5 flex flex-wrap gap-3 items-start">
-                    {products.length > 0 ? products.map((item: Product, i: number) => (
+                    {products.length > 0 ? products.filter((i: Product) => i.shop.status).map((item: Product, i: number) => (
                         <div key={i} className="w-full md:max-w-72 flex flex-col h-full rounded-md p-3 border border-black/20">
                             <div className="flex-grow">
                                 <Image src={item.image} width={500} height={500} className="rounded-md mb-3" alt={item.name} />

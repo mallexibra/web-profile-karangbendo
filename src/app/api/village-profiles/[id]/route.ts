@@ -21,7 +21,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
         const image = formData.get('image') as File | null;
 
         await villageProfileSchema.validate(data, { abortEarly: false });
-
+console.log(Number(params.id))
         const existingVillage = await db.villageProfile.findUnique({ where: { id: Number(params.id) } });
         if (!existingVillage) {
             return NextResponse.json({
@@ -72,6 +72,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
             where: { id: Number(params.id) },
             data: {
                 ...data,
+                id: Number(params.id),
                 image: imagePath,
                 old: parseInt(data.old as string, 10),
                 mature: parseInt(data.mature as string, 10),

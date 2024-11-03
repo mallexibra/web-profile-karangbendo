@@ -16,33 +16,48 @@ import Swal from "sweetalert2";
 import * as yup from 'yup';
 
 export default function PengaduanMasyarakat() {
-    const [selectedImage, setSelectedImage] = useState<string | null>(null)
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
 
     const MAX_FILE_SIZE = 2 * 1024 * 1024;
     const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
 
     const complaintSchema = yup.object({
         name: yup.string().required('Nama wajib diisi'),
-        complaint: yup.mixed<'fasilitas_umum'>().oneOf(['fasilitas_umum'], 'Invalid complaint type').required("Jenis aduan wajib diisi"),
-        email: yup.string().email('Invalid email format').nullable(),
-        phone: yup.string().nullable(),
+        complaint: yup.mixed().required("Jenis aduan wajib diisi").oneOf(optionAduan.map(option => option.value), 'Jenis aduan tidak valid'),
+        emailOrPhone: yup.string()
+            .required('Email atau nomor telepon harus diisi')
+            .test('is-valid', 'Email atau nomor telepon tidak valid', (value) => {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const phoneRegex = /^[0-9]{10,15}$/; // Ganti dengan regex yang sesuai dengan format nomor telepon
+                return emailRegex.test(value) || phoneRegex.test(value);
+            }),
         image: yup
             .mixed<File>()
-            .required()
-            .test('fileSize', 'Ukuran file maksimal 2MB', function (value: any) {
+            .test(
+                'fileRequired',
+                'Bukti aduan wajib diisi',
+                function (value) {
+                    const isValueValid = value instanceof File;
+                    return isValueValid;
+                },
+            )
+            .test('fileSize', 'Ukuran file maksimal 2MB', function (value) {
+                if (value == undefined) return true;
                 if (value) {
                     return value.size <= MAX_FILE_SIZE;
                 }
-                return true;
+                return false;
             })
             .test(
                 'fileFormat',
                 'Format file tidak valid, hanya jpg, jpeg, dan png yang diperbolehkan',
-                function (value: any) {
+                function (value) {
+                    if (value == undefined) return true;
                     if (value) {
                         return SUPPORTED_FORMATS.includes(value.type);
                     }
-                    return true;
+                    return false;
                 },
             ),
     });
@@ -69,6 +84,7 @@ export default function PengaduanMasyarakat() {
     };
 
     const handleAddComplaint = async (data: any) => {
+        setLoading(true);
         try {
             const formData = new FormData();
             for (const key in data) {
@@ -113,6 +129,8 @@ export default function PengaduanMasyarakat() {
                 });
             }
             console.log(`Error create data public complaints: ${error}`);
+        } finally {
+            setLoading(false)
         }
     };
     return (
@@ -147,16 +165,16 @@ export default function PengaduanMasyarakat() {
                                     <p className="text-red-500 text-sm">{errors.name.message}</p>
                                 )}
                             </LabelForm>
-                            <LabelForm label="Nomor Telepon">
+                            <LabelForm label="Email/Nomor Telepon">
                                 <InputForm
-                                    {...register('phone')}
+                                    {...register('emailOrPhone')}
                                     type="text"
-                                    label="Nomor Telepon"
-                                    name="phone"
+                                    label="Email/Nomor Telepon"
+                                    name="emailOrPhone"
                                     placeholder="Input nomor telepon kamu"
                                 />
-                                {errors.phone && (
-                                    <p className="text-red-500 text-sm">{errors.phone.message}</p>
+                                {errors.emailOrPhone && (
+                                    <p className="text-red-500 text-sm">{errors.emailOrPhone.message}</p>
                                 )}
                             </LabelForm>
                             <LabelForm label="Jenis Pengaduan">
@@ -175,9 +193,9 @@ export default function PengaduanMasyarakat() {
                                     <div className="relative">
                                         <Image
                                             src={selectedImage}
-                                            fill
+                                            width={500} height={160}
                                             alt="Struktur Aparatur Desa"
-                                            className="rounded-md"
+                                            className="rounded-md w-full h-40 object-cover"
                                         />
                                         <IconSquareRoundedXFilled
                                             onClick={() => {
@@ -198,8 +216,8 @@ export default function PengaduanMasyarakat() {
                                     <p className="text-red-500 text-sm">{errors.image.message}</p>
                                 )}
                             </LabelForm>
-                            <Button type="submit" color="primary" size="base">
-                                Save
+                            <Button type="submit" color="primary" size="base" disable={loading}>
+                                {loading ? "Loading..." : "Save"}
                             </Button>
                         </form>
                     </Card>

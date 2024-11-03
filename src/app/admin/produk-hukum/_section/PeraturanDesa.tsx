@@ -26,6 +26,7 @@ export default function PeraturanDesa() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [id, setId] = useState<number | null>(null);
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
 
     const MAX_FILE_SIZE = 2 * 1024 * 1024;
     const SUPPORTED_FORMATS = [
@@ -42,21 +43,28 @@ export default function PeraturanDesa() {
         file: yup
             .mixed<File>()
             .nullable()
-            .test('fileSize', 'Ukuran file maksimal 2MB', function (value: any) {
+            .test(
+                'fileRequired',
+                'File wajib diisi',
+                function (value) {
+                    const isValueValid = value instanceof File;
+                    return isValueValid;
+                },
+            )
+            .test('fileSize', 'Ukuran file maksimal 2MB', function (value) {
                 if (value) {
-                    console.log('File size:', value.size);
                     return value.size <= MAX_FILE_SIZE;
                 }
-                return true;
+                return false;
             })
             .test(
                 'fileFormat',
-                'Format file tidak valid, hanya word dan pdf yang diperbolehkan',
-                function (value: any) {
+                'Format file tidak valid, hanya jpg, jpeg, dan png yang diperbolehkan',
+                function (value) {
                     if (value) {
                         return SUPPORTED_FORMATS.includes(value.type);
                     }
-                    return true;
+                    return false;
                 },
             ),
     });
@@ -101,7 +109,6 @@ export default function PeraturanDesa() {
         const input = event.target;
         if (input.files && input.files.length > 0) {
             const file = input.files[0];
-            console.log(file)
             setSelectedFile(file.name);
             setValue('file', file);
         } else {
@@ -155,41 +162,49 @@ export default function PeraturanDesa() {
     };
 
     const handleAddRegulation = async (data: any) => {
-        console.log('Form data:', data);
-        const formData = new FormData();
-        for (const key in data) {
-            if (Object.prototype.hasOwnProperty.call(data, key)) {
-                let value = data[key];
-                formData.append(key, value);
+        setLoading(true);
+        try {
+            const formData = new FormData();
+            for (const key in data) {
+                if (Object.prototype.hasOwnProperty.call(data, key)) {
+                    let value = data[key];
+                    formData.append(key, value);
+                }
             }
-        }
 
-        formData.append('type', 'village_regulation');
+            formData.append('type', 'village_regulation');
 
-        console.log('FormData before sending:', formData.get('file'));
+            let response;
+            if (id) {
+                response = await axiosInstance.patch(`/legal-product/${id}`, formData);
+            } else {
+                response = await axiosInstance.post('/legal-product', formData);
+            }
 
-        let response;
-        if (id) {
-            response = await axiosInstance.patch(`/legal-product/${id}`, formData);
-        } else {
-            response = await axiosInstance.post('/legal-product', formData);
-        }
-
-        if (response.status) {
-            close();
-            Swal.fire({
-                icon: 'success',
-                title: 'Sukses!',
-                text: `Sukses ${id ? 'edit' : 'tambah'} data peraturan desa`,
-            });
-            fetchData();
-        } else {
-            close();
+            if (response.status) {
+                close();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sukses!',
+                    text: `Sukses ${id ? 'edit' : 'tambah'} data peraturan desa`,
+                });
+                fetchData();
+            } else {
+                close();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: response.data.message[0] || 'Terjadi kesalahan.',
+                });
+            }
+        } catch (error: any) {
             Swal.fire({
                 icon: 'error',
                 title: 'Gagal!',
-                text: response.data.message[0] || 'Terjadi kesalahan.',
+                text: error.message || 'Terjadi kesalahan.',
             });
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -314,8 +329,8 @@ export default function PeraturanDesa() {
                         </LabelForm>
 
                         {type != 'view' && (
-                            <Button type="submit" color="primary" size="base">
-                                Save
+                            <Button type="submit" color="primary" size="base" disable={loading}>
+                                {loading ? "Loading..." : "Save"}
                             </Button>
                         )}
                     </form>
