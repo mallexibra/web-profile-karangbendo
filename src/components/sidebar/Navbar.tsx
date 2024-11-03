@@ -158,7 +158,7 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                <div className='md:flex items-center w-full justify-between gap-3 hidden'>
+                <div className='md:flex text-sm items-center w-full justify-between gap-3 hidden'>
                 <Link href={"/"} className="flex justify-start items-center gap-2">
                         <Image src={logo} className="w-10" alt="Logo Kabupaten Banyuwangi" />
                         <h1 className="text-lg font-extrabold">
