@@ -1,5 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
+import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
     title: 'Desa Karangbendo | Login',
@@ -29,7 +30,9 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body>{children}</body>
+            <body>
+            <NextTopLoader />
+                {children}</body>
         </html>
     )
 }

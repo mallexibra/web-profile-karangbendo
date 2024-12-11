@@ -10,6 +10,7 @@ import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import LoadingBar from "@/components/loading/LoadingBar";
 
 export default function Login() {
     const router = useRouter();
@@ -88,6 +89,7 @@ export default function Login() {
     if (isMobile) {
         return (
             <main className="flex items-center justify-center min-h-screen bg-gray-100">
+                <LoadingBar />
                 <div className="w-full max-w-md p-8 space-y-8 bg-white border border-primary/30 shadow-lg rounded-lg text-center">
                     <h1 className="text-2xl font-bold text-primary mb-2">Tidak Dapat Diakses</h1>
                     <p className="text-gray-600">Website ini tidak dapat diakses melalui layar mobile.</p>
@@ -101,6 +103,7 @@ export default function Login() {
 
     return (
         <main className="flex items-center justify-center min-h-screen bg-gray-100">
+            <LoadingBar />
             <div className="w-full max-w-md p-8 space-y-8 bg-white border border-primary/30 shadow-lg rounded-lg">
                 <div className="text-center">
                     <h1 className="text-3xl font-bold text-primary mb-2">Login UMKM / Admin</h1>

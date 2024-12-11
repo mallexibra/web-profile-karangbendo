@@ -2,6 +2,7 @@ import './globals.css';
 import { Metadata } from 'next';
 import { ReactNode } from 'react';
 import ClientUmkmLayout from './_section/ClientUmkmLayout';
+import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
     title: 'Karangbendo | UMKM',
@@ -28,7 +29,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     return (
         <html lang="en">
             <ClientUmkmLayout>
-                <body>{children}</body>
+                <body>
+                <NextTopLoader />
+                    {children}</body>
             </ClientUmkmLayout>
         </html>
     );
