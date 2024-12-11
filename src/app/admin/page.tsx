@@ -2,10 +2,12 @@ import Card from '@/components/cards/Card';
 import ContainerAdmin from '@/components/containers/ContainerAdmin';
 import TableAdmin from './_section/TableAdmin';
 import TableUMKM from './_section/TableUMKM';
+import LoadingBar from '@/components/loading/LoadingBar';
 
 export default function DashboardPage() {
     return (
         <ContainerAdmin>
+            <LoadingBar />
             <Card>
                 <h3 className="font-bold text-lg">Selamat Datang</h3>
                 <p className="pt-2">
