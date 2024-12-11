@@ -46,7 +46,7 @@ export const POST = async (request: Request) => {
         let filePath;
         if (file != null) {
             const timestamp = Date.now();
-            const imgProfile = `${timestamp}_${MD5(file.name.split(".")[0]).toString()}`;
+            const imgProfile = `${timestamp}_${file.name.split(".")[0]}`;
             const buffer = Buffer.from(await file.arrayBuffer());
 
             const uploadResponse = await new Promise((resolve, reject) => {

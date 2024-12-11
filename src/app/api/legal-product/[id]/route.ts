@@ -36,7 +36,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
                 await cloudinary.uploader.destroy(existingLegalProduct.file.split('/').pop()!.split('.')[0]);
             }
             const timestamp = Date.now();
-            const imgProfile = `${timestamp}_${MD5(image.name.split(".")[0]).toString()}`;
+            const imgProfile = `${timestamp}_${image.name.split(".")[0]}`;
             const buffer = Buffer.from(await image.arrayBuffer());
 
             const uploadResponse = await new Promise((resolve, reject) => {
