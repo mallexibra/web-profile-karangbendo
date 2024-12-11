@@ -217,7 +217,6 @@ export default function KegiatanMasyarakat() {
     try {
       const response = await axiosInstance.get('/community-activities');
       const dataTemporary: CommunityActivities[] = response.data.data;
-      // const data = dataTemporary.filter((user: User) => user.role == 'admin');
 
       setActivities(dataTemporary);
     } catch (error) {
@@ -273,7 +272,7 @@ export default function KegiatanMasyarakat() {
                 type="text"
                 label="Nama"
                 name="name"
-                placeholder="Input nama community activities"
+                placeholder="Input nama kegiatan masyarakat"
               />
               {errors.name && (
                 <p className="text-red-500 text-sm">{errors.name.message}</p>
@@ -315,7 +314,7 @@ export default function KegiatanMasyarakat() {
                   } width={500} height={300}
                   alt="Kegiatan Masyarakat"
                   className="rounded-md w-full object-cover"
-                />
+                />1
                 <IconSquareRoundedXFilled
                   onClick={() => {
                     setSelectedImage(null);
