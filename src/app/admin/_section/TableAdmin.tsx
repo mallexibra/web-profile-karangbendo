@@ -17,6 +17,7 @@ import * as yup from 'yup';
 
 export default function TableAdmin() {
   const [accounts, setAccounts] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const userSchema = yup.object().shape({
     name: yup.string().required('Nama wajib diisi'),
@@ -31,14 +32,12 @@ export default function TableAdmin() {
       .required('Password wajib diisi'),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref('password')], 'Passwords must match'),
+      .oneOf([yup.ref('password')], 'Konfirmasi password harus sesuai'),
     verified: yup.date().nullable(),
-    position: yup
-      .mixed<'village_head' | 'employee'>()
-      .required('Jabatan wajib diisi'),
+    position: yup.string().required('Jabatan wajib diisi'),
     role: yup
-      .mixed<'village_head' | 'employee' | 'admin' | 'umkm'>()
-      .oneOf(['village_head', 'employee', 'admin', 'umkm'], 'Role tidak valid'),
+      .mixed<'admin' | 'umkm'>()
+      .oneOf(['admin', 'umkm'], 'Role tidak valid'),
   });
   const [type, setType] = useState<'add' | 'edit'>('add');
   const [id, setId] = useState<number | null>(null);
@@ -53,13 +52,15 @@ export default function TableAdmin() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(userSchema),
+    defaultValues: {
+      position: '',
+    },
   });
 
   const fetchData = async () => {
     try {
       const response = await axiosInstance.get('/users');
       const dataTemporary: User[] = response.data.data;
-      // const data = dataTemporary.filter((user: User) => user.role == 'admin');
 
       setAccounts(dataTemporary);
     } catch (error) {
@@ -69,13 +70,20 @@ export default function TableAdmin() {
 
   const handleAddUser = async (data: any) => {
     try {
+      setIsLoading(true);
       delete data.confirmPassword;
       let response;
       if (data.position == '') data.position = null;
       if (!id) {
-        response = await axiosInstance.post('/users', data);
+        response = await axiosInstance.post('/users', {
+          ...data,
+          role: 'admin',
+        });
       } else {
-        response = await axiosInstance.put(`users/${id}`, data);
+        response = await axiosInstance.put(`users/${id}`, {
+          ...data,
+          role: 'admin',
+        });
       }
       if (response.status) {
         close();
@@ -101,8 +109,11 @@ export default function TableAdmin() {
           text: response.data.message[0] || 'Terjadi kesalahan.',
         });
       }
+
+      setIsLoading(false);
     } catch (error: any) {
       close();
+      setIsLoading(false);
 
       if (error.response) {
         Swal.fire({
@@ -307,13 +318,20 @@ export default function TableAdmin() {
                 data={optionPosition}
                 onChange={(e: any) => setRole(e.target.value)}
               />
-              {errors.role && (
-                <p className="text-red-500 text-sm">{errors.role.message}</p>
+              {errors.position && (
+                <p className="text-red-500 text-sm">
+                  {errors.position.message}
+                </p>
               )}
             </LabelForm>
 
-            <Button type="submit" color="primary" size="base">
-              Save
+            <Button
+              type="submit"
+              color="primary"
+              size="base"
+              disable={isLoading}
+            >
+              {isLoading ? 'Loading...' : 'Save'}
             </Button>
           </form>
         </div>

@@ -26,8 +26,6 @@ model User {
 }
 
 enum Role {
-  village_head
-  employee
   admin
   umkm
 }
@@ -63,8 +61,8 @@ model VillagePotential {
 }
 
 model VillageInstitution {
-  id    Int    @id @default(autoincrement())
-  name  String
+  id   Int    @id @default(autoincrement())
+  name String
 }
 
 model CommunityActivities {

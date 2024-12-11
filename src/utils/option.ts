@@ -6,16 +6,16 @@ export const optionRole = [
 ];
 
 export const optionPosition = [
-    { label: 'Kepala Desa', value: 'village_head' },
-    { label: 'Pegawai', value: 'employee' },
-    { label: 'Kepala Seksi Kesejahteraan', value: 'head_of_welfare_section' },
-    { label: 'Kepala Seksi Pembangunan', value: 'head_of_development_section' },
-    { label: 'Kepala Seksi Pelayanan Umum', value: 'head_of_public_services_section' },
-    { label: 'Staf Administrasi', value: 'administrative_staff' },
-    { label: 'Bendahara Desa', value: 'village_treasurer' },
-    { label: 'Sekretaris Desa', value: 'village_secretary' },
-    { label: 'Kepala Urusan Umum', value: 'head_of_general_affairs' },
-    { label: 'Pengelola Keuangan Desa', value: 'village_financial_manager' },
+    { label: 'Kepala Desa', value: 'Kepala Desa' },
+    { label: 'Pegawai', value: 'Pegawai' },
+    { label: 'Kepala Seksi Kesejahteraan', value: 'Kepala Seksi Kesejahteraan' },
+    { label: 'Kepala Seksi Pembangunan', value: 'Kepala Seksi Pembangunan' },
+    { label: 'Kepala Seksi Pelayanan Umum', value: 'Kepala Seksi Pelayanan Umum' },
+    { label: 'Staf Administrasi', value: 'Staf Administrasi' },
+    { label: 'Bendahara Desa', value: 'Bendahara Desa' },
+    { label: 'Sekretaris Desa', value: 'Sekretaris Desa' },
+    { label: 'Kepala Urusan Umum', value: 'Kepala Urusan Umum' },
+    { label: 'Pengelola Keuangan Desa', value: 'Pengelola Keuangan Desa' },
 ];
 
 export const optionType = [

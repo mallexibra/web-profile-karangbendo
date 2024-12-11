@@ -1,8 +1,11 @@
-"use client";
-import { useSession } from "next-auth/react";
+'use client';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
 
 const CheckSession = () => {
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   if (status === 'loading') {
     return (
@@ -13,13 +16,12 @@ const CheckSession = () => {
   }
 
   if (!session) {
-    return (
-      <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-          Anda tidak memiliki akses
-        </div>
-      </div>
-    );
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal!',
+      text: 'Anda tidak memiliki akses',
+    });
+    return router.push('/auth/login');
   }
 
   return null;

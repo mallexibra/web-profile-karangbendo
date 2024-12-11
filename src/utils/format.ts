@@ -3,14 +3,12 @@ export const formatRupiah = (amount: number) => {
 }
 
 export const formatText = (text: string) => {
-    const customMappings: { [key: string]: string } = {
-        village_head: "Kepala Desa",
-        employee: "Pegawai",
-        admin: "Admin",
-        umkm: "UMKM"
-    };
-
-    return customMappings[text];
+    return text
+        .split(' ')
+        .map(word =>
+            word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        )
+        .join(' ');
 }
 
 export function formatDate(date: Date | string): string {
