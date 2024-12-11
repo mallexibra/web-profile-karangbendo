@@ -59,7 +59,7 @@ export default function ProfileDesa() {
         },
       )
       .test('fileSize', 'Ukuran file maksimal 2MB', function (value: any) {
-        if (value.length <= 0) return true;
+        if (value.length <= 0) return false;
         if (value) {
           return value.size <= MAX_FILE_SIZE;
         }
@@ -69,7 +69,7 @@ export default function ProfileDesa() {
         'fileFormat',
         'Format file tidak valid, hanya jpg, jpeg, dan png yang diperbolehkan',
         function (value: any) {
-          if (value.length <= 0) return true;
+          if (value.length <= 0) return false;
           if (value) {
             return SUPPORTED_FORMATS.includes(value.type);
           }

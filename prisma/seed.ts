@@ -18,7 +18,7 @@ async function main() {
                 email: 'umkm@gmail.com',
                 phone: '08123456789',
                 role: 'umkm',
-                password: await bcrypt.hash('admin1234', 10)
+                password: await bcrypt.hash('umkm1234', 10)
             }
         ],
     });
