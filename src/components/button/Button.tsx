@@ -3,7 +3,7 @@ import React from 'react';
 
 interface ButtonProps {
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   size?: 'sm' | 'base' | 'lg';
   color?: 'primary' | 'warning' | 'danger';
   className?: string;

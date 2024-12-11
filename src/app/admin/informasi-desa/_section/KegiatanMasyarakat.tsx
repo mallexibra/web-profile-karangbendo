@@ -32,34 +32,30 @@ export default function KegiatanMasyarakat() {
     time: yup.string().required('Tanggal wajib diisi'),
     image: yup
       .mixed<File>()
-      .test(
-        'fileRequired',
-        'Gambar wajib diisi',
-        function (value) {
-            const isDataImageValid = !!dataImage;
-            const isValueValid = value instanceof File;
-            const isIdValid = !!id;
-            console.log(isDataImageValid, isValueValid, isIdValid)
-            return isDataImageValid || isValueValid || isIdValid;
-        },
-    )
-    .test('fileSize', 'Ukuran file maksimal 2MB', function (value) {
+      .test('fileRequired', 'Gambar wajib diisi', function (value) {
+        if (dataImage != null) return true;
+        if (selectedImage != null) return true;
+        if (id !== null && selectedImage === null) return false;
+
+        const isValueValid = value instanceof File;
+        return isValueValid;
+      })
+      .test('fileSize', 'Ukuran file maksimal 2MB', function (value) {
         if (value) {
-            console.log("Value: ", value.size, MAX_FILE_SIZE)
-            return value.size <= MAX_FILE_SIZE;
+          return value.size <= MAX_FILE_SIZE;
         }
         return false;
-    })
-    .test(
+      })
+      .test(
         'fileFormat',
         'Format file tidak valid, hanya jpg, jpeg, dan png yang diperbolehkan',
         function (value) {
-            if (value) {
-                return SUPPORTED_FORMATS.includes(value.type);
-            }
-            return false;
+          if (value) {
+            return SUPPORTED_FORMATS.includes(value.type);
+          }
+          return false;
         },
-    ),
+      ),
   });
 
   const modalClick = () => {
@@ -81,6 +77,7 @@ export default function KegiatanMasyarakat() {
       setIsModalOpen(false);
       setSelectedImage(null);
       setType('add');
+      setDataImage(null);
     }
   };
 
@@ -112,7 +109,6 @@ export default function KegiatanMasyarakat() {
 
   const handleEdit = (data: CommunityActivities) => {
     Object.entries(data).forEach(([key, value]) => {
-      console.log(value);
       if (key === 'image') {
         setDataImage(value);
       } else if (key == 'time') {
@@ -179,8 +175,8 @@ export default function KegiatanMasyarakat() {
         });
       }
       console.log(`Error create data community activities: ${error}`);
-    }finally{
-        setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -257,8 +253,12 @@ export default function KegiatanMasyarakat() {
           </button>
 
           <h3 className="font-bold text-lg">
-            {type.split('_')[0] == 'edit' ? 'Edit' : 'Tambah'} Kegiatan
-            Masyarakat
+            {type == 'view'
+              ? 'Detail'
+              : type.split('_')[0] == 'edit'
+                ? 'Edit'
+                : 'Tambah'}{' '}
+            Kegiatan Masyarakat
           </h3>
 
           <form
@@ -268,6 +268,7 @@ export default function KegiatanMasyarakat() {
           >
             <LabelForm label="Nama">
               <InputForm
+                disabled={type == 'view'}
                 {...register('name')}
                 type="text"
                 label="Nama"
@@ -281,6 +282,7 @@ export default function KegiatanMasyarakat() {
 
             <LabelForm label="Deskripsi">
               <textarea
+                disabled={type == 'view'}
                 {...register('description')}
                 placeholder="Masukkan deskripsi kegiatan masyarakat"
                 rows={3}
@@ -295,6 +297,7 @@ export default function KegiatanMasyarakat() {
 
             <LabelForm label="Tanggal">
               <InputForm
+                disabled={type == 'view'}
                 {...register('time')}
                 type="date"
                 label="Tanggal"
@@ -309,18 +312,21 @@ export default function KegiatanMasyarakat() {
             {selectedImage || dataImage ? (
               <div className="relative">
                 <Image
-                  src={
-                    selectedImage || `${dataImage}`
-                  } width={500} height={300}
+                  src={selectedImage || `${dataImage}`}
+                  width={500}
+                  height={300}
                   alt="Kegiatan Masyarakat"
                   className="rounded-md w-full object-cover"
-                />1
-                <IconSquareRoundedXFilled
-                  onClick={() => {
-                    setSelectedImage(null);
-                  }}
-                  className="text-red-600 absolute -top-2 -right-2 cursor-pointer"
                 />
+                {type != 'view' && (
+                  <IconSquareRoundedXFilled
+                    onClick={() => {
+                      setSelectedImage(null);
+                      setDataImage(null);
+                    }}
+                    className="text-red-600 absolute -top-2 -right-2 cursor-pointer"
+                  />
+                )}
               </div>
             ) : (
               <LabelForm label="Dokumentasi Kegiatan">
@@ -337,9 +343,16 @@ export default function KegiatanMasyarakat() {
               <p className="text-red-500 text-sm">{errors.image.message}</p>
             )}
 
-            <Button type="submit" color="primary" size="base" disable={loading}>
-              {loading ? "Loading..." : "Save"}
-            </Button>
+            {type != 'view' && (
+              <Button
+                type="submit"
+                color="primary"
+                size="base"
+                disable={loading}
+              >
+                {loading ? 'Loading...' : 'Save'}
+              </Button>
+            )}
           </form>
         </div>
       </dialog>
@@ -350,13 +363,18 @@ export default function KegiatanMasyarakat() {
           activities.map((activity: CommunityActivities, i: number) => (
             <div
               key={i}
-              className="border border-custom w-max rounded-md overflow-hidden"
+              className="border border-custom cursor-pointer w-max rounded-md overflow-hidden"
+              onClick={() => {
+                setIsModalOpen(true);
+                setType('view');
+                handleEdit(activity);
+              }}
             >
               <Image
                 src={activity.image}
                 width={252}
                 height={20}
-                className="bg-cover w-full h-32 rounded-t-md"
+                className="object-cover w-full h-32 rounded-t-md"
                 alt="Communal Work Image"
               />
               <div className="max-w-[280px] space-y-2 p-3">
@@ -364,10 +382,11 @@ export default function KegiatanMasyarakat() {
                 <p className="text-xs font-medium opacity-35">
                   {formatDate(activity.time)}
                 </p>
-                <p className="text-sm">{activity.description}</p>
+                <p className="text-sm truncate">{activity.description}</p>
                 <div className="flex gap-3">
                   <Button
-                    onClick={() => {
+                    onClick={(e: any) => {
+                      e.stopPropagation();
                       setIsModalOpen(true);
                       setType(`edit_${activity.id}`);
                       setId(activity.id);
@@ -380,7 +399,8 @@ export default function KegiatanMasyarakat() {
                     Edit
                   </Button>
                   <Button
-                    onClick={() => {
+                    onClick={(e: any) => {
+                      e.stopPropagation();
                       Swal.fire({
                         title: 'Apakah anda yakin akan menghapus data ini?',
                         showDenyButton: true,
