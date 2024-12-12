@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import ClientUmkmLayout from './_section/ClientUmkmLayout';
 import NextTopLoader from 'nextjs-toploader';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 
 export const metadata: Metadata = {
   title: 'Desa Karangbendo | UMKM',
@@ -37,6 +38,10 @@ const ClientComponent = dynamic(
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <ClientUmkmLayout>
         <body>
           <NextTopLoader />

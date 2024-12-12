@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import ButtonOverlay from '@/components/button/ButtonOverlay';
 import AOSWrapper from './AOSWrapper';
 import NextTopLoader from 'nextjs-toploader';
+import Head from 'next/head';
 
 export const metadata: Metadata = {
   title: 'Desa Karangbendo | Profile Desa',

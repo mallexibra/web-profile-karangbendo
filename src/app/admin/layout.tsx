@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { ReactNode } from 'react';
 import ClientAdminLayout from './_section/ClientAdminLayout';
 import NextTopLoader from 'nextjs-toploader';
+import Head from 'next/head';
 
 export const metadata: Metadata = {
   title: 'Desa Karangbendo | Admin',
@@ -34,6 +35,10 @@ const ClientComponent = dynamic(() => import('./_section/CheckSession'), {
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <ClientAdminLayout>
         <body>
           <NextTopLoader />
