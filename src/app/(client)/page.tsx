@@ -9,7 +9,7 @@ import LoadingBar from '@/components/loading/LoadingBar';
 
 export default function HomePage() {
   return (
-    <main>
+    <main className='w-full overflow-x-hidden'>
       <LoadingBar />
       <Header />
       <Navbar />

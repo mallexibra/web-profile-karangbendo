@@ -5,7 +5,7 @@ import LoadingBar from "@/components/loading/LoadingBar";
 
 export default function DetailProduk(){
     return(
-        <main className="min-h-screen">
+        <main className="min-h-screen w-full overflow-x-hidden">
             <LoadingBar />
             <HeaderDetailProduk/>
             <Navbar/>

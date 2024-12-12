@@ -7,7 +7,7 @@ import LoadingBar from '@/components/loading/LoadingBar';
 
 export default function Transparansi() {
   return (
-    <main>
+    <main className='w-full overflow-x-hidden'>
       <LoadingBar />
       <HeaderTransparancy />
       <Navbar />

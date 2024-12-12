@@ -5,7 +5,7 @@ import LoadingBar from "@/components/loading/LoadingBar";
 
 export default function ProdukUMKM(){
     return(
-        <main>
+        <main className='w-full overflow-x-hidden'>
             <LoadingBar />
             <HeaderUMKM/>
             <Navbar/>

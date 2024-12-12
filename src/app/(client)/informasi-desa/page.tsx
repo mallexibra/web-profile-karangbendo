@@ -8,7 +8,7 @@ import LoadingBar from '@/components/loading/LoadingBar';
 
 export default function ProfileDesaPage() {
     return (
-        <main>
+        <main className='w-full overflow-x-hidden'>
             <LoadingBar />
             <HeaderInformationVillage />
             <Navbar/>
