@@ -1,8 +1,8 @@
 export interface PublicComplaints {
     id: number;
     name: string;
-    complaint: 'fasilitas_umum';
-    email?: string;
-    phone?: string;
+    complaint: string;
+    emailOrPhone: string;
     supportingEvidence: string;
+    description: string;
 }

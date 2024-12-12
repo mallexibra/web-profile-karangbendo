@@ -74,15 +74,12 @@ model CommunityActivities {
 }
 
 model PublicComplaints {
-  id                 Int             @id @default(autoincrement())
+  id                 Int     @id @default(autoincrement())
   name               String
-  complaint          TypeOfComplaint
+  complaint          String
   emailOrPhone       String?
   supportingEvidence String?
-}
-
-enum TypeOfComplaint {
-  fasilitas_umum
+  description        String?
 }
 
 model VillageGovernmentFinance {

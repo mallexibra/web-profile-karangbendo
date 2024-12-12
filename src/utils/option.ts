@@ -24,13 +24,13 @@ export const optionType = [
 ];
 
 export const optionAduan = [
-    { label: 'Fasilitas', value: 'fasilitas_umum' },
-    { label: 'Kebersihan', value: 'kebersihan' },
-    { label: 'Keamanan', value: 'keamanan' },
-    { label: 'Kesehatan', value: 'kesehatan' },
-    { label: 'Infrastruktur', value: 'infrastruktur' },
-    { label: 'Pelayanan Publik', value: 'pelayanan_publik' },
-    { label: 'Lingkungan Hidup', value: 'lingkungan_hidup' },
-    { label: 'Layanan Kesejahteraan', value: 'layanan_kesejahteraan' },
-    { label: 'Pengaduan Umum', value: 'pengaduan_umum' },
+    { label: 'Fasilitas', value: 'Fasilitas' },
+    { label: 'Kebersihan', value: 'Kebersihan' },
+    { label: 'Keamanan', value: 'Keamanan' },
+    { label: 'Kesehatan', value: 'Kesehatan' },
+    { label: 'Infrastruktur', value: 'Infrastruktur' },
+    { label: 'Pelayanan Publik', value: 'Pelayanan Publik' },
+    { label: 'Lingkungan Hidup', value: 'Lingkungan Hidup' },
+    { label: 'Layanan Kesejahteraan', value: 'Layanan Kesejahteraan' },
+    { label: 'Pengaduan Umum', value: 'Pengaduan Umum' },
 ];

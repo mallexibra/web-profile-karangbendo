@@ -5,10 +5,10 @@ import * as yup from 'yup';
 import cloudinary from '@/utils/cloudinary';
 const publicComplaintsSchema = yup.object({
     name: yup.string().required('Name is required and must be a string'),
-    complaint: yup.mixed<'fasilitas_umum'>().oneOf(['fasilitas_umum'], 'Invalid complaint type').required(),
+    complaint: yup.string().required("Type of complaint is required"),
     email: yup.string().email('Invalid email format').nullable(),
     phone: yup.string().nullable(),
-    supportingEvidence: yup.mixed<File>().nullable(),
+    image: yup.mixed<File>().nullable(),
 });
 
 export const GET = async () => {
@@ -35,12 +35,13 @@ export const POST = async (request: Request) => {
             name: formData.get('name') as string,
             complaint: formData.get('complaint') as string,
             emailOrPhone: formData.get('emailOrPhone') as string | null,
-            supportingEvidence: formData.get('supportingEvidence') as File | null,
+            image: formData.get('image') as File | null,
+            description: formData.get('description') as string
         };
 
         await publicComplaintsSchema.validate(data, { abortEarly: false });
 
-        const image = data.supportingEvidence;
+        const image = data.image;
         if (!image) {
             throw new Error('Supporting evidence file is missing');
         }
@@ -59,6 +60,8 @@ export const POST = async (request: Request) => {
             );
             stream.end(buffer);
         });
+
+        delete data.image;
 
         const newPublicComplaints = await db.publicComplaints.create({
             data: {
