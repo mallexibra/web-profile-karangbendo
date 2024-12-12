@@ -240,7 +240,7 @@ export default function TableUMKM() {
                 type="text"
                 label="Nama"
                 name="name"
-                placeholder="Input nama admin"
+                placeholder="Input nama UMKM"
               />
               {errors.name && (
                 <p className="text-red-500 text-sm">{errors.name.message}</p>
@@ -253,7 +253,7 @@ export default function TableUMKM() {
                 type="text"
                 label="Email"
                 name="email"
-                placeholder="Input email admin"
+                placeholder="Input email UMKM"
               />
               {errors.email && (
                 <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -266,7 +266,7 @@ export default function TableUMKM() {
                 type="text"
                 label="Nomor Telepon"
                 name="phone"
-                placeholder="Input nomor telepon admin"
+                placeholder="Input nomor telepon UMKM"
               />
               {errors.phone && (
                 <p className="text-red-500 text-sm">{errors.phone.message}</p>
@@ -279,7 +279,7 @@ export default function TableUMKM() {
                 type="password"
                 label="Password"
                 name="password"
-                placeholder="Input password admin"
+                placeholder="Input password UMKM"
               />
               {errors.password && (
                 <p className="text-red-500 text-sm">
@@ -294,7 +294,7 @@ export default function TableUMKM() {
                 type="password"
                 label="Konfirmasi Password"
                 name="confirmPassword"
-                placeholder="Input konfirmasi password admin"
+                placeholder="Input konfirmasi password UMKM"
               />
               {errors.confirmPassword && (
                 <p className="text-red-500 text-sm">

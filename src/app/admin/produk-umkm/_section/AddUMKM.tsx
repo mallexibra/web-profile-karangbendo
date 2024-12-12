@@ -56,12 +56,16 @@ export default function AddUMKM() {
       .nullable()
       .test('fileRequired', 'Identitas wajib diisi', function (value) {
         console.log(value);
-        if (id != null && dataImage != null) return false;
+        if (dataImage != null) return true;
+        if (selectedFile != null) return true;
+        if (id !== null && selectedFile === null) return false;
         const isValueValid = value instanceof File;
         return isValueValid;
       })
       .test('fileSize', 'Ukuran file maksimal 2MB', function (value) {
-        if (id != null && dataImage != null) return false;
+        if (dataImage != null) return true;
+        if (selectedFile != null) return true;
+        if (id !== null && selectedFile === null) return false;
         if (value) {
           return value.size <= MAX_FILE_SIZE;
         }
@@ -71,7 +75,9 @@ export default function AddUMKM() {
         'fileFormat',
         'Format file tidak valid, hanya jpg, jpeg, dan png yang diperbolehkan',
         function (value) {
-          if (id != null && dataImage != null) return false;
+          if (dataImage != null) return true;
+          if (selectedFile != null) return true;
+          if (id !== null && selectedFile === null) return false;
           if (value) {
             return SUPPORTED_FORMATS.includes(value.type);
           }
@@ -85,8 +91,8 @@ export default function AddUMKM() {
       .mixed<File>()
       .nullable()
       .test('fileRequired', 'Gambar produk wajib diisi', function (value) {
-        if(dataProduk != null) return true;
-        if(selectedProduk != null) return true;
+        if (dataProduk != null) return true;
+        if (selectedProduk != null) return true;
         if (idProduk !== null && selectedProduk === null) return false;
         const isValueValid = value instanceof File;
         return isValueValid;
@@ -850,7 +856,7 @@ export default function AddUMKM() {
             {item.product.length <= 0 ? (
               <p className="font-medium mt-3">Produk sedang kosong!</p>
             ) : (
-              <div className="flex gap-3 flex-wrap mt-3">
+              <div className="flex gap-3 items-start flex-wrap mt-3">
                 {item.product.map((product: Product) => (
                   <div
                     key={i}

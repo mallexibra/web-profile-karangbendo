@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import * as yup from 'yup';
-import { getSession, signIn } from 'next-auth/react';
+import { getSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -63,6 +63,16 @@ export default function Login() {
         });
 
         if (session?.user?.role === 'umkm') {
+          console.log(session?.user);
+          const haveShhop = session?.user?.shop?.length ?? 0 > 0;
+          if(!haveShhop){
+            Swal.fire({
+              icon: 'error',
+              title: 'Gagal!',
+              text: "Anda tidak memiliki toko",
+            });
+            signOut({ callbackUrl: '/auth/login' });
+          }
           router.push('/umkm');
         } else {
           router.push('/admin');

@@ -6,7 +6,7 @@ import ClientAdminLayout from './_section/ClientAdminLayout';
 import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
-  title: 'Karangbendo | Admin',
+  title: 'Desa Karangbendo | Admin',
   description:
     'Website Profil Desa Karangbendo adalah platform digital untuk memperkenalkan Desa Karangbendo kepada masyarakat luas, menghubungkan informasi desa, produk UMKM, dan layanan pengelolaan oleh pemerintah desa. Melalui website ini, masyarakat dapat melihat profil desa, informasi transparansi keuangan, produk hukum, dan produk UMKM setempat, serta memiliki akses untuk menyampaikan pengaduan. Tiga role pengguna tersedia: masyarakat, admin desa, dan UMKM, yang masing-masing memiliki akses berbeda untuk menavigasi dan mengelola konten. Promosi dan transparansi desa Karangbendo kini lebih mudah dan interaktif.',
   keywords:

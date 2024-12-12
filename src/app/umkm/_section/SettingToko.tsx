@@ -174,7 +174,7 @@ export default function SettingToko() {
                         )}
                     </LabelForm>
                     <div className="flex justify-end mt-5">
-                        <Button type='submit' color="primary" size="sm" disable={loading}>
+                        <Button type='submit' color="primary" size="base" disable={loading}>
                             {loading ? "Loading..." : "Save"}
                         </Button>
                     </div>
