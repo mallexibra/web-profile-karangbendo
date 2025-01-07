@@ -18,6 +18,12 @@ export default function ProfileDesa() {
   const [dataImage, setDataImage] = useState<string | null>(null);
   const [id, setId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [total, setTotal] = useState({
+    resident: 0,
+    mature: 0,
+    children: 0,
+    old: 0
+  });
 
   const MAX_FILE_SIZE = 2 * 1024 * 1024;
   const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
@@ -109,6 +115,17 @@ export default function ProfileDesa() {
           setId(value);
         }
 
+        if (key === "children" || key === "mature" || key === "old") {
+          setTotal((prev) => {
+            const updatedTotal = { 
+              ...prev, 
+              [key]: value,
+              resident: prev.mature + prev.children + prev.old + value - prev[key]
+            };
+            return updatedTotal;
+          });
+        }
+
         if (key === 'image') {
           setDataImage(value);
         } else {
@@ -178,6 +195,20 @@ export default function ProfileDesa() {
     }
   };
 
+  const handleTotal = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
+    const value = Number(e.target.value);
+    if (key === "children" || key === "mature" || key === "old") {
+      setTotal((prev) => {
+        const updatedTotal = { 
+          ...prev, 
+          [key]: value,
+          resident: prev.mature + prev.children + prev.old + value - prev[key]
+        };
+        return updatedTotal;
+      });
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -221,13 +252,13 @@ export default function ProfileDesa() {
             </LabelForm>
             <div className="relative">
               {(selectedImage || dataImage) && (
-              <IconSquareRoundedXFilled
-                onClick={() => {
-                  setSelectedImage(null);
-                  setDataImage(null);
-                }}
-                className="text-red-600 absolute z-10 -top-2 -right-2 cursor-pointer"
-              />
+                <IconSquareRoundedXFilled
+                  onClick={() => {
+                    setSelectedImage(null);
+                    setDataImage(null);
+                  }}
+                  className="text-red-600 absolute z-10 -top-2 -right-2 cursor-pointer"
+                />
               )}
               <LabelForm label="Struktur Aparatur Desa">
                 {selectedImage || dataImage ? (
@@ -260,6 +291,8 @@ export default function ProfileDesa() {
                 type="number"
                 label="Jumlah Penduduk"
                 name="resident"
+                disabled={true}
+                value={total.resident}
                 placeholder="Masukkan jumlah penduduk"
               />
               {errors.resident && (
@@ -274,6 +307,7 @@ export default function ProfileDesa() {
                 type="number"
                 label="Jumlah Anak-anak"
                 name="children"
+                onChange={(e) => handleTotal(e, "children")}
                 placeholder="Masukkan jumlah anak-anak"
               />
               {errors.children && (
@@ -288,6 +322,7 @@ export default function ProfileDesa() {
                 type="number"
                 label="Jumlah Dewasa"
                 name="mature"
+                onChange={(e) => handleTotal(e, "mature")}
                 placeholder="Masukkan jumlah dewasa"
               />
               {errors.mature && (
@@ -300,6 +335,7 @@ export default function ProfileDesa() {
                 type="number"
                 label="Jumlah Lanjut Usia"
                 name="old"
+                onChange={(e) => handleTotal(e, "old")}
                 placeholder="Masukkan jumlah lanjut usia"
               />
               {errors.old && (
