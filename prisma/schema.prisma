@@ -65,6 +65,11 @@ model VillageInstitution {
   name String
 }
 
+model Position {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
 model CommunityActivities {
   id          Int      @id @default(autoincrement())
   name        String

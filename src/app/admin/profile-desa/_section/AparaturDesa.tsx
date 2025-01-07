@@ -4,6 +4,7 @@ import Card from '@/components/cards/Card';
 import { InputForm } from '@/components/forms/InputForm';
 import LabelForm from '@/components/forms/LabelForm';
 import { SelectForm } from '@/components/forms/SelectForm';
+import { Position } from '@/types/Position';
 import { VillageApparatus } from '@/types/VillageApparatus';
 import axiosInstance from '@/utils/axiosInstance';
 import { formatText } from '@/utils/format';
@@ -23,6 +24,7 @@ import * as yup from 'yup';
 
 export default function AparaturDesa() {
   const [apparatus, setApparatus] = useState<VillageApparatus[]>([]);
+  const [positions, setPositions] = useState<{ label: string; value: string }[]>([]);
   const [type, setType] = useState<'add' | 'edit'>('add');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [dataImage, setDataImage] = useState<string | null>(null);
@@ -86,9 +88,16 @@ export default function AparaturDesa() {
   const fetchData = async () => {
     try {
       const response = await axiosInstance.get('/village-apparatus');
+      const positionResponse = await axiosInstance.get('/positions');
       const dataTemporary: VillageApparatus[] = response.data.data;
+      const positionsData: Position[] = positionResponse.data.data;
+      const dataPositions = positionsData.map((item) => ({
+        label: item.name,
+        value: item.name,
+      }));
 
       setApparatus(dataTemporary);
+      setPositions(dataPositions);
     } catch (error) {
       console.log(`Error fetching data apparatur desa: ${error}`);
     }
@@ -277,7 +286,7 @@ export default function AparaturDesa() {
                 {...register('position')}
                 label="Jabatan"
                 name="position"
-                data={optionPosition}
+                data={positions}
               />
               {errors.position && (
                 <p className="text-red-500 text-sm">

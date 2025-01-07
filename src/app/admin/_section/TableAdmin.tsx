@@ -4,6 +4,7 @@ import Card from '@/components/cards/Card';
 import { InputForm } from '@/components/forms/InputForm';
 import LabelForm from '@/components/forms/LabelForm';
 import { SelectForm } from '@/components/forms/SelectForm';
+import { Position } from '@/types/Position';
 import { User } from '@/types/User';
 import axiosInstance from '@/utils/axiosInstance';
 import { formatText } from '@/utils/format';
@@ -17,6 +18,7 @@ import * as yup from 'yup';
 
 export default function TableAdmin() {
   const [accounts, setAccounts] = useState<User[]>([]);
+  const [positions, setPositions] = useState<{ label: string; value: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const userSchema = yup.object().shape({
@@ -62,6 +64,14 @@ export default function TableAdmin() {
       const response = await axiosInstance.get('/users');
       const dataTemporary: User[] = response.data.data;
 
+      const positionResponse = await axiosInstance.get('/positions');
+      const positionsData: Position[] = positionResponse.data.data;
+      const dataPositions = positionsData.map((item) => ({
+        label: item.name,
+        value: item.name,
+      }));
+
+      setPositions(dataPositions);
       setAccounts(dataTemporary);
     } catch (error) {
       console.log(`Error fetching data akun admin: ${error}`);
@@ -315,7 +325,7 @@ export default function TableAdmin() {
                 {...register('position')}
                 label="Jabatan"
                 name="position"
-                data={optionPosition}
+                data={positions}
                 onChange={(e: any) => setRole(e.target.value)}
               />
               {errors.position && (

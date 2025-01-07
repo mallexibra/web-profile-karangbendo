@@ -248,7 +248,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="md:flex text-sm items-center w-full overflow-hidden justify-between gap-3 hidden">
+        <div className="md:flex text-sm items-center w-full justify-between gap-3 hidden">
           <Link href={'/'} className="flex justify-start items-center gap-2">
             <Image
               src={logo}
